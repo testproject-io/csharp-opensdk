@@ -14,7 +14,9 @@
 // limitations under the License.
 // </copyright>
 
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using TestProject.SDK.Internal.Rest;
 
 namespace TestProject.SDK.Drivers.Web
 {
@@ -34,14 +36,25 @@ namespace TestProject.SDK.Drivers.Web
         /// <param name="jobName">The job name to report.</param>
         /// <param name="disableReports">Set to true to disable all reporting (no report will be created on TestProject).</param>
         public ChromeDriver(
-            string remoteAddress = null,
+            string remoteAddress = "http://localhost:8585",  // TODO: replace with proper logic
             string token = null,
             ChromeOptions chromeOptions = null,
             string projectName = null,
             string jobName = null,
             bool disableReports = false)
-            : base(ChromeDriverService.CreateDefaultService(string.Empty, string.Empty), chromeOptions)
         {
+            this.Quit(); // TODO: see if there's a better way to do this. We need to kill the locally started instance before connecting to the instance that the Agent provides us with.
+
+            if (chromeOptions == null)
+            {
+                // These values are set because C# ChromeOptions defaults are not understood by the driver
+                // They are equal to the values that the Agent would assign if these properties were not specified
+                chromeOptions = new ChromeOptions();
+                chromeOptions.UnhandledPromptBehavior = UnhandledPromptBehavior.DismissAndNotify;
+                chromeOptions.PageLoadStrategy = PageLoadStrategy.Normal;
+            }
+
+            new AgentClient(new System.Uri(remoteAddress), token, chromeOptions, new ReportSettings(projectName, jobName), disableReports);
         }
     }
 }
