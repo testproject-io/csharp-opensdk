@@ -72,6 +72,7 @@
     <Rule Id="SA1600" Action="Warning" /> <!-- Elements should be documented -->
     <Rule Id="SA1633" Action="Warning" /> <!-- File should have header -->
     <Rule Id="SA0001" Action="Warning" /> <!-- XML comments -->
+    <Rule Id="SA1623" Action="None" /> <!-- Disabled to allow documenting class properties without starting with 'Gets' -->
     <Rule Id="SA1636" Action="None" /> <!-- Disabled to allow custom copyright text -->
     <Rule Id="SA1101" Action="Warning" /> <!-- Prefix local calls with this -->
     <Rule Id="SA1407" Action="Warning" /> <!-- Arithmetic expressions should declare precedence -->
@@ -102,6 +103,6 @@
     <Rule Id="SA1214" Action="Warning" /> <!-- Readonly fields should appear before non-readonly fields -->
     <Rule Id="SA1133" Action="Warning" /> <!-- Do not combine attributes -->
     <Rule Id="SA1202" Action="Warning" /> <!-- Elements should be ordered by access -->
-    <Rule Id="SA1201" Action="Warning" /> <!-- Elements should appear in the correct order -->
+    <Rule Id="SA1201" Action="None" /> <!-- Disabled to allow elements to appear in the order we see fit -->
   </Rules>
 </RuleSet>
