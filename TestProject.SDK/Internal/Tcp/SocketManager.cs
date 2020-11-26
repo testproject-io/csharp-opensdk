@@ -14,9 +14,11 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Net.Sockets;
 using NLog;
 using TestProject.SDK.Internal.Exceptions;
+using TestProject.SDK.Internal.Helpers.Threading;
 
 namespace TestProject.SDK.Internal.Tcp
 {
@@ -29,6 +31,11 @@ namespace TestProject.SDK.Internal.Tcp
         /// The SocketManager singleton instance.
         /// </summary>
         private static SocketManager instance;
+
+        /// <summary>
+        /// Thread object used to gracefully close the socket when the session ends.
+        /// </summary>
+        private static SocketClosingThread socketClosingThread;
 
         /// <summary>
         /// Logger instance for this class.
@@ -45,7 +52,8 @@ namespace TestProject.SDK.Internal.Tcp
         /// </summary>
         private SocketManager()
         {
-            // TODO: add shutdown hook that closes the socket when process exits
+            socketClosingThread = new SocketClosingThread();
+            AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) => socketClosingThread.RunThread();
         }
 
         /// <summary>
@@ -86,6 +94,40 @@ namespace TestProject.SDK.Internal.Tcp
                 Logger.Error($"An error occurred when connecting to {host}:{port} - {se.Message}");
                 throw new AgentConnectException("Failed connecting to Agent socket");
             }
+        }
+
+        /// <summary>
+        /// Closes the TCP socket connection to the Agent.
+        /// </summary>
+        public void CloseSocket()
+        {
+            if (this.IsOpen())
+            {
+                try
+                {
+                    this.socket.Shutdown(SocketShutdown.Both);
+                }
+                finally
+                {
+                    this.socket.Close();
+                }
+
+                this.socket = null;
+                Logger.Debug("Development socket successfully closed");
+            }
+            else
+            {
+                Logger.Debug("Development socket was already closed.");
+            }
+        }
+
+        /// <summary>
+        /// Checks if the socket is connected.
+        /// </summary>
+        /// <returns>True if the socket is connected, false otherwise.</returns>
+        private bool IsOpen()
+        {
+            return this.socket != null && this.socket.Connected;
         }
     }
 }
