@@ -14,8 +14,11 @@
 // limitations under the License.
 // </copyright>
 
+using System;
+using NLog;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using TestProject.SDK.Internal.Helpers.Threading;
 using TestProject.SDK.Internal.Rest;
 
 namespace TestProject.SDK.Drivers.Web
@@ -26,6 +29,10 @@ namespace TestProject.SDK.Drivers.Web
     /// </summary>
     public class ChromeDriver : OpenQA.Selenium.Chrome.ChromeDriver
     {
+        private DriverShutdownThread driverShutdownThread;
+
+        private static Logger Logger { get; set; } = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ChromeDriver"/> class.
         /// </summary>
@@ -43,7 +50,7 @@ namespace TestProject.SDK.Drivers.Web
             string jobName = null,
             bool disableReports = false)
         {
-            this.Quit(); // TODO: see if there's a better way to do this. We need to kill the locally started instance before connecting to the instance that the Agent provides us with.
+            base.Quit(); // TODO: see if there's a better way to do this. We need to kill the locally started instance before connecting to the instance that the Agent provides us with.
 
             if (chromeOptions == null)
             {
@@ -55,6 +62,29 @@ namespace TestProject.SDK.Drivers.Web
             }
 
             new AgentClient(new System.Uri(remoteAddress), token, chromeOptions, new ReportSettings(projectName, jobName), disableReports);
+
+            this.driverShutdownThread = new DriverShutdownThread(this);
+            AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) => this.driverShutdownThread.RunThread();
+        }
+
+        /// <summary>
+        /// Quits the driver and stops the session with the Agent, cleaning up after itself.
+        /// </summary>
+        public new void Quit()
+        {
+            // Avoid performing the graceful shutdown more than once
+            AppDomain.CurrentDomain.ProcessExit -= (sender, eventArgs) => this.driverShutdownThread.RunThread();
+
+            this.Stop();
+        }
+
+        /// <summary>
+        /// Sends any pending reports and closes the browser session.
+        /// </summary>
+        public void Stop()
+        {
+            // TODO: add reporting pending reports
+            base.Quit();
         }
     }
 }
