@@ -14,6 +14,8 @@
 // limitations under the License.
 // </copyright>
 
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
 using System.Collections.Generic;
 
 namespace TestProject.SDK.Internal.Rest.Messages
@@ -46,7 +48,7 @@ namespace TestProject.SDK.Internal.Rest.Messages
         /// <summary>
         /// Capabilities of the session that has been initialized by the Agent.
         /// </summary>
-        public Dictionary<string, object> Capabilities { get; set; }
+        public ChromeOptions Capabilities { get; set; }
 
         /// <summary>
         /// The current version of the Agent.
