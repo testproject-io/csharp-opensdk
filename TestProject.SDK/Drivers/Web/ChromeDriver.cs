@@ -15,9 +15,13 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using NLog;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Remote;
+using TestProject.SDK.Internal.Helpers;
+using TestProject.SDK.Internal.Helpers.CommandExecutors;
 using TestProject.SDK.Internal.Helpers.Threading;
 using TestProject.SDK.Internal.Rest;
 
@@ -27,9 +31,15 @@ namespace TestProject.SDK.Drivers.Web
     /// Extension of <see cref="OpenQA.Selenium.Chrome.ChromeDriver">ChromeDriver</see> for use with TestProject.
     /// Instead of initializing a new session, it starts it in the TestProject Agent and then reconnects to it.
     /// </summary>
-    public class ChromeDriver : OpenQA.Selenium.Chrome.ChromeDriver
+    public class ChromeDriver : OpenQA.Selenium.Remote.RemoteWebDriver
     {
         private DriverShutdownThread driverShutdownThread;
+
+        private string sessionId;
+
+        private AgentClient agentClient;
+
+        private CustomHttpCommandExecutor commandExecutor;
 
         private static Logger Logger { get; set; } = LogManager.GetCurrentClassLogger();
 
@@ -49,20 +59,23 @@ namespace TestProject.SDK.Drivers.Web
             string projectName = null,
             string jobName = null,
             bool disableReports = false)
+            : base(
+                  new System.Uri(remoteAddress),
+                  AgentClient.GetInstance(new System.Uri(remoteAddress), token, chromeOptions, new ReportSettings(projectName, jobName), disableReports).AgentSession.Capabilities)
         {
-            base.Quit(); // TODO: see if there's a better way to do this. We need to kill the locally started instance before connecting to the instance that the Agent provides us with.
+            this.sessionId = AgentClient.GetInstance().AgentSession.SessionId;
 
-            if (chromeOptions == null)
-            {
-                // These values are set because C# ChromeOptions defaults are not understood by the driver
-                // They are equal to the values that the Agent would assign if these properties were not specified
-                chromeOptions = new ChromeOptions();
-                chromeOptions.UnhandledPromptBehavior = UnhandledPromptBehavior.DismissAndNotify;
-                chromeOptions.PageLoadStrategy = PageLoadStrategy.Normal;
-            }
+            // Set the session ID for the base driver object to the session ID returned by the Agent.
+            var sessionIdBase = this.GetType()
+                .BaseType
+                .GetField(
+                    "sessionId",
+                    System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            sessionIdBase.SetValue(this, new OpenQA.Selenium.Remote.SessionId(this.sessionId));
 
-            new AgentClient(new System.Uri(remoteAddress), token, chromeOptions, new ReportSettings(projectName, jobName), disableReports);
+            this.commandExecutor = new CustomHttpCommandExecutor(this.agentClient, AgentClient.GetInstance().AgentSession.RemoteAddress);
 
+            // Add shutdown hook for gracefully shutting down the driver
             this.driverShutdownThread = new DriverShutdownThread(this);
             AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) => this.driverShutdownThread.RunThread();
         }
@@ -85,6 +98,37 @@ namespace TestProject.SDK.Drivers.Web
         {
             // TODO: add reporting pending reports
             base.Quit();
+        }
+
+        /// <summary>
+        /// Overrides the base Execute() method by redirecting the WebDriver command to our own command executor.
+        /// </summary>
+        /// <param name="driverCommandToExecute">The WebDriver command to execute.</param>
+        /// <param name="parameters">Contains the parameters associated with this command.</param>
+        /// <returns>The response returned by the Agent upon requesting to execute this command.</returns>
+        protected override Response Execute(string driverCommandToExecute, Dictionary<string, object> parameters)
+        {
+            if (driverCommandToExecute.Equals(DriverCommand.NewSession))
+            {
+                var resp = new Response();
+                resp.Status = WebDriverResult.Success;
+                resp.SessionId = this.sessionId;
+                resp.Value = new Dictionary<string, object>();
+                return resp;
+            }
+
+            // The Agent does not understand the default way Selenium sends the driver command parameters for SendKeys
+            // This means we'll need to patch them so these commands can be executed.
+            if (driverCommandToExecute.ShouldBePatched())
+            {
+                parameters = CommandHelper.UpdateSendKeysParameters(parameters);
+            }
+
+            Command command = new Command(new SessionId(this.sessionId), driverCommandToExecute, parameters);
+
+            Response commandResponse = this.commandExecutor.Execute(command);
+
+            return commandResponse;
         }
     }
 }
