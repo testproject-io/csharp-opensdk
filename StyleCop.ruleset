@@ -104,5 +104,6 @@
     <Rule Id="SA1133" Action="Warning" /> <!-- Do not combine attributes -->
     <Rule Id="SA1202" Action="Warning" /> <!-- Elements should be ordered by access -->
     <Rule Id="SA1201" Action="None" /> <!-- Disabled to allow elements to appear in the order we see fit -->
+	<Rule Id="SA1310" Action="None" /> <!-- Disabled to allow naming constants using underscores -->
   </Rules>
 </RuleSet>
