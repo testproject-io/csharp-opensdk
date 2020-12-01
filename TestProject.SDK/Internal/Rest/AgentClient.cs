@@ -33,6 +33,13 @@ namespace TestProject.SDK.Internal.Rest
     public class AgentClient
     {
         /// <summary>
+        /// Class member to store Agent session details.
+        /// </summary>
+        public AgentSession AgentSession { get; private set; }
+
+        private static AgentClient instance;
+
+        /// <summary>
         /// Name of the environment variable that stores the development token.
         /// </summary>
         private readonly string tpDevToken = "TP_DEV_TOKEN";
@@ -63,6 +70,34 @@ namespace TestProject.SDK.Internal.Rest
         private static Logger Logger { get; set; } = LogManager.GetCurrentClassLogger();
 
         /// <summary>
+        /// Returns a singleton instance of the <see cref="AgentClient"/>.
+        /// </summary>
+        /// <returns>A singleton instance of the <see cref="AgentClient"/>.</returns>
+        public static AgentClient GetInstance()
+        {
+            return GetInstance(null, string.Empty, null, null, false);
+        }
+
+        /// <summary>
+        /// If necessary, creates and then returns a singleton instance of the <see cref="AgentClient"/>.
+        /// </summary>
+        /// <param name="remoteAddress">The remote address where the Agent is running.</param>
+        /// <param name="token">The development token used to authenticate with the Agent.</param>
+        /// <param name="capabilities">Requested driver options for the browser session.</param>
+        /// <param name="reportSettings">Contains the project and job name to report to TestProject.</param>
+        /// <param name="disableReports">Set to true to disable all reporting to TestProject, false otherwise.</param>
+        /// <returns>A singleton instance of the <see cref="AgentClient"/>.</returns>
+        public static AgentClient GetInstance(Uri remoteAddress, string token, DriverOptions capabilities, ReportSettings reportSettings, bool disableReports)
+        {
+            if (instance == null)
+            {
+                instance = new AgentClient(remoteAddress, token, capabilities, reportSettings, disableReports);
+            }
+
+            return instance;
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="AgentClient"/> class.
         /// </summary>
         /// <param name="remoteAddress">The remote address where the Agent is running.</param>
@@ -70,7 +105,7 @@ namespace TestProject.SDK.Internal.Rest
         /// <param name="capabilities">Requested driver options for the browser session.</param>
         /// <param name="reportSettings">Contains the project and job name to report to TestProject.</param>
         /// <param name="disableReports">Set to true to disable all reporting to TestProject, false otherwise.</param>
-        public AgentClient(Uri remoteAddress, string token, DriverOptions capabilities, ReportSettings reportSettings, bool disableReports)
+        private AgentClient(Uri remoteAddress, string token, DriverOptions capabilities, ReportSettings reportSettings, bool disableReports)
         {
             this.remoteAddress = remoteAddress; // TODO: Add proper address inferring logic
 
@@ -133,6 +168,8 @@ namespace TestProject.SDK.Internal.Rest
             SessionResponse sessionResponse = CustomJsonSerializer.FromJson<SessionResponse>(startSessionResponse.Content, this.serializerSettings);
 
             Logger.Info($"Session [{sessionResponse.SessionId}] initialized");
+
+            this.AgentSession = new AgentSession(new System.Uri(sessionResponse.ServerAddress), sessionResponse.SessionId, sessionResponse.Dialect, sessionResponse.Capabilities);
 
             SocketManager.GetInstance().OpenSocket(this.remoteAddress.Host, sessionResponse.DevSocketPort);
         }
