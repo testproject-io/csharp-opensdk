@@ -95,6 +95,24 @@ namespace TestProject.SDK.Internal.Rest
             this.StartSession(reportSettings, capabilities);
         }
 
+        /// <summary>
+        /// Stops the current development session with the Agent.
+        /// </summary>
+        public void Stop()
+        {
+            // TODO: stop reporting queue (to be implemented)
+            // TODO: call when driver quits (implemented through command executor)
+            if (!this.CanReuseSession())
+            {
+                SocketManager.GetInstance().CloseSocket();
+            }
+        }
+
+        /// <summary>
+        /// Starts a new session with the Agent.
+        /// </summary>
+        /// <param name="reportSettings">Settings (project name, job name) to be included in the report.</param>
+        /// <param name="capabilities">Additional options to be applied to the driver instance.</param>
         private void StartSession(ReportSettings reportSettings, DriverOptions capabilities)
         {
             RestRequest startSessionRequest = new RestRequest("/api/development/session", Method.POST);  // TODO: move endpoints to their own class
@@ -119,6 +137,10 @@ namespace TestProject.SDK.Internal.Rest
             SocketManager.GetInstance().OpenSocket(this.remoteAddress.Host, sessionResponse.DevSocketPort);
         }
 
+        /// <summary>
+        /// Handle any failures that might occur whenever the session request results in an error returned by the Agent.
+        /// </summary>
+        /// <param name="startSessionResponse">The session response object returned by the Agent.</param>
         private void HandleSessionStartFailure(IRestResponse startSessionResponse)
         {
             JObject responseBody = JObject.Parse(startSessionResponse.Content);
@@ -150,6 +172,15 @@ namespace TestProject.SDK.Internal.Rest
                     Logger.Error("Failed to initialize a session with the Agent");
                     throw new AgentConnectException($"Agent responsed with status code {(int)startSessionResponse.StatusCode}: [{responseMessage}]");
             }
+        }
+
+        /// <summary>
+        /// Indicates whether the current Agent version supports session reuse.
+        /// </summary>
+        /// <returns>True if the Agent version supports session reuse, false otherwise.</returns>
+        private bool CanReuseSession()
+        {
+            return true;  // TODO: implement actual logic
         }
     }
 }
