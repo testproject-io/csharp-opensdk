@@ -16,7 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-using NLog;
 using OpenQA.Selenium.Remote;
 
 namespace TestProject.SDK.Internal.Helpers.CommandExecutors
@@ -28,11 +27,6 @@ namespace TestProject.SDK.Internal.Helpers.CommandExecutors
     public class CustomHttpCommandExecutor : HttpCommandExecutor
     {
         /// <summary>
-        /// Timeout for the remote connection to the WebDriver server executing the commands.
-        /// </summary>
-        private static readonly TimeSpan RemoteConnectionTimeout = TimeSpan.FromSeconds(10);
-
-        /// <summary>
         /// Object responsible for executing reporting to TestProject.
         /// </summary>
         private ReportingCommandExecutor reportingCommandExecutor;
@@ -42,7 +36,17 @@ namespace TestProject.SDK.Internal.Helpers.CommandExecutors
         /// </summary>
         /// <param name="addressOfRemoteServer">URL of the remote Selenium server managed by the Agent.</param>
         public CustomHttpCommandExecutor(Uri addressOfRemoteServer)
-            : base(addressOfRemoteServer, RemoteConnectionTimeout)
+            : this(addressOfRemoteServer, TimeSpan.FromSeconds(10))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomHttpCommandExecutor"/> class.
+        /// </summary>
+        /// <param name="addressOfRemoteServer">URL of the remote Selenium server managed by the Agent.</param>
+        /// <param name="remoteConnectionTimeout">Timeout for the remote connection to the WebDriver server executing the commands.</param>
+        public CustomHttpCommandExecutor(Uri addressOfRemoteServer, TimeSpan remoteConnectionTimeout)
+            : base(addressOfRemoteServer, remoteConnectionTimeout)
         {
             this.reportingCommandExecutor = new ReportingCommandExecutor();
         }
