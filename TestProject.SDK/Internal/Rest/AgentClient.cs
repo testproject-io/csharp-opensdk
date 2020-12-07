@@ -131,6 +131,29 @@ namespace TestProject.SDK.Internal.Rest
         }
 
         /// <summary>
+        /// Reports a WebDriver command to TestProject.
+        /// </summary>
+        /// <param name="driverCommandReport">Payload object containing command information and execution result.</param>
+        public void ReportDriverCommand(DriverCommandReport driverCommandReport)
+        {
+            // TODO: move to queueing logic
+
+            RestRequest sendDriverCommandRequest = new RestRequest("/api/development/report/command", Method.POST); // TODO: move endpoints to their own class
+            sendDriverCommandRequest.RequestFormat = DataFormat.Json;
+
+            string json = CustomJsonSerializer.ToJson(driverCommandReport, this.serializerSettings);
+
+            sendDriverCommandRequest.AddJsonBody(json);
+
+            IRestResponse sendDriverCommandResponse = this.client.Execute(sendDriverCommandRequest);
+
+            if ((int)sendDriverCommandResponse.StatusCode >= 400)
+            {
+                Logger.Error($"Agent returned HTTP {(int)sendDriverCommandResponse.StatusCode} with message: {sendDriverCommandResponse.ErrorMessage}");
+            }
+        }
+
+        /// <summary>
         /// Stops the current development session with the Agent.
         /// </summary>
         public void Stop()
