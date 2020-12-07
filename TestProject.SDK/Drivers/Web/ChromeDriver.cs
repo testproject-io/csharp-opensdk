@@ -16,7 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-using NLog;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Remote;
@@ -31,24 +30,20 @@ namespace TestProject.SDK.Drivers.Web
     /// Extension of <see cref="OpenQA.Selenium.Chrome.ChromeDriver">ChromeDriver</see> for use with TestProject.
     /// Instead of initializing a new session, it starts it in the TestProject Agent and then reconnects to it.
     /// </summary>
-    public class ChromeDriver : OpenQA.Selenium.Remote.RemoteWebDriver
+    public class ChromeDriver : RemoteWebDriver
     {
         private DriverShutdownThread driverShutdownThread;
 
         private string sessionId;
 
-        private AgentClient agentClient;
-
         private CustomHttpCommandExecutor commandExecutor;
-
-        private static Logger Logger { get; set; } = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChromeDriver"/> class.
         /// </summary>
         /// <param name="remoteAddress">The base address for the Agent API (e.g. http://localhost:8585).</param>
         /// <param name="token">The development token used to communicate with the Agent, see <a href="https://app.testproject.io/#/integrations/sdk">here</a> for more info.</param>
-        /// <param name="chromeOptions">See <see cref="OpenQA.Selenium.Chrome.ChromeOptions"/> for more details.</param>
+        /// <param name="chromeOptions">See <see cref="ChromeOptions"/> for more details.</param>
         /// <param name="projectName">The project name to report.</param>
         /// <param name="jobName">The job name to report.</param>
         /// <param name="disableReports">Set to true to disable all reporting (no report will be created on TestProject).</param>
@@ -61,7 +56,7 @@ namespace TestProject.SDK.Drivers.Web
             bool disableReports = false)
             : base(
                   new System.Uri(remoteAddress),
-                  AgentClient.GetInstance(new System.Uri(remoteAddress), token, chromeOptions, new ReportSettings(projectName, jobName), disableReports).AgentSession.Capabilities)
+                  AgentClient.GetInstance(new Uri(remoteAddress), token, chromeOptions, new ReportSettings(projectName, jobName), disableReports).AgentSession.Capabilities)
         {
             this.sessionId = AgentClient.GetInstance().AgentSession.SessionId;
 
@@ -71,9 +66,9 @@ namespace TestProject.SDK.Drivers.Web
                 .GetField(
                     "sessionId",
                     System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-            sessionIdBase.SetValue(this, new OpenQA.Selenium.Remote.SessionId(this.sessionId));
+            sessionIdBase.SetValue(this, new SessionId(this.sessionId));
 
-            this.commandExecutor = new CustomHttpCommandExecutor(this.agentClient, AgentClient.GetInstance().AgentSession.RemoteAddress);
+            this.commandExecutor = new CustomHttpCommandExecutor(AgentClient.GetInstance().AgentSession.RemoteAddress);
 
             // Add shutdown hook for gracefully shutting down the driver
             this.driverShutdownThread = new DriverShutdownThread(this);
