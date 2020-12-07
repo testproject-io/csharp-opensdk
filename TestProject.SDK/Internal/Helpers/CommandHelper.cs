@@ -47,9 +47,8 @@ namespace TestProject.SDK.Internal.Helpers
                     string[] result = Array.ConvertAll(value, ConvertObjectToString);
 
                     // After that, we take the first value (should also be the only one) and assign
-                    // that to the 'text' parameter, and remove the 'value' parameter
+                    // that to the 'text' parameter
                     parameters.Add(KEY_TEXT, result[0]);
-                    parameters.Remove(KEY_VALUE);
                 }
                 else
                 {

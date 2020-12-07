@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using OpenQA.Selenium;
 using OpenQA.Selenium.Remote;
 
 namespace TestProject.SDK.Internal.Helpers
@@ -31,6 +32,16 @@ namespace TestProject.SDK.Internal.Helpers
         public static bool ShouldBePatched(this string driverCommand)
         {
             return driverCommand.Equals(DriverCommand.SendKeysToElement) || driverCommand.Equals(DriverCommand.SendKeysToActiveElement);
+        }
+
+        /// <summary>
+        /// Determines whether or not a WebDriver command execution is deemed successful.
+        /// </summary>
+        /// <param name="response">The <see cref="Response"/> to be inspected.</param>
+        /// <returns>True if the Response result is interpreted as successful, false otherwise.</returns>
+        public static bool IsPassed(this Response response)
+        {
+            return response.Status.Equals(WebDriverResult.Success);
         }
     }
 }
