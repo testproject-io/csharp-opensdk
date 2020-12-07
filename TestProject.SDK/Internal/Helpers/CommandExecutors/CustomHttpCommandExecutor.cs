@@ -15,34 +15,36 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
+using NLog;
 using OpenQA.Selenium.Remote;
-using TestProject.SDK.Internal.Rest;
 
 namespace TestProject.SDK.Internal.Helpers.CommandExecutors
 {
     /// <summary>
     /// A custom commands executor for Selenium drivers.
     /// Extends the original functionality by restoring driver session initiated by the Agent.
-    /// Reports commands executed to Agent.
     /// </summary>
     public class CustomHttpCommandExecutor : HttpCommandExecutor
     {
         /// <summary>
-        /// Client used to communicate with the Agent.
+        /// Timeout for the remote connection to the WebDriver server executing the commands.
         /// </summary>
-        public AgentClient AgentClient { get; }
-
         private static readonly TimeSpan RemoteConnectionTimeout = TimeSpan.FromSeconds(10);
+
+        /// <summary>
+        /// Object responsible for executing reporting to TestProject.
+        /// </summary>
+        private ReportingCommandExecutor reportingCommandExecutor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomHttpCommandExecutor"/> class.
         /// </summary>
-        /// <param name="agentClient"><see cref="AgentClient"/> used to communicate with the Agent.</param>
         /// <param name="addressOfRemoteServer">URL of the remote Selenium server managed by the Agent.</param>
-        public CustomHttpCommandExecutor(AgentClient agentClient, Uri addressOfRemoteServer)
+        public CustomHttpCommandExecutor(Uri addressOfRemoteServer)
             : base(addressOfRemoteServer, RemoteConnectionTimeout)
         {
-            this.AgentClient = agentClient;
+            this.reportingCommandExecutor = new ReportingCommandExecutor();
         }
 
         /// <summary>
@@ -70,10 +72,31 @@ namespace TestProject.SDK.Internal.Helpers.CommandExecutors
 
             if (!skipReporting)
             {
-                // TODO: report command
+                this.ReportCommand(commandToExecute, response);
             }
 
             return response;
+        }
+
+        private void ReportCommand(Command command, Response response)
+        {
+            bool isQuitCommand = command.Name.Equals(DriverCommand.Quit);
+
+            Dictionary<string, object> result;
+
+            try
+            {
+                result = (Dictionary<string, object>)response.Value;
+            }
+            catch (InvalidCastException)
+            {
+                result = new Dictionary<string, object>();
+            }
+
+            if (!isQuitCommand)
+            {
+                this.reportingCommandExecutor.ReportCommand(command.Name, command.Parameters, result, response.IsPassed());
+            }
         }
     }
 }
