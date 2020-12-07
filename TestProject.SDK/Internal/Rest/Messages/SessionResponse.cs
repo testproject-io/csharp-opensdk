@@ -14,9 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using System.Collections.Generic;
 
 namespace TestProject.SDK.Internal.Rest.Messages
 {
