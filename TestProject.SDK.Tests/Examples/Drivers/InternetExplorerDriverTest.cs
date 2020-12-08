@@ -1,31 +1,31 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
-using TestProject.SDK.Drivers;
 using TestProject.SDK.Drivers.Web;
 
 namespace TestProject.SDK.Tests.Examples.Drivers
 {
     [TestClass]
-    public class ChromeDriverTest
+    public class InternetExplorerDriverTest
     {
-        private ChromeDriver driver;
+        private InternetExplorerDriver driver;
 
         [TestInitialize]
         public void StartBrowser()
         {
-            OpenQA.Selenium.Chrome.ChromeOptions chromeOptions = new OpenQA.Selenium.Chrome.ChromeOptions();
-            chromeOptions.PageLoadStrategy = PageLoadStrategy.Normal;
-            chromeOptions.UnhandledPromptBehavior = UnhandledPromptBehavior.DismissAndNotify;
+            OpenQA.Selenium.IE.InternetExplorerOptions internetExplorerOptions = new OpenQA.Selenium.IE.InternetExplorerOptions();
+            internetExplorerOptions.PageLoadStrategy = PageLoadStrategy.Normal;
+            internetExplorerOptions.UnhandledPromptBehavior = UnhandledPromptBehavior.DismissAndNotify;
+            internetExplorerOptions.IntroduceInstabilityByIgnoringProtectedModeSettings = true;
 
-            driver = new ChromeDriver(
-                chromeOptions: chromeOptions,
+            driver = new InternetExplorerDriver(
+                internetExplorerOptions: internetExplorerOptions,
                 projectName: "My project",
                 jobName: "My job",
                 token: "aqqm_o3T_egvYLkI1eum8LV10IsHu-tKO3cRbJP6qW81");
         }
 
         [TestMethod]
-        public void ExampleTestUsingChromeDriver()
+        public void ExampleTestUsingInternetExplorerDriver()
         {
             driver.Navigate().GoToUrl("https://example.testproject.io");
             driver.FindElement(By.CssSelector("#name")).SendKeys("John Smith");

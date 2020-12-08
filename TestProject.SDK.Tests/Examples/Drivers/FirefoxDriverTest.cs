@@ -1,31 +1,30 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
-using TestProject.SDK.Drivers;
 using TestProject.SDK.Drivers.Web;
 
 namespace TestProject.SDK.Tests.Examples.Drivers
 {
     [TestClass]
-    public class ChromeDriverTest
+    public class FirefoxDriverTest
     {
-        private ChromeDriver driver;
+        private FirefoxDriver driver;
 
         [TestInitialize]
         public void StartBrowser()
         {
-            OpenQA.Selenium.Chrome.ChromeOptions chromeOptions = new OpenQA.Selenium.Chrome.ChromeOptions();
-            chromeOptions.PageLoadStrategy = PageLoadStrategy.Normal;
-            chromeOptions.UnhandledPromptBehavior = UnhandledPromptBehavior.DismissAndNotify;
+            OpenQA.Selenium.Firefox.FirefoxOptions firefoxOptions = new OpenQA.Selenium.Firefox.FirefoxOptions();
+            firefoxOptions.PageLoadStrategy = PageLoadStrategy.Normal;
+            firefoxOptions.UnhandledPromptBehavior = UnhandledPromptBehavior.DismissAndNotify;
 
-            driver = new ChromeDriver(
-                chromeOptions: chromeOptions,
+            driver = new FirefoxDriver(
+                firefoxOptions: firefoxOptions,
                 projectName: "My project",
                 jobName: "My job",
                 token: "aqqm_o3T_egvYLkI1eum8LV10IsHu-tKO3cRbJP6qW81");
         }
 
         [TestMethod]
-        public void ExampleTestUsingChromeDriver()
+        public void ExampleTestUsingFirefoxDriver()
         {
             driver.Navigate().GoToUrl("https://example.testproject.io");
             driver.FindElement(By.CssSelector("#name")).SendKeys("John Smith");
