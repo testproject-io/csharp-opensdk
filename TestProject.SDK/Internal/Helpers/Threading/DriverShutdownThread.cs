@@ -24,7 +24,7 @@ namespace TestProject.SDK.Internal.Helpers.Threading
     /// </summary>
     public class DriverShutdownThread : BaseThread
     {
-        private ChromeDriver driver;  // TODO: make this generic for all drivers (using an interface)
+        private ITestProjectDriver driver;
 
         private static Logger Logger { get; set; } = LogManager.GetCurrentClassLogger();
 
@@ -32,7 +32,7 @@ namespace TestProject.SDK.Internal.Helpers.Threading
         /// Initializes a new instance of the <see cref="DriverShutdownThread"/> class.
         /// </summary>
         /// <param name="driver">The driver object to shutdown gracefully.</param>
-        public DriverShutdownThread(ChromeDriver driver)
+        public DriverShutdownThread(ITestProjectDriver driver)
             : base()
         {
             this.driver = driver;
