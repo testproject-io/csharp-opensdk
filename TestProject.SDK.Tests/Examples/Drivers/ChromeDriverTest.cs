@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
+using TestProject.SDK.Drivers;
 using TestProject.SDK.Drivers.Web;
 
 namespace TestProject.SDK.Tests.Examples.Drivers
@@ -13,8 +14,8 @@ namespace TestProject.SDK.Tests.Examples.Drivers
         public void StartBrowser()
         {
             OpenQA.Selenium.Chrome.ChromeOptions chromeOptions = new OpenQA.Selenium.Chrome.ChromeOptions();
-            chromeOptions.PageLoadStrategy = OpenQA.Selenium.PageLoadStrategy.Normal;
-            chromeOptions.UnhandledPromptBehavior = OpenQA.Selenium.UnhandledPromptBehavior.DismissAndNotify;
+            chromeOptions.PageLoadStrategy = PageLoadStrategy.Normal;
+            chromeOptions.UnhandledPromptBehavior = UnhandledPromptBehavior.DismissAndNotify;
 
             driver = new ChromeDriver(
                 chromeOptions: chromeOptions,
