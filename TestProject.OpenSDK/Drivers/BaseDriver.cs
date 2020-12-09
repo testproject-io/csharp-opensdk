@@ -22,6 +22,7 @@ using TestProject.OpenSDK.Drivers.Web;
 using TestProject.OpenSDK.Internal.Helpers;
 using TestProject.OpenSDK.Internal.Helpers.CommandExecutors;
 using TestProject.OpenSDK.Internal.Helpers.Threading;
+using TestProject.OpenSDK.Internal.Reporting;
 using TestProject.OpenSDK.Internal.Rest;
 
 namespace TestProject.OpenSDK.Drivers
@@ -73,6 +74,15 @@ namespace TestProject.OpenSDK.Drivers
             // Add shutdown hook for gracefully shutting down the driver
             this.driverShutdownThread = new DriverShutdownThread(this);
             AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) => this.driverShutdownThread.RunThread();
+        }
+
+        /// <summary>
+        /// Enables access to the TestProject reporting actions from the driver object.
+        /// </summary>
+        /// <returns><see cref="Reporter"/> object exposing TestProject reporting methods.</returns>
+        public Reporter Report()
+        {
+            return new Reporter(this.commandExecutor);
         }
 
         /// <summary>

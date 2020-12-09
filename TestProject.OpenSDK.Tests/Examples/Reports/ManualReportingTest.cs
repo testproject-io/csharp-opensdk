@@ -1,9 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
-using TestProject.OpenSDK.Drivers;
 using TestProject.OpenSDK.Drivers.Web;
 
-namespace TestProject.OpenSDK.Tests.Examples.Drivers
+namespace TestProject.OpenSDK.Tests.Examples.Reports
 {
     [TestClass]
     public class ManualReportingTest
@@ -32,7 +31,11 @@ namespace TestProject.OpenSDK.Tests.Examples.Drivers
             driver.FindElement(By.CssSelector("#password")).SendKeys("12345");
             driver.FindElement(By.CssSelector("#login")).Click();
 
-            Assert.IsTrue(driver.FindElement(By.CssSelector("#greetings")).Displayed);
+            driver.Report().Step("A passing step", "This demonstrates reporting a passing step with a screenshot", true, true);
+
+            bool result = driver.FindElement(By.CssSelector("#greetings")).Displayed;
+
+            driver.Report().Test("Passing test", result, "This demonstrates reporting a passing test");
         }
 
         [TestCleanup]

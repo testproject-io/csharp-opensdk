@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using OpenQA.Selenium.Remote;
+using TestProject.OpenSDK.Internal.Rest;
 
 namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
 {
@@ -80,6 +81,24 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
             }
 
             return response;
+        }
+
+        /// <summary>
+        /// Creates a screenshot (PNG) and returns it as a base64 encoded string.
+        /// </summary>
+        /// <returns>The base64 encoded screenshot in PNG format.</returns>
+        public string GetScreenshot()
+        {
+            string sessionId = AgentClient.GetInstance().AgentSession.SessionId;
+
+            Dictionary<string, object> screenshotCommandParameters = new Dictionary<string, object>();
+            screenshotCommandParameters.Add("sessionId", sessionId);
+
+            Command screenshotCommand = new Command(new SessionId(sessionId), DriverCommand.Screenshot, screenshotCommandParameters);
+
+            Response response = this.Execute(screenshotCommand, true);
+
+            return response.Value.ToString();
         }
 
         private void ReportCommand(Command command, Response response)

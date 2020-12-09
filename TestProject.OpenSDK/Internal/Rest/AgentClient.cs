@@ -137,8 +137,7 @@ namespace TestProject.OpenSDK.Internal.Rest
         public void ReportDriverCommand(DriverCommandReport driverCommandReport)
         {
             // TODO: move to queueing logic
-
-            RestRequest sendDriverCommandRequest = new RestRequest("/api/development/report/command", Method.POST); // TODO: move endpoints to their own class
+            RestRequest sendDriverCommandRequest = new RestRequest(Endpoints.REPORT_COMMAND, Method.POST);
             sendDriverCommandRequest.RequestFormat = DataFormat.Json;
 
             string json = CustomJsonSerializer.ToJson(driverCommandReport, this.serializerSettings);
@@ -150,6 +149,50 @@ namespace TestProject.OpenSDK.Internal.Rest
             if ((int)sendDriverCommandResponse.StatusCode >= 400)
             {
                 Logger.Error($"Agent returned HTTP {(int)sendDriverCommandResponse.StatusCode} with message: {sendDriverCommandResponse.ErrorMessage}");
+            }
+        }
+
+        /// <summary>
+        /// Sends a <see cref="TestReport"/> to the Agent.
+        /// </summary>
+        /// <param name="testReport">The payload object containing the test details to be reported.</param>
+        public void ReportTest(TestReport testReport)
+        {
+            // TODO: move to queueing logic
+            RestRequest sendTestReportRequest = new RestRequest(Endpoints.REPORT_TEST, Method.POST);
+            sendTestReportRequest.RequestFormat = DataFormat.Json;
+
+            string json = CustomJsonSerializer.ToJson(testReport, this.serializerSettings);
+
+            sendTestReportRequest.AddJsonBody(json);
+
+            IRestResponse sendTestReportResponse = this.client.Execute(sendTestReportRequest);
+
+            if ((int)sendTestReportResponse.StatusCode >= 400)
+            {
+                Logger.Error($"Agent returned HTTP {(int)sendTestReportResponse.StatusCode} with message: {sendTestReportResponse.ErrorMessage}");
+            }
+        }
+
+        /// <summary>
+        /// Sends a <see cref="StepReport"/> to the Agent.
+        /// </summary>
+        /// <param name="stepReport">The payload object containing the step details to be reported.</param>
+        public void ReportStep(StepReport stepReport)
+        {
+            // TODO: move to queueing logic
+            RestRequest sendStepReportRequest = new RestRequest(Endpoints.REPORT_STEP, Method.POST);
+            sendStepReportRequest.RequestFormat = DataFormat.Json;
+
+            string json = CustomJsonSerializer.ToJson(stepReport, this.serializerSettings);
+
+            sendStepReportRequest.AddJsonBody(json);
+
+            IRestResponse sendStepReportResponse = this.client.Execute(sendStepReportRequest);
+
+            if ((int)sendStepReportResponse.StatusCode >= 400)
+            {
+                Logger.Error($"Agent returned HTTP {(int)sendStepReportResponse.StatusCode} with message: {sendStepReportResponse.ErrorMessage}");
             }
         }
 
@@ -173,7 +216,7 @@ namespace TestProject.OpenSDK.Internal.Rest
         /// <param name="capabilities">Additional options to be applied to the driver instance.</param>
         private void StartSession(ReportSettings reportSettings, DriverOptions capabilities)
         {
-            RestRequest startSessionRequest = new RestRequest("/api/development/session", Method.POST);  // TODO: move endpoints to their own class
+            RestRequest startSessionRequest = new RestRequest(Endpoints.DEVELOPMENT_SESSION, Method.POST);
             startSessionRequest.RequestFormat = DataFormat.Json;
 
             string json = CustomJsonSerializer.ToJson(new SessionRequest(reportSettings, capabilities), this.serializerSettings);
@@ -192,7 +235,7 @@ namespace TestProject.OpenSDK.Internal.Rest
 
             Logger.Info($"Session [{sessionResponse.SessionId}] initialized");
 
-            this.AgentSession = new AgentSession(new System.Uri(sessionResponse.ServerAddress), sessionResponse.SessionId, sessionResponse.Dialect, sessionResponse.Capabilities);
+            this.AgentSession = new AgentSession(new Uri(sessionResponse.ServerAddress), sessionResponse.SessionId, sessionResponse.Dialect, sessionResponse.Capabilities);
 
             SocketManager.GetInstance().OpenSocket(this.remoteAddress.Host, sessionResponse.DevSocketPort);
         }
@@ -241,6 +284,32 @@ namespace TestProject.OpenSDK.Internal.Rest
         private bool CanReuseSession()
         {
             return true;  // TODO: implement actual logic
+        }
+
+        /// <summary>
+        /// Internal class used to store Agent API endpoints.
+        /// </summary>
+        internal static class Endpoints
+        {
+            /// <summary>
+            /// Endpoint for starting a new development session.
+            /// </summary>
+            public const string DEVELOPMENT_SESSION = "/api/development/session";
+
+            /// <summary>
+            /// Endpoint for reporting a driver command.
+            /// </summary>
+            public const string REPORT_COMMAND = "/api/development/report/command";
+
+            /// <summary>
+            /// Endpoint for reporting a test.
+            /// </summary>
+            public const string REPORT_TEST = "/api/development/report/test";
+
+            /// <summary>
+            /// Endpoint for reporting a step.
+            /// </summary>
+            public const string REPORT_STEP = "/api/development/report/step";
         }
     }
 }
