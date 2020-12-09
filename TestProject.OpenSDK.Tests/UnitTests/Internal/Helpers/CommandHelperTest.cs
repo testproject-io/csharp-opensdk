@@ -39,7 +39,7 @@ namespace TestProject.OpenSDK.Tests.UnitTests.Internal.Helpers
 
             Assert.IsTrue(modifiedParams.ContainsKey("text"));
             Assert.AreEqual("astring", modifiedParams["text"]);
-            Assert.IsFalse(modifiedParams.ContainsKey("value"));
+            Assert.IsTrue(modifiedParams.ContainsKey("value"));
         }
     }
 }
