@@ -49,6 +49,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
                 return;
             }
 
+            // TODO: add command redaction
             // TODO: add logic to detect if we're inside a WebDriverWait
             DriverCommandReport driverCommandReport = new DriverCommandReport(commandName, commandParams, result, passed);
 
