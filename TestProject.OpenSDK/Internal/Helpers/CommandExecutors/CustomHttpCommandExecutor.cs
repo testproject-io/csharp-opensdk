@@ -16,6 +16,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using NLog;
 using OpenQA.Selenium.Remote;
 using TestProject.OpenSDK.Internal.Rest;
 
@@ -31,6 +33,8 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         /// Object responsible for executing reporting to TestProject.
         /// </summary>
         private ReportingCommandExecutor reportingCommandExecutor;
+
+        private static Logger Logger { get; set; } = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomHttpCommandExecutor"/> class.
@@ -73,11 +77,18 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         /// <returns>The <see cref="Response"/> returned by the Agent.</returns>
         public Response Execute(Command commandToExecute, bool skipReporting)
         {
+            // The Selenium HttpCommandExecutor modifies the command parameters, removing properties we need along the way
+            // We want to use the original command parameters when reporting, not the modified one after command execution.
+            Dictionary<string, object> originalParameters = new Dictionary<string, object>(commandToExecute.Parameters);
+
             Response response = base.Execute(commandToExecute);
+
+            // Create a command to report using the original parameters instead of the modified ones.
+            Command commandToReport = new Command(commandToExecute.SessionId, commandToExecute.Name, originalParameters);
 
             if (!skipReporting)
             {
-                this.ReportCommand(commandToExecute, response);
+                this.ReportCommand(commandToReport, response);
             }
 
             return response;
@@ -118,6 +129,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
 
             if (!isQuitCommand)
             {
+                command = RedactHelper.RedactCommand(this, command);
                 this.reportingCommandExecutor.ReportCommand(command.Name, command.Parameters, result, response.IsPassed());
             }
         }
