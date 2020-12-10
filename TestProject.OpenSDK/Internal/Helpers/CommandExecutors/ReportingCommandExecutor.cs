@@ -49,16 +49,11 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
                 return;
             }
 
-            // TODO: add command redaction
-
             // TODO: add logic to detect if we're inside a WebDriverWait
-
             DriverCommandReport driverCommandReport = new DriverCommandReport(commandName, commandParams, result, passed);
 
             // TODO: add screenshot if command was failed
-
             // TODO: add command stashing logic
-
             AgentClient.GetInstance().ReportDriverCommand(driverCommandReport);
         }
     }
