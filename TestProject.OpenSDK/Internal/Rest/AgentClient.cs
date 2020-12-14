@@ -65,6 +65,11 @@ namespace TestProject.OpenSDK.Internal.Rest
         private JsonSerializerSettings serializerSettings;
 
         /// <summary>
+        /// The queue used to submit and report driver command, test and step reports.
+        /// </summary>
+        private ReportsQueue reportsQueue;
+
+        /// <summary>
         /// Logger instance for this class.
         /// </summary>
         private static Logger Logger { get; set; } = LogManager.GetCurrentClassLogger();
@@ -127,6 +132,8 @@ namespace TestProject.OpenSDK.Internal.Rest
 
             this.serializerSettings = CustomJsonSerializer.Populate(new JsonSerializerSettings());
 
+            this.reportsQueue = new ReportsQueue(this.client);
+
             this.StartSession(reportSettings, capabilities);
         }
 
@@ -136,7 +143,6 @@ namespace TestProject.OpenSDK.Internal.Rest
         /// <param name="driverCommandReport">Payload object containing command information and execution result.</param>
         public void ReportDriverCommand(DriverCommandReport driverCommandReport)
         {
-            // TODO: move to queueing logic
             RestRequest sendDriverCommandRequest = new RestRequest(Endpoints.REPORT_COMMAND, Method.POST);
             sendDriverCommandRequest.RequestFormat = DataFormat.Json;
 
@@ -144,12 +150,7 @@ namespace TestProject.OpenSDK.Internal.Rest
 
             sendDriverCommandRequest.AddJsonBody(json);
 
-            IRestResponse sendDriverCommandResponse = this.client.Execute(sendDriverCommandRequest);
-
-            if ((int)sendDriverCommandResponse.StatusCode >= 400)
-            {
-                Logger.Error($"Agent returned HTTP {(int)sendDriverCommandResponse.StatusCode} with message: {sendDriverCommandResponse.ErrorMessage}");
-            }
+            this.reportsQueue.Submit(sendDriverCommandRequest, driverCommandReport);
         }
 
         /// <summary>
@@ -158,7 +159,6 @@ namespace TestProject.OpenSDK.Internal.Rest
         /// <param name="testReport">The payload object containing the test details to be reported.</param>
         public void ReportTest(TestReport testReport)
         {
-            // TODO: move to queueing logic
             RestRequest sendTestReportRequest = new RestRequest(Endpoints.REPORT_TEST, Method.POST);
             sendTestReportRequest.RequestFormat = DataFormat.Json;
 
@@ -166,12 +166,7 @@ namespace TestProject.OpenSDK.Internal.Rest
 
             sendTestReportRequest.AddJsonBody(json);
 
-            IRestResponse sendTestReportResponse = this.client.Execute(sendTestReportRequest);
-
-            if ((int)sendTestReportResponse.StatusCode >= 400)
-            {
-                Logger.Error($"Agent returned HTTP {(int)sendTestReportResponse.StatusCode} with message: {sendTestReportResponse.ErrorMessage}");
-            }
+            this.reportsQueue.Submit(sendTestReportRequest, testReport);
         }
 
         /// <summary>
@@ -180,7 +175,6 @@ namespace TestProject.OpenSDK.Internal.Rest
         /// <param name="stepReport">The payload object containing the step details to be reported.</param>
         public void ReportStep(StepReport stepReport)
         {
-            // TODO: move to queueing logic
             RestRequest sendStepReportRequest = new RestRequest(Endpoints.REPORT_STEP, Method.POST);
             sendStepReportRequest.RequestFormat = DataFormat.Json;
 
@@ -188,12 +182,7 @@ namespace TestProject.OpenSDK.Internal.Rest
 
             sendStepReportRequest.AddJsonBody(json);
 
-            IRestResponse sendStepReportResponse = this.client.Execute(sendStepReportRequest);
-
-            if ((int)sendStepReportResponse.StatusCode >= 400)
-            {
-                Logger.Error($"Agent returned HTTP {(int)sendStepReportResponse.StatusCode} with message: {sendStepReportResponse.ErrorMessage}");
-            }
+            this.reportsQueue.Submit(sendStepReportRequest, stepReport);
         }
 
         /// <summary>
@@ -201,8 +190,8 @@ namespace TestProject.OpenSDK.Internal.Rest
         /// </summary>
         public void Stop()
         {
-            // TODO: stop reporting queue (to be implemented)
-            // TODO: call when driver quits (implemented through command executor)
+            this.reportsQueue.Stop();
+
             if (!this.CanReuseSession())
             {
                 SocketManager.GetInstance().CloseSocket();
