@@ -43,9 +43,8 @@ namespace TestProject.OpenSDK.Tests.Examples.Reports
 
             this.driver = new ChromeDriver(
                 chromeOptions: chromeOptions,
-                projectName: "My project",
-                jobName: "My job",
-                token: "aqqm_o3T_egvYLkI1eum8LV10IsHu-tKO3cRbJP6qW81");
+                projectName: "Examples",
+                jobName: "Manual reporting examples");
         }
 
         /// <summary>

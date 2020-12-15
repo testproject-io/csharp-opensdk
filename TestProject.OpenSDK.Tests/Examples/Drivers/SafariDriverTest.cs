@@ -43,9 +43,8 @@ namespace TestProject.OpenSDK.Tests.Examples.Drivers
 
             this.driver = new SafariDriver(
                 safariOptions: safariOptions,
-                projectName: "My project",
-                jobName: "My job",
-                token: "aqqm_o3T_egvYLkI1eum8LV10IsHu-tKO3cRbJP6qW81");
+                projectName: "Examples",
+                jobName: "Safari examples");
         }
 
         /// <summary>
