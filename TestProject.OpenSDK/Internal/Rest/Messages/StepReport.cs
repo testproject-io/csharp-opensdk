@@ -19,7 +19,7 @@ namespace TestProject.OpenSDK.Internal.Rest.Messages
     /// <summary>
     /// Payload object sent to the Agent when reporting a test step.
     /// </summary>
-    public class StepReport
+    public class StepReport : Report
     {
         /// <summary>
         /// A GUID that uniquely identifies this step.

@@ -21,7 +21,7 @@ namespace TestProject.OpenSDK.Internal.Rest.Messages
     /// <summary>
     /// Payload object sent to the Agent to report a WebDriver command.
     /// </summary>
-    public class DriverCommandReport
+    public class DriverCommandReport : Report
     {
         /// <summary>
         /// WebDriver command executed by the driver.

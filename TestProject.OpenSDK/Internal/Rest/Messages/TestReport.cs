@@ -19,7 +19,7 @@ namespace TestProject.OpenSDK.Internal.Rest.Messages
     /// <summary>
     /// Payload object sent to the Agent when reporting a test.
     /// </summary>
-    public class TestReport
+    public class TestReport : Report
     {
         /// <summary>
         /// The test name.

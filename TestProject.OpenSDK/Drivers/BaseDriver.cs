@@ -101,7 +101,8 @@ namespace TestProject.OpenSDK.Drivers
         /// </summary>
         public void Stop()
         {
-            // TODO: add reporting pending reports
+            AgentClient.GetInstance().Stop();
+
             base.Quit();
         }
 
