@@ -43,9 +43,8 @@ namespace TestProject.OpenSDK.Tests.Examples.Drivers
 
             this.driver = new RemoteWebDriver(
                 driverOptions: chromeOptions,
-                projectName: "My project",
-                jobName: "My job",
-                token: "aqqm_o3T_egvYLkI1eum8LV10IsHu-tKO3cRbJP6qW81");
+                projectName: "Examples",
+                jobName: "Remote WebDriver examples");
 
             this.driver.Navigate().GoToUrl("https://example.testproject.io");
             this.driver.FindElement(By.CssSelector("#name")).SendKeys("John Smith");
