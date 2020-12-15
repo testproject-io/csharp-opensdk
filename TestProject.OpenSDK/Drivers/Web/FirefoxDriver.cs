@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using OpenQA.Selenium.Firefox;
 
 namespace TestProject.OpenSDK.Drivers.Web
@@ -34,7 +35,7 @@ namespace TestProject.OpenSDK.Drivers.Web
         /// <param name="jobName">The job name to report.</param>
         /// <param name="disableReports">Set to true to disable all reporting (no report will be created on TestProject).</param>
         public FirefoxDriver(
-            string remoteAddress = "http://localhost:8585",  // TODO: replace with proper logic
+            Uri remoteAddress = null,
             string token = null,
             FirefoxOptions firefoxOptions = null,
             string projectName = null,

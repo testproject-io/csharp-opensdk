@@ -49,15 +49,14 @@ namespace TestProject.OpenSDK.Drivers
         /// <param name="jobName">The job name to report.</param>
         /// <param name="disableReports">Set to true to disable all reporting (no report will be created on TestProject).</param>
         protected BaseDriver(
-            string remoteAddress = "http://localhost:8585",  // TODO: replace with proper logic
+            Uri remoteAddress = null,
             string token = null,
             DriverOptions driverOptions = null,
             string projectName = null,
             string jobName = null,
             bool disableReports = false)
             : base(
-                  new Uri(remoteAddress),
-                  AgentClient.GetInstance(new Uri(remoteAddress), token, driverOptions, new ReportSettings(projectName, jobName), disableReports).AgentSession.Capabilities)
+                  AgentClient.GetInstance(remoteAddress, token, driverOptions, new ReportSettings(projectName, jobName), disableReports).AgentSession.Capabilities)
         {
             this.sessionId = AgentClient.GetInstance().AgentSession.SessionId;
 

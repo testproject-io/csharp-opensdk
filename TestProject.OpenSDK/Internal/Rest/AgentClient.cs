@@ -45,6 +45,16 @@ namespace TestProject.OpenSDK.Internal.Rest
         private readonly string tpDevToken = "TP_DEV_TOKEN";
 
         /// <summary>
+        /// Name of the environment variable that stores the Agent address.
+        /// </summary>
+        private readonly string tpAgentAddress = "TP_AGENT_URL";
+
+        /// <summary>
+        /// The default Agent address to be used if no address is specified in the driver constructor or environment variable.
+        /// </summary>
+        private readonly string agentDefaultAddress = "http://localhost:8585";
+
+        /// <summary>
         /// The remote address where the Agent is running.
         /// </summary>
         private Uri remoteAddress;
@@ -112,7 +122,7 @@ namespace TestProject.OpenSDK.Internal.Rest
         /// <param name="disableReports">Set to true to disable all reporting to TestProject, false otherwise.</param>
         private AgentClient(Uri remoteAddress, string token, DriverOptions capabilities, ReportSettings reportSettings, bool disableReports)
         {
-            this.remoteAddress = remoteAddress; // TODO: Add proper address inferring logic
+            this.remoteAddress = this.InferRemoteAddress(remoteAddress);
 
             if (token != null)
             {
@@ -273,6 +283,23 @@ namespace TestProject.OpenSDK.Internal.Rest
         private bool CanReuseSession()
         {
             return true;  // TODO: implement actual logic
+        }
+
+        private Uri InferRemoteAddress(Uri originalUri)
+        {
+            if (originalUri != null)
+            {
+                return originalUri;
+            }
+
+            if (Environment.GetEnvironmentVariable(this.tpAgentAddress) != null)
+            {
+                return new Uri(Environment.GetEnvironmentVariable(this.tpAgentAddress));
+            }
+            else
+            {
+                return new Uri(this.agentDefaultAddress);
+            }
         }
 
         /// <summary>
