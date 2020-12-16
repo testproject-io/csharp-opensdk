@@ -65,5 +65,41 @@ namespace TestProject.OpenSDK.Internal.Reporting
 
             AgentClient.GetInstance().ReportStep(stepReport);
         }
+
+        /// <summary>
+        /// Enables / disables all reporting.
+        /// </summary>
+        /// <param name="disable">True to disable all reporting, false to enable.</param>
+        public void DisableReports(bool disable)
+        {
+            this.commandExecutor.ReportsDisabled = disable;
+        }
+
+        /// <summary>
+        /// Enables / disables automatic driver command reporting.
+        /// </summary>
+        /// <param name="disable">True to disable automatic driver command reporting, false to enable.</param>
+        public void DisableCommandReports(bool disable)
+        {
+            this.commandExecutor.CommandReportsDisabled = disable;
+        }
+
+        /// <summary>
+        /// Enables / disables automatic test reporting.
+        /// </summary>
+        /// <param name="disable">True to disable automatic test reporting, false to enable.</param>
+        public void DisableAutoTestReports(bool disable)
+        {
+            this.commandExecutor.AutoTestReportsDisabled = disable;
+        }
+
+        /// <summary>
+        /// Enables / disables redaction of sensitive text sent to elements deemed private.
+        /// </summary>
+        /// <param name="disable">True to disable command redaction, false to enable.</param>
+        public void DisableRedaction(bool disable)
+        {
+            this.commandExecutor.RedactionDisabled = disable;
+        }
     }
 }
