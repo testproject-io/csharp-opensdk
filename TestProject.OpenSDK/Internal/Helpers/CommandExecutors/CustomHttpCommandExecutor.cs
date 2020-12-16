@@ -145,7 +145,11 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
 
             if (!isQuitCommand)
             {
-                command = RedactHelper.RedactCommand(this, command);
+                if (!this.RedactionDisabled)
+                {
+                    command = RedactHelper.RedactCommand(this, command);
+                }
+
                 this.reportingCommandExecutor.ReportCommand(command.Name, command.Parameters, result, response.IsPassed());
             }
         }
