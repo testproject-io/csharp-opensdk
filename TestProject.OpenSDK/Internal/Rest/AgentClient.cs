@@ -37,6 +37,9 @@ namespace TestProject.OpenSDK.Internal.Rest
         /// </summary>
         public AgentSession AgentSession { get; private set; }
 
+        /// <summary>
+        /// A singleton instance of the <see cref="AgentClient"/> class.
+        /// </summary>
         private static AgentClient instance;
 
         /// <summary>
@@ -53,6 +56,16 @@ namespace TestProject.OpenSDK.Internal.Rest
         /// The default Agent address to be used if no address is specified in the driver constructor or environment variable.
         /// </summary>
         private readonly string agentDefaultAddress = "http://localhost:8585";
+
+        /// <summary>
+        /// Minimum Agent version that support session reuse.
+        /// </summary>
+        private readonly Version minSessionReuseCapableVersion = new Version("0.64.32");
+
+        /// <summary>
+        /// The current version of the Agent in use.
+        /// </summary>
+        private Version agentVersion;
 
         /// <summary>
         /// The remote address where the Agent is running.
@@ -237,6 +250,8 @@ namespace TestProject.OpenSDK.Internal.Rest
             this.AgentSession = new AgentSession(new Uri(sessionResponse.ServerAddress), sessionResponse.SessionId, sessionResponse.Dialect, sessionResponse.Capabilities);
 
             SocketManager.GetInstance().OpenSocket(this.remoteAddress.Host, sessionResponse.DevSocketPort);
+
+            this.agentVersion = this.GetAgentVersion();
         }
 
         /// <summary>
@@ -277,12 +292,43 @@ namespace TestProject.OpenSDK.Internal.Rest
         }
 
         /// <summary>
+        /// Retrieves the version of the Agent currently in use.
+        /// </summary>
+        /// <returns>An instance of the <see cref="Version"/> class containing the Agent version.</returns>
+        private Version GetAgentVersion()
+        {
+            RestRequest getAgentStatusRequest = new RestRequest(Endpoints.STATUS, Method.GET);
+
+            IRestResponse getAgentStatusResponse = this.client.Execute(getAgentStatusRequest);
+
+            if ((int)getAgentStatusResponse.StatusCode >= 400)
+            {
+                throw new AgentConnectException($"Failed to get Agent status: {getAgentStatusResponse.ErrorMessage}");
+            }
+
+            AgentStatusResponse agentStatusResponse = CustomJsonSerializer.FromJson<AgentStatusResponse>(getAgentStatusResponse.Content, this.serializerSettings);
+
+            Logger.Info($"Current Agent version is {agentStatusResponse.Tag}");
+
+            return new Version(agentStatusResponse.Tag);
+        }
+
+        /// <summary>
         /// Indicates whether the current Agent version supports session reuse.
         /// </summary>
         /// <returns>True if the Agent version supports session reuse, false otherwise.</returns>
         private bool CanReuseSession()
         {
-            return true;  // TODO: implement actual logic
+            if (this.agentVersion == null)
+            {
+                return false;
+            }
+
+            // a.CompareTo(b) returns:
+            // * -1 if a is earlier than b
+            // *  0 if a is the same version as b
+            // *  1 is a is later than b
+            return this.agentVersion.CompareTo(this.minSessionReuseCapableVersion) >= 0;
         }
 
         private Uri InferRemoteAddress(Uri originalUri)
@@ -307,6 +353,11 @@ namespace TestProject.OpenSDK.Internal.Rest
         /// </summary>
         internal static class Endpoints
         {
+            /// <summary>
+            /// Endpoint for retrieving Agent status info.
+            /// </summary>
+            public const string STATUS = "/api/status";
+
             /// <summary>
             /// Endpoint for starting a new development session.
             /// </summary>
