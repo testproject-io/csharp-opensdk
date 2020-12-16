@@ -16,8 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using NLog;
 using OpenQA.Selenium.Remote;
 using TestProject.OpenSDK.Internal.Rest;
 
@@ -30,11 +28,29 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
     public class CustomHttpCommandExecutor : HttpCommandExecutor
     {
         /// <summary>
+        /// Flag to enable / disable all reporting.
+        /// </summary>
+        public bool ReportsDisabled { get; set; }
+
+        /// <summary>
+        /// Flag to enable / disable automatic driver command reporting.
+        /// </summary>
+        public bool CommandReportsDisabled { get; set; }
+
+        /// <summary>
+        /// Flag to enable / disable automatic test reporting.
+        /// </summary>
+        public bool AutoTestReportsDisabled { get; set; }
+
+        /// <summary>
+        /// Flag to enable / disable command reporting.
+        /// </summary>
+        public bool RedactionDisabled { get; set; }
+
+        /// <summary>
         /// Object responsible for executing reporting to TestProject.
         /// </summary>
         private ReportingCommandExecutor reportingCommandExecutor;
-
-        private static Logger Logger { get; set; } = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomHttpCommandExecutor"/> class.
