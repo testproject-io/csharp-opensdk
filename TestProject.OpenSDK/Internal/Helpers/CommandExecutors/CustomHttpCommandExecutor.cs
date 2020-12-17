@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using NLog;
 using OpenQA.Selenium.Remote;
 using TestProject.OpenSDK.Internal.Rest;
 
@@ -51,6 +52,11 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         /// Object responsible for executing reporting to TestProject.
         /// </summary>
         private ReportingCommandExecutor reportingCommandExecutor;
+
+        /// <summary>
+        /// Logger instance for this class.
+        /// </summary>
+        private static Logger Logger { get; set; } = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomHttpCommandExecutor"/> class.
@@ -150,7 +156,14 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
                     command = RedactHelper.RedactCommand(this, command);
                 }
 
-                this.reportingCommandExecutor.ReportCommand(command.Name, command.Parameters, result, response.IsPassed());
+                if (!this.CommandReportsDisabled)
+                {
+                    this.reportingCommandExecutor.ReportCommand(command.Name, command.Parameters, result, response.IsPassed());
+                }
+                else
+                {
+                    Logger.Trace($"Command '{command.Name}' {(response.IsPassed() ? "passed" : "failed")}");
+                }
             }
         }
     }
