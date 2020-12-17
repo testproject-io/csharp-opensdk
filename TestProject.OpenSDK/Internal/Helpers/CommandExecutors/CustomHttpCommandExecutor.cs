@@ -16,7 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using NLog;
 using OpenQA.Selenium.Remote;
 using TestProject.OpenSDK.Internal.Rest;
@@ -30,10 +29,33 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
     public class CustomHttpCommandExecutor : HttpCommandExecutor
     {
         /// <summary>
+        /// Flag to enable / disable all reporting.
+        /// </summary>
+        public bool ReportsDisabled { get; set; }
+
+        /// <summary>
+        /// Flag to enable / disable automatic driver command reporting.
+        /// </summary>
+        public bool CommandReportsDisabled { get; set; }
+
+        /// <summary>
+        /// Flag to enable / disable automatic test reporting.
+        /// </summary>
+        public bool AutoTestReportsDisabled { get; set; }
+
+        /// <summary>
+        /// Flag to enable / disable command reporting.
+        /// </summary>
+        public bool RedactionDisabled { get; set; }
+
+        /// <summary>
         /// Object responsible for executing reporting to TestProject.
         /// </summary>
         private ReportingCommandExecutor reportingCommandExecutor;
 
+        /// <summary>
+        /// Logger instance for this class.
+        /// </summary>
         private static Logger Logger { get; set; } = LogManager.GetCurrentClassLogger();
 
         /// <summary>
@@ -129,8 +151,19 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
 
             if (!isQuitCommand)
             {
-                command = RedactHelper.RedactCommand(this, command);
-                this.reportingCommandExecutor.ReportCommand(command.Name, command.Parameters, result, response.IsPassed());
+                if (!this.RedactionDisabled)
+                {
+                    command = RedactHelper.RedactCommand(this, command);
+                }
+
+                if (!this.CommandReportsDisabled)
+                {
+                    this.reportingCommandExecutor.ReportCommand(command.Name, command.Parameters, result, response.IsPassed());
+                }
+                else
+                {
+                    Logger.Trace($"Command '{command.Name}' {(response.IsPassed() ? "passed" : "failed")}");
+                }
             }
         }
     }

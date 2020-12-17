@@ -68,7 +68,10 @@ namespace TestProject.OpenSDK.Drivers
                     System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
             sessionIdBase.SetValue(this, this.sessionId);
 
+            // Create a new command executor for this driver session and set disable reporting flag
             this.commandExecutor = new CustomHttpCommandExecutor(AgentClient.GetInstance().AgentSession.RemoteAddress);
+
+            this.commandExecutor.ReportsDisabled = disableReports;
 
             // Add shutdown hook for gracefully shutting down the driver
             this.driverShutdownThread = new DriverShutdownThread(this);

@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using NLog;
 using TestProject.OpenSDK.Internal.Helpers.CommandExecutors;
 using TestProject.OpenSDK.Internal.Rest;
 using TestProject.OpenSDK.Internal.Rest.Messages;
@@ -25,7 +26,15 @@ namespace TestProject.OpenSDK.Internal.Reporting
     /// </summary>
     public class Reporter
     {
+        /// <summary>
+        /// The HTTP command executor associated with the current driver session.
+        /// </summary>
         private CustomHttpCommandExecutor commandExecutor;
+
+        /// <summary>
+        /// Logger instance for this class.
+        /// </summary>
+        private static Logger Logger { get; set; } = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Reporter"/> class.
@@ -44,9 +53,22 @@ namespace TestProject.OpenSDK.Internal.Reporting
         /// <param name="message">A message that goes with the test.</param>
         public void Test(string name, bool passed = true, string message = null)
         {
-            TestReport testReport = new TestReport(name, passed, message);
+            if (!this.commandExecutor.ReportsDisabled)
+            {
+                if (!this.commandExecutor.AutoTestReportsDisabled)
+                {
+                    Logger.Warn("Automatic reporting is enabled, disable this using DisableAutoTestReports() " +
+                        "to avoid duplicates in the report.");
+                }
 
-            AgentClient.GetInstance().ReportTest(testReport);
+                TestReport testReport = new TestReport(name, passed, message);
+
+                AgentClient.GetInstance().ReportTest(testReport);
+            }
+            else
+            {
+                Logger.Trace($"Test '{name}' {(passed ? "passed" : "failed")}");
+            }
         }
 
         /// <summary>
@@ -59,11 +81,54 @@ namespace TestProject.OpenSDK.Internal.Reporting
         public void Step(string description, string message = null, bool passed = true, bool screenshot = false)
         {
             // TODO: report a test if necessary
-            string screenshotAsString = screenshot ? this.commandExecutor.GetScreenshot() : null;
+            if (!this.commandExecutor.ReportsDisabled)
+            {
+                string screenshotAsString = screenshot ? this.commandExecutor.GetScreenshot() : null;
 
-            StepReport stepReport = new StepReport(description, message, passed, screenshotAsString);
+                StepReport stepReport = new StepReport(description, message, passed, screenshotAsString);
 
-            AgentClient.GetInstance().ReportStep(stepReport);
+                AgentClient.GetInstance().ReportStep(stepReport);
+            }
+            else
+            {
+                Logger.Trace($"Step '{description}' {(passed ? "passed" : "failed")}");
+            }
+        }
+
+        /// <summary>
+        /// Enables / disables all reporting.
+        /// </summary>
+        /// <param name="disable">True to disable all reporting, false to enable.</param>
+        public void DisableReports(bool disable)
+        {
+            this.commandExecutor.ReportsDisabled = disable;
+        }
+
+        /// <summary>
+        /// Enables / disables automatic driver command reporting.
+        /// </summary>
+        /// <param name="disable">True to disable automatic driver command reporting, false to enable.</param>
+        public void DisableCommandReports(bool disable)
+        {
+            this.commandExecutor.CommandReportsDisabled = disable;
+        }
+
+        /// <summary>
+        /// Enables / disables automatic test reporting.
+        /// </summary>
+        /// <param name="disable">True to disable automatic test reporting, false to enable.</param>
+        public void DisableAutoTestReports(bool disable)
+        {
+            this.commandExecutor.AutoTestReportsDisabled = disable;
+        }
+
+        /// <summary>
+        /// Enables / disables redaction of sensitive text sent to elements deemed private.
+        /// </summary>
+        /// <param name="disable">True to disable command redaction, false to enable.</param>
+        public void DisableRedaction(bool disable)
+        {
+            this.commandExecutor.RedactionDisabled = disable;
         }
     }
 }
