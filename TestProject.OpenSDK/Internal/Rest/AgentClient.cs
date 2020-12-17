@@ -137,6 +137,8 @@ namespace TestProject.OpenSDK.Internal.Rest
         {
             this.remoteAddress = this.InferRemoteAddress(remoteAddress);
 
+            ReportSettings sessionReportSettings = disableReports ? null : reportSettings;  // TODO: infer project and job name
+
             if (token != null)
             {
                 this.token = token;
@@ -157,7 +159,7 @@ namespace TestProject.OpenSDK.Internal.Rest
 
             this.reportsQueue = new ReportsQueue(this.client);
 
-            this.StartSession(reportSettings, capabilities);
+            this.StartSession(sessionReportSettings, capabilities);
         }
 
         /// <summary>
