@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using NLog;
 using TestProject.OpenSDK.Internal.Helpers.CommandExecutors;
 using TestProject.OpenSDK.Internal.Rest;
 using TestProject.OpenSDK.Internal.Rest.Messages;
@@ -25,7 +26,15 @@ namespace TestProject.OpenSDK.Internal.Reporting
     /// </summary>
     public class Reporter
     {
+        /// <summary>
+        /// The HTTP command executor associated with the current driver session.
+        /// </summary>
         private CustomHttpCommandExecutor commandExecutor;
+
+        /// <summary>
+        /// Logger instance for this class.
+        /// </summary>
+        private static Logger Logger { get; set; } = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Reporter"/> class.
@@ -44,6 +53,12 @@ namespace TestProject.OpenSDK.Internal.Reporting
         /// <param name="message">A message that goes with the test.</param>
         public void Test(string name, bool passed = true, string message = null)
         {
+            if (!this.commandExecutor.AutoTestReportsDisabled)
+            {
+                Logger.Warn("Automatic reporting is enabled, disable this using DisableAutoTestReports() " +
+                    "to avoid duplicates in the report.");
+            }
+
             TestReport testReport = new TestReport(name, passed, message);
 
             AgentClient.GetInstance().ReportTest(testReport);
