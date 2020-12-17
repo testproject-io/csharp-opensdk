@@ -53,15 +53,22 @@ namespace TestProject.OpenSDK.Internal.Reporting
         /// <param name="message">A message that goes with the test.</param>
         public void Test(string name, bool passed = true, string message = null)
         {
-            if (!this.commandExecutor.AutoTestReportsDisabled)
+            if (!this.commandExecutor.ReportsDisabled)
             {
-                Logger.Warn("Automatic reporting is enabled, disable this using DisableAutoTestReports() " +
-                    "to avoid duplicates in the report.");
+                if (!this.commandExecutor.AutoTestReportsDisabled)
+                {
+                    Logger.Warn("Automatic reporting is enabled, disable this using DisableAutoTestReports() " +
+                        "to avoid duplicates in the report.");
+                }
+
+                TestReport testReport = new TestReport(name, passed, message);
+
+                AgentClient.GetInstance().ReportTest(testReport);
             }
-
-            TestReport testReport = new TestReport(name, passed, message);
-
-            AgentClient.GetInstance().ReportTest(testReport);
+            else
+            {
+                Logger.Trace($"Test '{name}' {(passed ? "passed" : "failed")}");
+            }
         }
 
         /// <summary>
@@ -74,11 +81,18 @@ namespace TestProject.OpenSDK.Internal.Reporting
         public void Step(string description, string message = null, bool passed = true, bool screenshot = false)
         {
             // TODO: report a test if necessary
-            string screenshotAsString = screenshot ? this.commandExecutor.GetScreenshot() : null;
+            if (!this.commandExecutor.ReportsDisabled)
+            {
+                string screenshotAsString = screenshot ? this.commandExecutor.GetScreenshot() : null;
 
-            StepReport stepReport = new StepReport(description, message, passed, screenshotAsString);
+                StepReport stepReport = new StepReport(description, message, passed, screenshotAsString);
 
-            AgentClient.GetInstance().ReportStep(stepReport);
+                AgentClient.GetInstance().ReportStep(stepReport);
+            }
+            else
+            {
+                Logger.Trace($"Step '{description}' {(passed ? "passed" : "failed")}");
+            }
         }
 
         /// <summary>
