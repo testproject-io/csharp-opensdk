@@ -42,9 +42,7 @@ namespace TestProject.OpenSDK.Tests.Examples.Drivers
             chromeOptions.UnhandledPromptBehavior = UnhandledPromptBehavior.DismissAndNotify;
 
             this.driver = new RemoteWebDriver(
-                driverOptions: chromeOptions,
-                projectName: "Examples",
-                jobName: "Remote WebDriver examples");
+                driverOptions: chromeOptions);
 
             this.driver.Navigate().GoToUrl("https://example.testproject.io");
             this.driver.FindElement(By.CssSelector("#name")).SendKeys("John Smith");

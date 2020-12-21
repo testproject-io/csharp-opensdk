@@ -42,9 +42,7 @@ namespace TestProject.OpenSDK.Tests.Examples.Drivers
             firefoxOptions.UnhandledPromptBehavior = UnhandledPromptBehavior.DismissAndNotify;
 
             this.driver = new FirefoxDriver(
-                firefoxOptions: firefoxOptions,
-                projectName: "Examples",
-                jobName: "Firefox examples");
+                firefoxOptions: firefoxOptions);
         }
 
         /// <summary>

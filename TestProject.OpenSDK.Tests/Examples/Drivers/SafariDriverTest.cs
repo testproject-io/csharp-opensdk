@@ -42,9 +42,7 @@ namespace TestProject.OpenSDK.Tests.Examples.Drivers
             safariOptions.UnhandledPromptBehavior = UnhandledPromptBehavior.DismissAndNotify;
 
             this.driver = new SafariDriver(
-                safariOptions: safariOptions,
-                projectName: "Examples",
-                jobName: "Safari examples");
+                safariOptions: safariOptions);
         }
 
         /// <summary>
