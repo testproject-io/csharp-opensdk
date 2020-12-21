@@ -43,9 +43,7 @@ namespace TestProject.OpenSDK.Tests.Examples.Drivers
             internetExplorerOptions.IntroduceInstabilityByIgnoringProtectedModeSettings = true;
 
             this.driver = new InternetExplorerDriver(
-                internetExplorerOptions: internetExplorerOptions,
-                projectName: "Examples",
-                jobName: "Internet Explorer examples");
+                internetExplorerOptions: internetExplorerOptions);
         }
 
         /// <summary>

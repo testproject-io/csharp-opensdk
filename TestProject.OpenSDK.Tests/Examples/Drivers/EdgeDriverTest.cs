@@ -42,9 +42,7 @@ namespace TestProject.OpenSDK.Tests.Examples.Drivers
             edgeOptions.UnhandledPromptBehavior = UnhandledPromptBehavior.DismissAndNotify;
 
             this.driver = new EdgeDriver(
-                edgeOptions: edgeOptions,
-                projectName: "Examples",
-                jobName: "Edge examples");
+                edgeOptions: edgeOptions);
         }
 
         /// <summary>

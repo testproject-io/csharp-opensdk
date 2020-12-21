@@ -42,9 +42,7 @@ namespace TestProject.OpenSDK.Tests.Examples.Drivers
             chromeOptions.UnhandledPromptBehavior = UnhandledPromptBehavior.DismissAndNotify;
 
             this.driver = new ChromeDriver(
-                chromeOptions: chromeOptions,
-                projectName: "Examples",
-                jobName: "Chrome examples");
+                chromeOptions: chromeOptions);
         }
 
         /// <summary>

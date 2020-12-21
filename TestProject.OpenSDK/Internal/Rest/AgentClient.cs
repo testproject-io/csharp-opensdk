@@ -20,6 +20,7 @@ using Newtonsoft.Json.Linq;
 using NLog;
 using OpenQA.Selenium;
 using RestSharp;
+using TestProject.OpenSDK.Internal.CallStackAnalysis;
 using TestProject.OpenSDK.Internal.Exceptions;
 using TestProject.OpenSDK.Internal.Helpers;
 using TestProject.OpenSDK.Internal.Rest.Messages;
@@ -137,7 +138,7 @@ namespace TestProject.OpenSDK.Internal.Rest
         {
             this.remoteAddress = this.InferRemoteAddress(remoteAddress);
 
-            ReportSettings sessionReportSettings = disableReports ? null : reportSettings;  // TODO: infer project and job name
+            ReportSettings sessionReportSettings = disableReports ? null : this.InferReportSettings(reportSettings);
 
             if (token != null)
             {
@@ -348,6 +349,36 @@ namespace TestProject.OpenSDK.Internal.Rest
             {
                 return new Uri(this.agentDefaultAddress);
             }
+        }
+
+        /// <summary>
+        /// Tries to infer report settings using the <see cref="StackTraceHelper"/> and returns resulting reporting settings.
+        /// </summary>
+        /// <param name="originalSettings">The explicitly specified project and job names (may be null or empty).</param>
+        /// <returns><see cref="ReportSettings"/> instance with inferred project and job names (where applicable).</returns>
+        private ReportSettings InferReportSettings(ReportSettings originalSettings)
+        {
+            if (originalSettings != null &&
+                !string.IsNullOrEmpty(originalSettings.JobName) &&
+                !string.IsNullOrEmpty(originalSettings.ProjectName))
+            {
+                Logger.Trace("Project and job names were explicitly specified, skipping inferring.");
+                return originalSettings;
+            }
+
+            Logger.Trace("Report settings were not provided or incomplete, trying to infer them...");
+
+            string projectName = StackTraceHelper.Instance.GetInferredProjectName();
+            string jobName = StackTraceHelper.Instance.GetInferredJobName();
+
+            // Overwrite empty values with inferred ones
+            ReportSettings inferredReportSettings = new ReportSettings(
+                string.IsNullOrEmpty(originalSettings.ProjectName) ? projectName : originalSettings.ProjectName,
+                string.IsNullOrEmpty(originalSettings.JobName) ? jobName : originalSettings.JobName);
+
+            Logger.Trace($"Using inferred values '{inferredReportSettings.ProjectName}' and '{inferredReportSettings.JobName}' as project and job name, respectively.");
+
+            return inferredReportSettings;
         }
 
         /// <summary>
