@@ -69,9 +69,7 @@ namespace TestProject.OpenSDK.Drivers
             sessionIdBase.SetValue(this, this.sessionId);
 
             // Create a new command executor for this driver session and set disable reporting flag
-            this.commandExecutor = new CustomHttpCommandExecutor(AgentClient.GetInstance().AgentSession.RemoteAddress);
-
-            this.commandExecutor.ReportsDisabled = disableReports;
+            this.commandExecutor = new CustomHttpCommandExecutor(AgentClient.GetInstance().AgentSession.RemoteAddress, disableReports);
 
             // Add shutdown hook for gracefully shutting down the driver
             this.driverShutdownThread = new DriverShutdownThread(this);
@@ -84,7 +82,7 @@ namespace TestProject.OpenSDK.Drivers
         /// <returns><see cref="Reporter"/> object exposing TestProject reporting methods.</returns>
         public Reporter Report()
         {
-            return new Reporter(this.commandExecutor);
+            return new Reporter(this.commandExecutor.ReportingCommandExecutor);
         }
 
         /// <summary>
