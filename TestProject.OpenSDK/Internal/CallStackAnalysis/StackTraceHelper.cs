@@ -38,7 +38,7 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
         {
         }
 
-        private readonly IMethodAnalyzer[] analyzers = { new MSTestAnalyzer() };
+        private readonly IMethodAnalyzer[] analyzers = { new MSTestAnalyzer(), new NUnitAnalyzer(), new XUnitAnalyzer() };
 
         /// <summary>
         /// Infers the test method name from the current stack trace.
