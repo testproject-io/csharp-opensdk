@@ -182,8 +182,12 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
                 command = RedactHelper.RedactCommand(this.commandExecutor, command);
             }
 
-            // TODO: add screenshot if command was failed
             DriverCommandReport driverCommandReport = new DriverCommandReport(command.Name, command.Parameters, result, passed);
+
+            if (!passed)
+            {
+                driverCommandReport.Screenshot = this.GetScreenshot();
+            }
 
             AgentClient.GetInstance().ReportDriverCommand(driverCommandReport);
         }
