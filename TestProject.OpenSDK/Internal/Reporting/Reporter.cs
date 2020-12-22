@@ -29,7 +29,7 @@ namespace TestProject.OpenSDK.Internal.Reporting
         /// <summary>
         /// The HTTP command executor associated with the current driver session.
         /// </summary>
-        private CustomHttpCommandExecutor commandExecutor;
+        private ReportingCommandExecutor reportingCommandExecutor;
 
         /// <summary>
         /// Logger instance for this class.
@@ -39,10 +39,10 @@ namespace TestProject.OpenSDK.Internal.Reporting
         /// <summary>
         /// Initializes a new instance of the <see cref="Reporter"/> class.
         /// </summary>
-        /// <param name="commandExecutor">The command executor associated with the current WebDriver object.</param>
-        public Reporter(CustomHttpCommandExecutor commandExecutor)
+        /// <param name="reportingCommandExecutor">The reporting command executor associated with the current WebDriver object.</param>
+        public Reporter(ReportingCommandExecutor reportingCommandExecutor)
         {
-            this.commandExecutor = commandExecutor;
+            this.reportingCommandExecutor = reportingCommandExecutor;
         }
 
         /// <summary>
@@ -53,9 +53,9 @@ namespace TestProject.OpenSDK.Internal.Reporting
         /// <param name="message">A message that goes with the test.</param>
         public void Test(string name, bool passed = true, string message = null)
         {
-            if (!this.commandExecutor.ReportsDisabled)
+            if (!this.reportingCommandExecutor.ReportsDisabled)
             {
-                if (!this.commandExecutor.AutoTestReportsDisabled)
+                if (!this.reportingCommandExecutor.AutoTestReportsDisabled)
                 {
                     Logger.Warn("Automatic reporting is enabled, disable this using DisableAutoTestReports() " +
                         "to avoid duplicates in the report.");
@@ -81,9 +81,9 @@ namespace TestProject.OpenSDK.Internal.Reporting
         public void Step(string description, string message = null, bool passed = true, bool screenshot = false)
         {
             // TODO: report a test if necessary
-            if (!this.commandExecutor.ReportsDisabled)
+            if (!this.reportingCommandExecutor.ReportsDisabled)
             {
-                string screenshotAsString = screenshot ? this.commandExecutor.GetScreenshot() : null;
+                string screenshotAsString = screenshot ? this.reportingCommandExecutor.GetScreenshot() : null;
 
                 StepReport stepReport = new StepReport(description, message, passed, screenshotAsString);
 
@@ -101,7 +101,7 @@ namespace TestProject.OpenSDK.Internal.Reporting
         /// <param name="disable">True to disable all reporting, false to enable.</param>
         public void DisableReports(bool disable)
         {
-            this.commandExecutor.ReportsDisabled = disable;
+            this.reportingCommandExecutor.ReportsDisabled = disable;
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace TestProject.OpenSDK.Internal.Reporting
         /// <param name="disable">True to disable automatic driver command reporting, false to enable.</param>
         public void DisableCommandReports(bool disable)
         {
-            this.commandExecutor.CommandReportsDisabled = disable;
+            this.reportingCommandExecutor.CommandReportsDisabled = disable;
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace TestProject.OpenSDK.Internal.Reporting
         /// <param name="disable">True to disable automatic test reporting, false to enable.</param>
         public void DisableAutoTestReports(bool disable)
         {
-            this.commandExecutor.AutoTestReportsDisabled = disable;
+            this.reportingCommandExecutor.AutoTestReportsDisabled = disable;
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace TestProject.OpenSDK.Internal.Reporting
         /// <param name="disable">True to disable command redaction, false to enable.</param>
         public void DisableRedaction(bool disable)
         {
-            this.commandExecutor.RedactionDisabled = disable;
+            this.reportingCommandExecutor.RedactionDisabled = disable;
         }
     }
 }
