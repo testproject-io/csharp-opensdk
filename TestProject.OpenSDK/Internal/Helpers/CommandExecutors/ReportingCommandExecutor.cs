@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using NLog;
 using OpenQA.Selenium.Remote;
+using TestProject.OpenSDK.Internal.CallStackAnalysis;
 using TestProject.OpenSDK.Internal.Rest;
 using TestProject.OpenSDK.Internal.Rest.Messages;
 
@@ -50,6 +51,8 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
 
         private CustomHttpCommandExecutor commandExecutor;
 
+        private string currentTestName;
+
         /// <summary>
         /// Logger instance for this class.
         /// </summary>
@@ -74,6 +77,20 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         public void ReportCommand(Command command, Response response)
         {
             bool isQuitCommand = command.Name.Equals(DriverCommand.Quit);
+
+            if (!this.AutoTestReportsDisabled)
+            {
+                this.ReportTest(isQuitCommand);
+            }
+
+            if (isQuitCommand)
+            {
+                // Close the client after finishing the test using driver.Quit()
+                AgentClient.GetInstance().Stop();
+
+                // Do not report Quit() command to avoid creating a new test in the reports
+                return;
+            }
 
             Dictionary<string, object> result;
 
@@ -105,6 +122,44 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         }
 
         /// <summary>
+        /// Report a test to the Agent.
+        /// </summary>
+        /// <param name="force">True if called just before the session closes, but test name has not changed.
+        /// This forces reporting a test at the end of the session. False, otherwise.</param>
+        public void ReportTest(bool force)
+        {
+            // Get the name of the test method currently running
+            string inferredTestName = StackTraceHelper.Instance.GetInferredTestName();
+
+            // If the current test name has not been set, set it
+            if (this.currentTestName == null)
+            {
+                this.currentTestName = inferredTestName;
+            }
+
+            if (inferredTestName == null)
+            {
+                return;
+            }
+
+            if (!inferredTestName.Equals(this.currentTestName) || force)
+            {
+                if (this.ReportsDisabled)
+                {
+                    Logger.Trace($"Test [{this.currentTestName}] - [Passed]");
+                    return;
+                }
+
+                // Report a finished test
+                TestReport testReport = new TestReport(this.currentTestName, true, null);
+                AgentClient.GetInstance().ReportTest(testReport);
+
+                // Update the current test name
+                this.currentTestName = inferredTestName;
+            }
+        }
+
+        /// <summary>
         /// Creates a screenshot (PNG) and returns it as a base64 encoded string.
         /// </summary>
         /// <returns>The base64 encoded screenshot in PNG format.</returns>
@@ -131,13 +186,6 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         /// <param name="passed">True if command execution was successful, false otherwise.</param>
         private void SendCommandToAgent(string commandName, Dictionary<string, object> commandParams, Dictionary<string, object> result, bool passed)
         {
-            if (commandName.Equals(DriverCommand.Quit))
-            {
-                // TODO: auto report a test if automatic test reporting is not disabled
-                return;
-            }
-
-            // TODO: add command redaction
             // TODO: add logic to detect if we're inside a WebDriverWait
             DriverCommandReport driverCommandReport = new DriverCommandReport(commandName, commandParams, result, passed);
 
