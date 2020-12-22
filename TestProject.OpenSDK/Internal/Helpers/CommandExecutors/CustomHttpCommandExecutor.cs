@@ -16,7 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-using NLog;
 using OpenQA.Selenium.Remote;
 using TestProject.OpenSDK.Internal.Rest;
 
@@ -29,41 +28,17 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
     public class CustomHttpCommandExecutor : HttpCommandExecutor
     {
         /// <summary>
-        /// Flag to enable / disable all reporting.
-        /// </summary>
-        public bool ReportsDisabled { get; set; }
-
-        /// <summary>
-        /// Flag to enable / disable automatic driver command reporting.
-        /// </summary>
-        public bool CommandReportsDisabled { get; set; }
-
-        /// <summary>
-        /// Flag to enable / disable automatic test reporting.
-        /// </summary>
-        public bool AutoTestReportsDisabled { get; set; }
-
-        /// <summary>
-        /// Flag to enable / disable command reporting.
-        /// </summary>
-        public bool RedactionDisabled { get; set; }
-
-        /// <summary>
         /// Object responsible for executing reporting to TestProject.
         /// </summary>
-        private ReportingCommandExecutor reportingCommandExecutor;
-
-        /// <summary>
-        /// Logger instance for this class.
-        /// </summary>
-        private static Logger Logger { get; set; } = LogManager.GetCurrentClassLogger();
+        public ReportingCommandExecutor ReportingCommandExecutor { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomHttpCommandExecutor"/> class.
         /// </summary>
         /// <param name="addressOfRemoteServer">URL of the remote Selenium server managed by the Agent.</param>
-        public CustomHttpCommandExecutor(Uri addressOfRemoteServer)
-            : this(addressOfRemoteServer, TimeSpan.FromSeconds(10))
+        /// <param name="disableReports">True if all reporting should be disabled, false otherwise.</param>
+        public CustomHttpCommandExecutor(Uri addressOfRemoteServer, bool disableReports)
+            : this(addressOfRemoteServer, disableReports, TimeSpan.FromSeconds(10))
         {
         }
 
@@ -71,11 +46,12 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         /// Initializes a new instance of the <see cref="CustomHttpCommandExecutor"/> class.
         /// </summary>
         /// <param name="addressOfRemoteServer">URL of the remote Selenium server managed by the Agent.</param>
+        /// <param name="disableReports">True if all reporting should be disabled, false otherwise.</param>
         /// <param name="remoteConnectionTimeout">Timeout for the remote connection to the WebDriver server executing the commands.</param>
-        public CustomHttpCommandExecutor(Uri addressOfRemoteServer, TimeSpan remoteConnectionTimeout)
+        public CustomHttpCommandExecutor(Uri addressOfRemoteServer, bool disableReports, TimeSpan remoteConnectionTimeout)
             : base(addressOfRemoteServer, remoteConnectionTimeout)
         {
-            this.reportingCommandExecutor = new ReportingCommandExecutor();
+            this.ReportingCommandExecutor = new ReportingCommandExecutor(this, disableReports);
         }
 
         /// <summary>
@@ -110,61 +86,10 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
 
             if (!skipReporting)
             {
-                this.ReportCommand(commandToReport, response);
+                this.ReportingCommandExecutor.ReportCommand(commandToReport, response);
             }
 
             return response;
-        }
-
-        /// <summary>
-        /// Creates a screenshot (PNG) and returns it as a base64 encoded string.
-        /// </summary>
-        /// <returns>The base64 encoded screenshot in PNG format.</returns>
-        public string GetScreenshot()
-        {
-            string sessionId = AgentClient.GetInstance().AgentSession.SessionId;
-
-            Dictionary<string, object> screenshotCommandParameters = new Dictionary<string, object>();
-            screenshotCommandParameters.Add("sessionId", sessionId);
-
-            Command screenshotCommand = new Command(new SessionId(sessionId), DriverCommand.Screenshot, screenshotCommandParameters);
-
-            Response response = this.Execute(screenshotCommand, true);
-
-            return response.Value.ToString();
-        }
-
-        private void ReportCommand(Command command, Response response)
-        {
-            bool isQuitCommand = command.Name.Equals(DriverCommand.Quit);
-
-            Dictionary<string, object> result;
-
-            try
-            {
-                result = (Dictionary<string, object>)response.Value;
-            }
-            catch (InvalidCastException)
-            {
-                result = new Dictionary<string, object>();
-            }
-
-            if (!isQuitCommand)
-            {
-                if (!this.RedactionDisabled)
-                {
-                    command = RedactHelper.RedactCommand(this, command);
-                }
-
-                if (!this.CommandReportsDisabled)
-                {
-                    this.reportingCommandExecutor.ReportCommand(command.Name, command.Parameters, result, response.IsPassed());
-                }
-                else
-                {
-                    Logger.Trace($"Command '{command.Name}' {(response.IsPassed() ? "passed" : "failed")}");
-                }
-            }
         }
     }
 }
