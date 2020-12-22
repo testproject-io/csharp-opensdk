@@ -103,22 +103,8 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
                 result = new Dictionary<string, object>();
             }
 
-            if (!isQuitCommand)
-            {
-                if (!this.RedactionDisabled)
-                {
-                    command = RedactHelper.RedactCommand(this.commandExecutor, command);
-                }
-
-                if (!this.CommandReportsDisabled)
-                {
-                    this.SendCommandToAgent(command.Name, command.Parameters, result, response.IsPassed());
-                }
-                else
-                {
-                    Logger.Trace($"Command '{command.Name}' {(response.IsPassed() ? "passed" : "failed")}");
-                }
-            }
+            // TODO: add logic to detect if we're inside a WebDriverWait
+            this.SendCommandToAgent(command, result, response.IsPassed());
         }
 
         /// <summary>
@@ -180,17 +166,25 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         /// <summary>
         /// Send an executed WebDriver command to the Agent.
         /// </summary>
-        /// <param name="commandName">The name of the WebDriver command that was executed.</param>
-        /// <param name="commandParams">The corresponding command parameters.</param>
+        /// <param name="command">The WebDriver command that was executed.</param>
         /// <param name="result">The result of the command execution.</param>
         /// <param name="passed">True if command execution was successful, false otherwise.</param>
-        private void SendCommandToAgent(string commandName, Dictionary<string, object> commandParams, Dictionary<string, object> result, bool passed)
+        private void SendCommandToAgent(Command command, Dictionary<string, object> result, bool passed)
         {
-            // TODO: add logic to detect if we're inside a WebDriverWait
-            DriverCommandReport driverCommandReport = new DriverCommandReport(commandName, commandParams, result, passed);
+            if (this.ReportsDisabled || this.CommandReportsDisabled)
+            {
+                Logger.Trace($"Command '{command.Name}' {(passed ? "passed" : "failed")}");
+                return;
+            }
+
+            if (!this.RedactionDisabled)
+            {
+                command = RedactHelper.RedactCommand(this.commandExecutor, command);
+            }
 
             // TODO: add screenshot if command was failed
-            // TODO: add command stashing logic
+            DriverCommandReport driverCommandReport = new DriverCommandReport(command.Name, command.Parameters, result, passed);
+
             AgentClient.GetInstance().ReportDriverCommand(driverCommandReport);
         }
     }
