@@ -17,7 +17,6 @@
 using System;
 using System.Collections.Generic;
 using OpenQA.Selenium.Remote;
-using TestProject.OpenSDK.Internal.Rest;
 
 namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
 {
@@ -25,7 +24,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
     /// A custom commands executor for Selenium drivers.
     /// Extends the original functionality by restoring driver session initiated by the Agent.
     /// </summary>
-    public class CustomHttpCommandExecutor : HttpCommandExecutor
+    public class CustomHttpCommandExecutor : HttpCommandExecutor, ITestProjectCommandExecutor
     {
         /// <summary>
         /// Object responsible for executing reporting to TestProject.
