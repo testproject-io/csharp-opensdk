@@ -1,0 +1,81 @@
+﻿// <copyright file="GenericDriver.cs" company="TestProject">
+// Copyright 2020 TestProject (https://testproject.io)
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
+
+using System;
+using TestProject.OpenSDK.Internal.Helpers.CommandExecutors;
+using TestProject.OpenSDK.Internal.Reporting;
+using TestProject.OpenSDK.Internal.Rest;
+
+namespace TestProject.OpenSDK.Drivers.Generic
+{
+    /// <summary>
+    /// Generic driver that can be used to execute non-UI automation and upload the results to TestProject.
+    /// </summary>
+    public class GenericDriver
+    {
+        /// <summary>
+        /// The minimum version of the Agent supporting the Generic driver.
+        /// </summary>
+        private readonly Version minGenericDriverSupportedVersion = new Version("0.64.40");
+
+        /// <summary>
+        /// The command executor that takes care of executing commands and reporting them to TestProject.
+        /// </summary>
+        private GenericCommandExecutor commandExecutor;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GenericDriver"/> class.
+        /// </summary>
+        /// <param name="remoteAddress">The base address for the Agent API (e.g. http://localhost:8585).</param>
+        /// <param name="token">The development token used to communicate with the Agent, see <a href="https://app.testproject.io/#/integrations/sdk">here</a> for more info.</param>
+        /// <param name="projectName">The project name to report.</param>
+        /// <param name="jobName">The job name to report.</param>
+        /// <param name="disableReports">Set to true to disable all reporting (no report will be created on TestProject).</param>
+        public GenericDriver(
+            Uri remoteAddress = null,
+            string token = null,
+            string projectName = null,
+            string jobName = null,
+            bool disableReports = false)
+        {
+            AgentClient agentClient = AgentClient.GetInstance(remoteAddress, token, new GenericOptions(), new ReportSettings(projectName, jobName), disableReports, this.minGenericDriverSupportedVersion);
+
+            this.commandExecutor = new GenericCommandExecutor(remoteAddress, disableReports);
+        }
+
+        /// <summary>
+        /// Enables access to the TestProject reporting actions from the driver object.
+        /// </summary>
+        /// <returns><see cref="Reporter"/> object exposing TestProject reporting methods.</returns>
+        public Reporter Report()
+        {
+            return new Reporter(this.commandExecutor.ReportingCommandExecutor);
+        }
+
+        /// <summary>
+        /// Quits the current driver session and wraps up reporting.
+        /// </summary>
+        public void Quit()
+        {
+            if (!this.commandExecutor.ReportingCommandExecutor.ReportsDisabled)
+            {
+                this.commandExecutor.ReportingCommandExecutor.ReportTest(true);
+            }
+
+            AgentClient.GetInstance().Stop();
+        }
+    }
+}
