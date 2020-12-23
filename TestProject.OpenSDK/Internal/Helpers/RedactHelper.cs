@@ -33,7 +33,7 @@ namespace TestProject.OpenSDK.Internal.Helpers
         /// <param name="executor">The command executor used by the driver to execute WebDriver commands.</param>
         /// <param name="command">The command to be redacted.</param>
         /// <returns>The redacted command, or the original command if no redaction is required.</returns>
-        public static Command RedactCommand(CustomHttpCommandExecutor executor, Command command)
+        public static Command RedactCommand(ITestProjectCommandExecutor executor, Command command)
         {
             if (command.Name.Equals(DriverCommand.SendKeysToElement) || command.Name.Equals(DriverCommand.SendKeysToActiveElement))
             {
@@ -58,7 +58,7 @@ namespace TestProject.OpenSDK.Internal.Helpers
         /// <param name="command">The command to be redacted.</param>
         /// <param name="elementId">The unique ID of the element that the command was executed on.</param>
         /// <returns>True if redaction is required, false otherwise.</returns>
-        private static bool IsRedactRequired(CustomHttpCommandExecutor executor, Command command, string elementId)
+        private static bool IsRedactRequired(ITestProjectCommandExecutor executor, Command command, string elementId)
         {
             // TODO: check if element is a mobile element and act accordingly
             return IsSecuredElement(executor, elementId);
@@ -70,7 +70,7 @@ namespace TestProject.OpenSDK.Internal.Helpers
         /// <param name="executor">The command executor used by the driver to execute WebDriver commands.</param>
         /// <param name="elementId">The unique ID of the element that the command was executed on.</param>
         /// <returns>True if the element is a secure element, false otherwise.</returns>
-        private static bool IsSecuredElement(CustomHttpCommandExecutor executor, string elementId)
+        private static bool IsSecuredElement(ITestProjectCommandExecutor executor, string elementId)
         {
             Dictionary<string, object> getAttributeParameters = new Dictionary<string, object>();
             getAttributeParameters.Add("id", elementId);
