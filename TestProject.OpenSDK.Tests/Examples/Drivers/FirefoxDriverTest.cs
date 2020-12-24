@@ -37,12 +37,7 @@ namespace TestProject.OpenSDK.Tests.Examples.Drivers
         [TestInitialize]
         public void StartBrowser()
         {
-            OpenQA.Selenium.Firefox.FirefoxOptions firefoxOptions = new OpenQA.Selenium.Firefox.FirefoxOptions();
-            firefoxOptions.PageLoadStrategy = PageLoadStrategy.Normal;
-            firefoxOptions.UnhandledPromptBehavior = UnhandledPromptBehavior.DismissAndNotify;
-
-            this.driver = new FirefoxDriver(
-                firefoxOptions: firefoxOptions);
+            this.driver = new FirefoxDriver();
         }
 
         /// <summary>

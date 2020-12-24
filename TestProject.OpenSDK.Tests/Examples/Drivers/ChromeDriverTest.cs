@@ -37,12 +37,7 @@ namespace TestProject.OpenSDK.Tests.Examples.Drivers
         [TestInitialize]
         public void StartBrowser()
         {
-            OpenQA.Selenium.Chrome.ChromeOptions chromeOptions = new OpenQA.Selenium.Chrome.ChromeOptions();
-            chromeOptions.PageLoadStrategy = PageLoadStrategy.Normal;
-            chromeOptions.UnhandledPromptBehavior = UnhandledPromptBehavior.DismissAndNotify;
-
-            this.driver = new ChromeDriver(
-                chromeOptions: chromeOptions);
+            this.driver = new ChromeDriver();
         }
 
         /// <summary>

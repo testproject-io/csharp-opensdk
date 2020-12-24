@@ -37,12 +37,7 @@ namespace TestProject.OpenSDK.Tests.Examples.Drivers
         [TestInitialize]
         public void StartBrowser()
         {
-            OpenQA.Selenium.Safari.SafariOptions safariOptions = new OpenQA.Selenium.Safari.SafariOptions();
-            safariOptions.PageLoadStrategy = PageLoadStrategy.Normal;
-            safariOptions.UnhandledPromptBehavior = UnhandledPromptBehavior.DismissAndNotify;
-
-            this.driver = new SafariDriver(
-                safariOptions: safariOptions);
+            this.driver = new SafariDriver();
         }
 
         /// <summary>
