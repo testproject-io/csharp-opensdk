@@ -49,7 +49,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         /// </summary>
         public bool RedactionDisabled { get; set; }
 
-        private CustomHttpCommandExecutor commandExecutor;
+        private ITestProjectCommandExecutor commandExecutor;
 
         private string currentTestName;
 
@@ -63,7 +63,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         /// </summary>
         /// <param name="commandExecutor">The HTTP command executor used to send WebDriver commands.</param>
         /// <param name="disableReports">True if all reporting should be disabled, false otherwise.</param>
-        public ReportingCommandExecutor(CustomHttpCommandExecutor commandExecutor, bool disableReports)
+        public ReportingCommandExecutor(ITestProjectCommandExecutor commandExecutor, bool disableReports)
         {
             this.commandExecutor = commandExecutor;
             this.ReportsDisabled = disableReports;

@@ -1,4 +1,4 @@
-﻿// <copyright file="CustomHttpCommandExecutor.cs" company="TestProject">
+﻿// <copyright file="GenericCommandExecutor.cs" company="TestProject">
 // Copyright 2020 TestProject (https://testproject.io)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,14 +17,15 @@
 using System;
 using System.Collections.Generic;
 using OpenQA.Selenium.Remote;
+using TestProject.OpenSDK.Internal.Rest;
 
 namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
 {
     /// <summary>
-    /// A custom commands executor for Selenium drivers.
+    /// A custom commands executor for the <see cref="GenericDriver"/>.
     /// Extends the original functionality by restoring driver session initiated by the Agent.
     /// </summary>
-    public class CustomHttpCommandExecutor : HttpCommandExecutor, ITestProjectCommandExecutor
+    public class GenericCommandExecutor : ITestProjectCommandExecutor
     {
         /// <summary>
         /// Object responsible for executing reporting to TestProject.
@@ -32,23 +33,11 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         public ReportingCommandExecutor ReportingCommandExecutor { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CustomHttpCommandExecutor"/> class.
+        /// Initializes a new instance of the <see cref="GenericCommandExecutor"/> class.
         /// </summary>
-        /// <param name="addressOfRemoteServer">URL of the remote Selenium server managed by the Agent.</param>
+        /// <param name="addressOfRemoteServer">URL of the Agent.</param>
         /// <param name="disableReports">True if all reporting should be disabled, false otherwise.</param>
-        public CustomHttpCommandExecutor(Uri addressOfRemoteServer, bool disableReports)
-            : this(addressOfRemoteServer, disableReports, TimeSpan.FromSeconds(10))
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CustomHttpCommandExecutor"/> class.
-        /// </summary>
-        /// <param name="addressOfRemoteServer">URL of the remote Selenium server managed by the Agent.</param>
-        /// <param name="disableReports">True if all reporting should be disabled, false otherwise.</param>
-        /// <param name="remoteConnectionTimeout">Timeout for the remote connection to the WebDriver server executing the commands.</param>
-        public CustomHttpCommandExecutor(Uri addressOfRemoteServer, bool disableReports, TimeSpan remoteConnectionTimeout)
-            : base(addressOfRemoteServer, remoteConnectionTimeout)
+        public GenericCommandExecutor(Uri addressOfRemoteServer, bool disableReports)
         {
             this.ReportingCommandExecutor = new ReportingCommandExecutor(this, disableReports);
         }
@@ -58,7 +47,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         /// </summary>
         /// <param name="commandToExecute">The WebDriver command to execute.</param>
         /// <returns>The <see cref="Response"/> returned by the Agent.</returns>
-        public override Response Execute(Command commandToExecute)
+        public Response Execute(Command commandToExecute)
         {
             return this.Execute(commandToExecute, false);
         }
@@ -74,21 +63,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         /// <returns>The <see cref="Response"/> returned by the Agent.</returns>
         public Response Execute(Command commandToExecute, bool skipReporting)
         {
-            // The Selenium HttpCommandExecutor modifies the command parameters, removing properties we need along the way
-            // We want to use the original command parameters when reporting, not the modified one after command execution.
-            Dictionary<string, object> originalParameters = new Dictionary<string, object>(commandToExecute.Parameters);
-
-            Response response = base.Execute(commandToExecute);
-
-            // Create a command to report using the original parameters instead of the modified ones.
-            Command commandToReport = new Command(commandToExecute.SessionId, commandToExecute.Name, originalParameters);
-
-            if (!skipReporting)
-            {
-                this.ReportingCommandExecutor.ReportCommand(commandToReport, response);
-            }
-
-            return response;
+            throw new NotImplementedException("Execute() is not implemented for the Generic driver");
         }
     }
 }

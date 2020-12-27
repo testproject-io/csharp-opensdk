@@ -68,7 +68,11 @@ TestProject.OpenSDK.Drivers
 │   ├── InternetExplorerDriver
 │   ├── SafariDriver
 │   └── RemoteWebDriver
+├── Generic
+│   └── GenericDriver
 ```
+
+> The GenericDriver can be used to run non-UI tests and still report the results to TestProject.
 
 ## Development Token
 
@@ -213,13 +217,14 @@ TBD
 
 Here are more [examples](https://github.com/testproject-io/csharp-sdk/tree/main/TestProject.OpenSDK.Tests/Examples):
 
-* Web
+* Drivers
   * [Chrome Test](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/ChromeDriverTest.cs)
   * [Edge Test](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/EdgeDriverTest.cs)
   * [Firefox Test](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/FirefoxDriverTest.cs)
   * [Internet Explorer Test](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/InternetExplorerDriverTest.cs)
   * [Safari Test](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/SafariDriverTest.cs)
   * [Remote Web Driver Test](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/RemoteWebDriverTest.cs)
+  * [Generic Driver Test](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/GenericDriverTest.cs)
 * Frameworks
   * MSTest
     * [Inferred Report](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Frameworks/MSTest/InferredReportTest.cs)

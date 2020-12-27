@@ -115,12 +115,13 @@ namespace TestProject.OpenSDK.Internal.Rest
         /// <param name="capabilities">Requested driver options for the browser session.</param>
         /// <param name="reportSettings">Contains the project and job name to report to TestProject.</param>
         /// <param name="disableReports">Set to true to disable all reporting to TestProject, false otherwise.</param>
+        /// <param name="compatibleVersion">Minimum Agent version that supports the requested feature. Can be used to check Agent compatibility.</param>
         /// <returns>A singleton instance of the <see cref="AgentClient"/>.</returns>
-        public static AgentClient GetInstance(Uri remoteAddress, string token, DriverOptions capabilities, ReportSettings reportSettings, bool disableReports)
+        public static AgentClient GetInstance(Uri remoteAddress, string token, DriverOptions capabilities, ReportSettings reportSettings, bool disableReports, Version compatibleVersion = null)
         {
             if (instance == null)
             {
-                instance = new AgentClient(remoteAddress, token, capabilities, reportSettings, disableReports);
+                instance = new AgentClient(remoteAddress, token, capabilities, reportSettings, disableReports, compatibleVersion);
             }
 
             return instance;
@@ -134,7 +135,8 @@ namespace TestProject.OpenSDK.Internal.Rest
         /// <param name="capabilities">Requested driver options for the browser session.</param>
         /// <param name="reportSettings">Contains the project and job name to report to TestProject.</param>
         /// <param name="disableReports">Set to true to disable all reporting to TestProject, false otherwise.</param>
-        private AgentClient(Uri remoteAddress, string token, DriverOptions capabilities, ReportSettings reportSettings, bool disableReports)
+        /// <param name="compatibleVersion">Minimum Agent version that supports the requested feature. Can be used to check Agent compatibility.</param>
+        private AgentClient(Uri remoteAddress, string token, DriverOptions capabilities, ReportSettings reportSettings, bool disableReports, Version compatibleVersion)
         {
             this.remoteAddress = this.InferRemoteAddress(remoteAddress);
 
@@ -157,6 +159,24 @@ namespace TestProject.OpenSDK.Internal.Rest
             this.client.AddDefaultHeader("Authorization", this.token);
 
             this.serializerSettings = CustomJsonSerializer.Populate(new JsonSerializerSettings());
+
+            // Check that Agent version supports the requested feature.
+            if (compatibleVersion != null)
+            {
+                Logger.Trace($"Checking if the Agent version is {compatibleVersion} at minimum");
+
+                this.agentVersion = this.GetAgentVersion();
+
+                // a.CompareTo(b) returns:
+                // * <0 if a is earlier than b
+                // *  0 if a is the same version as b
+                // * >0 is a is later than b
+                if (this.agentVersion.CompareTo(compatibleVersion) < 0)
+                {
+                    throw new AgentConnectException($"Current Agent version {this.agentVersion} does not support the requested feature," +
+                        $" should be at least {compatibleVersion}");
+                }
+            }
 
             this.reportsQueue = new ReportsQueue(this.client);
 
@@ -248,13 +268,23 @@ namespace TestProject.OpenSDK.Internal.Rest
 
             SessionResponse sessionResponse = CustomJsonSerializer.FromJson<SessionResponse>(startSessionResponse.Content, this.serializerSettings);
 
+            // A session request for the generic driver returns a partial response, so we generate our own session ID.
+            if (sessionResponse.SessionId == null)
+            {
+                sessionResponse.SessionId = Guid.NewGuid().ToString();
+            }
+
             Logger.Info($"Session [{sessionResponse.SessionId}] initialized");
 
             this.AgentSession = new AgentSession(new Uri(sessionResponse.ServerAddress), sessionResponse.SessionId, sessionResponse.Dialect, sessionResponse.Capabilities);
 
             SocketManager.GetInstance().OpenSocket(this.remoteAddress.Host, sessionResponse.DevSocketPort);
 
-            this.agentVersion = this.GetAgentVersion();
+            // Only retrieve the Agent version when it has not yet been set
+            if (this.agentVersion == null)
+            {
+                this.agentVersion = this.GetAgentVersion();
+            }
         }
 
         /// <summary>
