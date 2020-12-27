@@ -16,6 +16,7 @@
 
 using System;
 using OpenQA.Selenium.Chrome;
+using TestProject.OpenSDK.Internal.Helpers.DriverOptions;
 
 namespace TestProject.OpenSDK.Drivers.Web
 {
@@ -41,7 +42,7 @@ namespace TestProject.OpenSDK.Drivers.Web
             string projectName = null,
             string jobName = null,
             bool disableReports = false)
-            : base(remoteAddress, token, chromeOptions, projectName, jobName, disableReports)
+            : base(remoteAddress, token, DriverOptionsHelper.Patch(chromeOptions, BrowserType.Chrome), projectName, jobName, disableReports)
         {
         }
     }

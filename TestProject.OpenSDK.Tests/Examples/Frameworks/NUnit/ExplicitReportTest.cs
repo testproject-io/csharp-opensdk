@@ -37,12 +37,7 @@ namespace TestProject.OpenSDK.Tests.Examples.Frameworks.NUnit
         [SetUp]
         public void StartBrowser()
         {
-            OpenQA.Selenium.Chrome.ChromeOptions chromeOptions = new OpenQA.Selenium.Chrome.ChromeOptions();
-            chromeOptions.PageLoadStrategy = PageLoadStrategy.Normal;
-            chromeOptions.UnhandledPromptBehavior = UnhandledPromptBehavior.DismissAndNotify;
-
             this.driver = new ChromeDriver(
-                chromeOptions: chromeOptions,
                 projectName: "Examples",
                 jobName: "NUnit example");
         }

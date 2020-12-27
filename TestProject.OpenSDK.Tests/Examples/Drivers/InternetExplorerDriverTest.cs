@@ -37,13 +37,7 @@ namespace TestProject.OpenSDK.Tests.Examples.Drivers
         [TestInitialize]
         public void StartBrowser()
         {
-            OpenQA.Selenium.IE.InternetExplorerOptions internetExplorerOptions = new OpenQA.Selenium.IE.InternetExplorerOptions();
-            internetExplorerOptions.PageLoadStrategy = PageLoadStrategy.Normal;
-            internetExplorerOptions.UnhandledPromptBehavior = UnhandledPromptBehavior.DismissAndNotify;
-            internetExplorerOptions.IntroduceInstabilityByIgnoringProtectedModeSettings = true;
-
-            this.driver = new InternetExplorerDriver(
-                internetExplorerOptions: internetExplorerOptions);
+            this.driver = new InternetExplorerDriver();
         }
 
         /// <summary>

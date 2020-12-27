@@ -31,12 +31,7 @@ namespace TestProject.OpenSDK.Tests.Examples.Frameworks.XUnit
         [Fact]
         public void ExampleTestUsingChromeDriver()
         {
-            OpenQA.Selenium.Chrome.ChromeOptions chromeOptions = new OpenQA.Selenium.Chrome.ChromeOptions();
-            chromeOptions.PageLoadStrategy = PageLoadStrategy.Normal;
-            chromeOptions.UnhandledPromptBehavior = UnhandledPromptBehavior.DismissAndNotify;
-
             ChromeDriver driver = new ChromeDriver(
-                chromeOptions: chromeOptions,
                 projectName: "Examples",
                 jobName: "XUnit example");
 

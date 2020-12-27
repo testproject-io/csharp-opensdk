@@ -38,11 +38,8 @@ namespace TestProject.OpenSDK.Tests.Examples.Drivers
         public void ExampleTestUsingRemoteWebDriverWithChromeOptions()
         {
             OpenQA.Selenium.Chrome.ChromeOptions chromeOptions = new OpenQA.Selenium.Chrome.ChromeOptions();
-            chromeOptions.PageLoadStrategy = PageLoadStrategy.Normal;
-            chromeOptions.UnhandledPromptBehavior = UnhandledPromptBehavior.DismissAndNotify;
 
-            this.driver = new RemoteWebDriver(
-                driverOptions: chromeOptions);
+            this.driver = new RemoteWebDriver(driverOptions: chromeOptions);
 
             this.driver.Navigate().GoToUrl("https://example.testproject.io");
             this.driver.FindElement(By.CssSelector("#name")).SendKeys("John Smith");
@@ -59,14 +56,8 @@ namespace TestProject.OpenSDK.Tests.Examples.Drivers
         public void ExampleTestUsingRemoteWebDriverWithFirefoxOptions()
         {
             OpenQA.Selenium.Firefox.FirefoxOptions firefoxOptions = new OpenQA.Selenium.Firefox.FirefoxOptions();
-            firefoxOptions.PageLoadStrategy = PageLoadStrategy.Normal;
-            firefoxOptions.UnhandledPromptBehavior = UnhandledPromptBehavior.DismissAndNotify;
 
-            this.driver = new RemoteWebDriver(
-                driverOptions: firefoxOptions,
-                projectName: "My project",
-                jobName: "My job",
-                token: "aqqm_o3T_egvYLkI1eum8LV10IsHu-tKO3cRbJP6qW81");
+            this.driver = new RemoteWebDriver(driverOptions: firefoxOptions);
 
             this.driver.Navigate().GoToUrl("https://example.testproject.io");
             this.driver.FindElement(By.CssSelector("#name")).SendKeys("John Smith");

@@ -37,12 +37,7 @@ namespace TestProject.OpenSDK.Tests.Examples.Drivers
         [TestInitialize]
         public void StartBrowser()
         {
-            OpenQA.Selenium.Edge.EdgeOptions edgeOptions = new OpenQA.Selenium.Edge.EdgeOptions();
-            edgeOptions.PageLoadStrategy = PageLoadStrategy.Normal;
-            edgeOptions.UnhandledPromptBehavior = UnhandledPromptBehavior.DismissAndNotify;
-
-            this.driver = new EdgeDriver(
-                edgeOptions: edgeOptions);
+            this.driver = new EdgeDriver();
         }
 
         /// <summary>
