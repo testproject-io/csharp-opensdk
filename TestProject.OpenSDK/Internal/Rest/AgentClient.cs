@@ -368,16 +368,16 @@ namespace TestProject.OpenSDK.Internal.Rest
         {
             if (originalUri != null)
             {
-                return originalUri;
+                return originalUri.LocalhostTo127001();
             }
 
             if (Environment.GetEnvironmentVariable(this.tpAgentAddress) != null)
             {
-                return new Uri(Environment.GetEnvironmentVariable(this.tpAgentAddress));
+                return new Uri(Environment.GetEnvironmentVariable(this.tpAgentAddress)).LocalhostTo127001();
             }
             else
             {
-                return new Uri(this.agentDefaultAddress);
+                return new Uri(this.agentDefaultAddress).LocalhostTo127001();
             }
         }
 

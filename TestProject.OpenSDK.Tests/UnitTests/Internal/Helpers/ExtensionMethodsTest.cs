@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium.Remote;
 using TestProject.OpenSDK.Internal.Helpers;
@@ -58,6 +59,41 @@ namespace TestProject.OpenSDK.Tests.UnitTests.Internal.Helpers
             string driverCommand = DriverCommand.ClickElement;
 
             Assert.IsFalse(driverCommand.ShouldBePatched());
+        }
+
+        /// <summary>
+        /// If the host name of a Uri used to define the Agent remote address contains 'localhost',
+        /// this should be updated to '127.0.0.1' to prevent reporting issues due to DNS lookup delays.
+        /// </summary>
+        [TestMethod]
+        public void LocalhostTo127001_WithLocalhostInUri_ShouldReturnUpdatedUri()
+        {
+            Uri originalUri = new Uri("http://localhost:1234");
+
+            Assert.AreEqual("http://127.0.0.1:1234/", originalUri.LocalhostTo127001().ToString());
+        }
+
+        /// <summary>
+        /// Checking if the hostname equals 'localhost' should be case insensitive.
+        /// </summary>
+        [TestMethod]
+        public void LocalhostTo127001_WithLocalhostInCaps_ShouldReturnUpdatedUri()
+        {
+            Uri originalUri = new Uri("https://lOcaLhoST:9876");
+
+            Assert.AreEqual("https://127.0.0.1:9876/", originalUri.LocalhostTo127001().ToString());
+        }
+
+        /// <summary>
+        /// If the host name of a Uri used to define the Agent remote address does not contain 'localhost',
+        /// it should return unchanged.
+        /// </summary>
+        [TestMethod]
+        public void LocalhostTo127001_WithoutLocalhostInUri_ShouldReturnUnchanged()
+        {
+            Uri originalUri = new Uri("http://my.host.com:5678");
+
+            Assert.AreEqual("http://my.host.com:5678/", originalUri.LocalhostTo127001().ToString());
         }
     }
 }

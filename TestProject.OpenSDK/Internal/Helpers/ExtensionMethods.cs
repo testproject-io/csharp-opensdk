@@ -14,6 +14,7 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Remote;
 
@@ -42,6 +43,25 @@ namespace TestProject.OpenSDK.Internal.Helpers
         public static bool IsPassed(this Response response)
         {
             return response.Status.Equals(WebDriverResult.Success);
+        }
+
+        /// <summary>
+        /// Changes the hostname of a <see cref="Uri"/> to '127.0.0.1' if the hostname is 'localhost'.
+        /// </summary>
+        /// <param name="originalUri">The original <see cref="Uri"/>.</param>
+        /// <returns>An updated Uri where 'localhost' is replaced with '127.0.0.1'.</returns>
+        public static Uri LocalhostTo127001(this Uri originalUri)
+        {
+            if (originalUri.Host.ToLower().Equals("localhost"))
+            {
+                UriBuilder builder = new UriBuilder(originalUri);
+                builder.Host = "127.0.0.1";
+                return builder.Uri;
+            }
+            else
+            {
+                return originalUri;
+            }
         }
     }
 }
