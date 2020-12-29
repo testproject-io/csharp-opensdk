@@ -121,6 +121,7 @@ namespace TestProject.OpenSDK.Internal.Rest
         {
             if (instance == null)
             {
+                Logger.Info($"AGENT CLIENT NULL, SO CREATING A NEW ONE");
                 instance = new AgentClient(remoteAddress, token, capabilities, reportSettings, disableReports, compatibleVersion);
             }
 
@@ -242,6 +243,9 @@ namespace TestProject.OpenSDK.Internal.Rest
             {
                 SocketManager.GetInstance().CloseSocket();
             }
+
+            // Nullifying the Agent instance reference ensures that a new session is started for subsequent tests
+            instance = null;
         }
 
         /// <summary>
