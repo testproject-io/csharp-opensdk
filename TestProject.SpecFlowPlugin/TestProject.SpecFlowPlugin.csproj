@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+	<Description>Reports SpecFlow-based test runs to TestProject Cloud</Description>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>https://testproject.io/</PackageProjectUrl>
+    <Authors>TestProject</Authors>
+    <Version>0.64.4</Version>
+    <Copyright>2020 TestProject (https://testproject.io)</Copyright>
+    <NeutralLanguage>en</NeutralLanguage>
+    <RepositoryUrl>https://github.com/testproject-io/csharp-sdk</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NLog" Version="4.7.6" />
+    <PackageReference Include="SpecFlow" Version="3.5.14" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TestProject.OpenSDK\TestProject.OpenSDK.csproj" />
+  </ItemGroup>
+
+</Project>
