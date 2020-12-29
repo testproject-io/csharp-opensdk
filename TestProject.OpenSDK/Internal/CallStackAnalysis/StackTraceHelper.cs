@@ -86,6 +86,19 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
         }
 
         /// <summary>
+        /// Checks if we're running inside a SpecFlow scenario.
+        /// </summary>
+        /// <returns>True if a SpecFlow reference is found in the stack trace, false otherwise.</returns>
+        public bool TryDetectSpecFlow()
+        {
+            StackFrame[] stackFrames = new StackTrace().GetFrames();
+            MethodBase callingMethod = stackFrames.Select(f => f.GetMethod()).FirstOrDefault(m => new SpecFlowAnalyzer().IsSpecFlow(m));
+
+            // If SpecFlow was detected, callingMethod is not null.
+            return callingMethod != null;
+        }
+
+        /// <summary>
         /// Checks if we're running inside a test method (such as NUnit test) and returns said method
         /// If no such method is found, attempts to detect the method that called the runner.
         /// </summary>
