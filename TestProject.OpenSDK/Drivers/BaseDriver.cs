@@ -101,8 +101,7 @@ namespace TestProject.OpenSDK.Drivers
         /// </summary>
         public void Stop()
         {
-            AgentClient.GetInstance().Stop();
-
+            // TODO: make sure that pending (stashed) reports are sent before closing the session
             base.Quit();
         }
 
