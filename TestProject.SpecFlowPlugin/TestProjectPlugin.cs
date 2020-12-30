@@ -42,6 +42,9 @@ namespace TestProject.SpecFlowPlugin
         {
             runtimePluginEvents.CustomizeGlobalDependencies += (sender, args) =>
                 args.ObjectContainer.RegisterTypeAs<TestProjectBindingInvoker, IBindingInvoker>();
+
+            runtimePluginEvents.CustomizeTestThreadDependencies += (sender, args) =>
+                args.ObjectContainer.RegisterTypeAs<TestProjectTestTracerWrapper, ITestTracer>();
         }
     }
 }
