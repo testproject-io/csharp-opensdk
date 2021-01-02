@@ -80,7 +80,9 @@ namespace TestProject.OpenSDK.Internal.Reporting
         /// <param name="screenshot">True if a screenshot should be attached to the step, false otherwise.</param>
         public void Step(string description, string message = null, bool passed = true, bool screenshot = false)
         {
-            // TODO: report a test if necessary
+            // Check whether it is necessary to report a test, too, and if so, do that.
+            this.reportingCommandExecutor.ReportTest(false);
+
             if (!this.reportingCommandExecutor.ReportsDisabled)
             {
                 string screenshotAsString = screenshot ? this.reportingCommandExecutor.GetScreenshot() : null;
