@@ -24,7 +24,7 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
     /// </summary>
     public class NUnitAnalyzer : IMethodAnalyzer
     {
-        private const string TestAttribute = "Test";
+        private const string TestAttribute = "TestAttribute";
         private const string NUnitFrameworkNamespace = "NUnit.Framework";
 
         /// <summary>
