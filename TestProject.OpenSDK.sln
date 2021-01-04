@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30621.155
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject.OpenSDK", "TestProject.OpenSDK\TestProject.OpenSDK.csproj", "{F09E21E6-D132-4D8C-98C4-E7424EF9BB1D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject.OpenSDK.Tests", "TestProject.OpenSDK.Tests\TestProject.OpenSDK.Tests.csproj", "{CD8CB508-4D67-4B0B-8D91-6854759E2E80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject.OpenSDK.Tests", "TestProject.OpenSDK.Tests\TestProject.OpenSDK.Tests.csproj", "{CD8CB508-4D67-4B0B-8D91-6854759E2E80}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
