@@ -43,8 +43,11 @@ namespace TestProject.OpenSDK.Internal.Helpers.Threading
         /// </summary>
         public override void RunThread()
         {
-            Logger.Info("Closing driver gracefully...");
-            this.driver.Stop();
+            // If the driver was closed gracefully before, there's no need to do it again.
+            if (this.driver.IsRunning)
+            {
+                this.driver.Stop();
+            }
         }
     }
 }
