@@ -33,6 +33,11 @@ namespace TestProject.OpenSDK.Drivers
     /// </summary>
     public class BaseDriver : OpenQA.Selenium.Remote.RemoteWebDriver, ITestProjectDriver
     {
+        /// <summary>
+        /// Flag that indicates whether or not the driver instance is running.
+        /// </summary>
+        public bool IsRunning { get; private set; }
+
         private DriverShutdownThread driverShutdownThread;
 
         private string sessionId;
@@ -71,6 +76,8 @@ namespace TestProject.OpenSDK.Drivers
             // Create a new command executor for this driver session and set disable reporting flag
             this.commandExecutor = new CustomHttpCommandExecutor(AgentClient.GetInstance().AgentSession.RemoteAddress, disableReports);
 
+            this.IsRunning = true;
+
             // Add shutdown hook for gracefully shutting down the driver
             this.driverShutdownThread = new DriverShutdownThread(this);
             AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) => this.driverShutdownThread.RunThread();
@@ -102,6 +109,8 @@ namespace TestProject.OpenSDK.Drivers
         public void Stop()
         {
             // TODO: make sure that pending (stashed) reports are sent before closing the session
+            this.IsRunning = false;
+
             base.Quit();
         }
 
