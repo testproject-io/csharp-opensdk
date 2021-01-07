@@ -96,7 +96,11 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
             MethodBase callingMethod = stackFrames.Select(f => f.GetMethod()).FirstOrDefault(m => this.analyzers.Any(a => a.IsTestClass(m)));
             if (callingMethod == null)
             {
-                callingMethod = stackFrames.Select(f => f.GetMethod()).FirstOrDefault(f => !f.DeclaringType.Assembly.Equals(Assembly.GetAssembly(this.GetType())));
+                // No unit testing framework is detected, select the first method in the call stack
+                // where the assembly is equal to the assembly of the entry method (typically Main()).
+                // This is assumed to be the method that contains the driver calls.
+                Assembly currentAssembly = stackFrames.Last<StackFrame>().GetMethod().DeclaringType.Assembly;
+                callingMethod = stackFrames.Select(f => f.GetMethod()).FirstOrDefault(f => f.DeclaringType.Assembly.Equals(currentAssembly));
             }
 
             return callingMethod;
