@@ -121,7 +121,6 @@ namespace TestProject.OpenSDK.Internal.Rest
         {
             if (instance == null)
             {
-                Logger.Info($"AGENT CLIENT NULL, SO CREATING A NEW ONE");
                 instance = new AgentClient(remoteAddress, token, capabilities, reportSettings, disableReports, compatibleVersion);
             }
 
@@ -405,10 +404,20 @@ namespace TestProject.OpenSDK.Internal.Rest
             string projectName = StackTraceHelper.Instance.GetInferredProjectName();
             string jobName = StackTraceHelper.Instance.GetInferredJobName();
 
-            // Overwrite empty values with inferred ones
-            ReportSettings inferredReportSettings = new ReportSettings(
-                string.IsNullOrEmpty(originalSettings.ProjectName) ? projectName : originalSettings.ProjectName,
-                string.IsNullOrEmpty(originalSettings.JobName) ? jobName : originalSettings.JobName);
+            ReportSettings inferredReportSettings;
+
+            if (originalSettings == null)
+            {
+                // Create ReportSettings
+                inferredReportSettings = new ReportSettings(projectName, jobName);
+            }
+            else
+            {
+                // Overwrite empty values with inferred ones
+                inferredReportSettings = new ReportSettings(
+                    string.IsNullOrEmpty(originalSettings.ProjectName) ? projectName : originalSettings.ProjectName,
+                    string.IsNullOrEmpty(originalSettings.JobName) ? jobName : originalSettings.JobName);
+            }
 
             Logger.Trace($"Using inferred values '{inferredReportSettings.ProjectName}' and '{inferredReportSettings.JobName}' as project and job name, respectively.");
 
