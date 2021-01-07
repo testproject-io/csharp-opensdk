@@ -22,6 +22,11 @@ namespace TestProject.OpenSDK.Drivers.Web
     public interface ITestProjectDriver
     {
         /// <summary>
+        /// Flag that indicates whether or not the driver instance is running.
+        /// </summary>
+        bool IsRunning { get; }
+
+        /// <summary>
         /// Quits the driver and stops the session with the Agent, cleaning up after itself.
         /// </summary>
         void Quit();
