@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject.OpenSDK", "Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject.OpenSDK.Tests", "TestProject.OpenSDK.Tests\TestProject.OpenSDK.Tests.csproj", "{CD8CB508-4D67-4B0B-8D91-6854759E2E80}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject.SpecFlowPlugin", "TestProject.SpecFlowPlugin\TestProject.SpecFlowPlugin.csproj", "{2A2FAEB5-48F5-4405-AB01-0985BD6784BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject.OpenSDK.SpecFlowExamples", "TestProject.OpenSDK.SpecFlowExamples\TestProject.OpenSDK.SpecFlowExamples.csproj", "{3917A9F2-5C16-421F-8B2E-A0D9C6F0695C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{CD8CB508-4D67-4B0B-8D91-6854759E2E80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD8CB508-4D67-4B0B-8D91-6854759E2E80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD8CB508-4D67-4B0B-8D91-6854759E2E80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A2FAEB5-48F5-4405-AB01-0985BD6784BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A2FAEB5-48F5-4405-AB01-0985BD6784BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A2FAEB5-48F5-4405-AB01-0985BD6784BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A2FAEB5-48F5-4405-AB01-0985BD6784BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3917A9F2-5C16-421F-8B2E-A0D9C6F0695C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3917A9F2-5C16-421F-8B2E-A0D9C6F0695C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3917A9F2-5C16-421F-8B2E-A0D9C6F0695C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3917A9F2-5C16-421F-8B2E-A0D9C6F0695C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

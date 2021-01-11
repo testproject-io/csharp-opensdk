@@ -16,9 +16,11 @@
 
 using System;
 using System.Collections.Generic;
+using NLog;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Remote;
 using TestProject.OpenSDK.Drivers.Web;
+using TestProject.OpenSDK.Internal.CallStackAnalysis;
 using TestProject.OpenSDK.Internal.Helpers;
 using TestProject.OpenSDK.Internal.Helpers.CommandExecutors;
 using TestProject.OpenSDK.Internal.Helpers.Threading;
@@ -43,6 +45,11 @@ namespace TestProject.OpenSDK.Drivers
         private string sessionId;
 
         private CustomHttpCommandExecutor commandExecutor;
+
+        /// <summary>
+        /// Logger instance for this class.
+        /// </summary>
+        private static Logger Logger { get; set; } = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseDriver"/> class.
@@ -81,6 +88,13 @@ namespace TestProject.OpenSDK.Drivers
             // Add shutdown hook for gracefully shutting down the driver
             this.driverShutdownThread = new DriverShutdownThread(this);
             AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) => this.driverShutdownThread.RunThread();
+
+            if (StackTraceHelper.Instance.TryDetectSpecFlow())
+            {
+                Logger.Info("SpecFlow detected, applying SpecFlow-specific reporting settings...");
+                this.Report().DisableCommandReports(true);
+                this.Report().DisableAutoTestReports(true);
+            }
         }
 
         /// <summary>

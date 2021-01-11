@@ -39,6 +39,11 @@ namespace TestProject.OpenSDK.Internal.Rest
         public AgentSession AgentSession { get; private set; }
 
         /// <summary>
+        /// SpecFlow test report.
+        /// </summary>
+        public TestReport SpecFlowTestReport { get; set; }
+
+        /// <summary>
         /// A singleton instance of the <see cref="AgentClient"/> class.
         /// </summary>
         private static AgentClient instance;
@@ -125,6 +130,15 @@ namespace TestProject.OpenSDK.Internal.Rest
             }
 
             return instance;
+        }
+
+        /// <summary>
+        /// Helper method to check if an instance has already been created, without actually creating one if it hasn't.
+        /// </summary>
+        /// <returns>True if the AgentClient has already been initialized, false otherwise.</returns>
+        public static bool IsInitialized()
+        {
+            return instance != null;
         }
 
         /// <summary>
@@ -236,6 +250,11 @@ namespace TestProject.OpenSDK.Internal.Rest
         /// </summary>
         public void Stop()
         {
+            if (this.SpecFlowTestReport != null)
+            {
+                this.ReportTest(this.SpecFlowTestReport);
+            }
+
             this.reportsQueue.Stop();
 
             if (!this.CanReuseSession())

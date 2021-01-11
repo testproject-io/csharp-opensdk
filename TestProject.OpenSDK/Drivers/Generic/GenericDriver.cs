@@ -15,6 +15,8 @@
 // </copyright>
 
 using System;
+using NLog;
+using TestProject.OpenSDK.Internal.CallStackAnalysis;
 using TestProject.OpenSDK.Internal.Helpers.CommandExecutors;
 using TestProject.OpenSDK.Internal.Reporting;
 using TestProject.OpenSDK.Internal.Rest;
@@ -37,6 +39,11 @@ namespace TestProject.OpenSDK.Drivers.Generic
         private GenericCommandExecutor commandExecutor;
 
         /// <summary>
+        /// Logger instance for this class.
+        /// </summary>
+        private static Logger Logger { get; set; } = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="GenericDriver"/> class.
         /// </summary>
         /// <param name="remoteAddress">The base address for the Agent API (e.g. http://localhost:8585).</param>
@@ -54,6 +61,13 @@ namespace TestProject.OpenSDK.Drivers.Generic
             AgentClient agentClient = AgentClient.GetInstance(remoteAddress, token, new GenericOptions(), new ReportSettings(projectName, jobName), disableReports, this.minGenericDriverSupportedVersion);
 
             this.commandExecutor = new GenericCommandExecutor(remoteAddress, disableReports);
+
+            if (StackTraceHelper.Instance.TryDetectSpecFlow())
+            {
+                Logger.Info("SpecFlow detected, applying SpecFlow-specific reporting settings...");
+                this.Report().DisableCommandReports(true);
+                this.Report().DisableAutoTestReports(true);
+            }
         }
 
         /// <summary>
