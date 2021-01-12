@@ -29,5 +29,12 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
         /// <param name="method">The method to be analyzed.</param>
         /// <returns>True if the class containing the method is a test framework class, false otherwise.</returns>
         bool IsTestClass(MethodBase method);
+
+        /// <summary>
+        /// Determines whether or not the given method is run inside the setup hook of any of the supported unit testing frameworks.
+        /// </summary>
+        /// <param name="method">The method to be analyzed.</param>
+        /// <returns>True if the method is run inside a setup hook, false otherwise.</returns>
+        bool IsSetupMethod(MethodBase method);
     }
 }

@@ -25,6 +25,19 @@ namespace TestProject.OpenSDK.Tests.UnitTests.Internal.CallStackAnalysis
     [TestClass]
     public class StackTraceHelperTest
     {
+        private string projectNameFromTestInitialize;
+        private string jobNameFromTestInitialize;
+
+        /// <summary>
+        /// Infer the project and job name from within a [TestInitialize] method for later verification.
+        /// </summary>
+        [TestInitialize]
+        public void GetInferredProjectAndJobName()
+        {
+            this.projectNameFromTestInitialize = StackTraceHelper.Instance.GetInferredProjectName();
+            this.jobNameFromTestInitialize = StackTraceHelper.Instance.GetInferredJobName();
+        }
+
         /// <summary>
         /// Inferring the current test name should return the expected value.
         /// </summary>
@@ -56,6 +69,24 @@ namespace TestProject.OpenSDK.Tests.UnitTests.Internal.CallStackAnalysis
             string projectName = StackTraceHelper.Instance.GetInferredProjectName();
 
             Assert.AreEqual("CallStackAnalysis", projectName);
+        }
+
+        /// <summary>
+        /// Inferring the project name in a [TestInitialize] method should return the expected value.
+        /// </summary>
+        [TestMethod]
+        public void CheckInferredProjectNameFromTestInitialize_ShouldEqualFinalPartOfCurrentNamespace()
+        {
+            Assert.AreEqual("CallStackAnalysis", this.projectNameFromTestInitialize);
+        }
+
+        /// <summary>
+        /// Inferring the job name in a [TestInitialize] method should return the expected value.
+        /// </summary>
+        [TestMethod]
+        public void CheckInferredJobNameFromTestInitialize_ShouldEqualCurrentTestClass()
+        {
+            Assert.AreEqual("StackTraceHelperTest", this.jobNameFromTestInitialize);
         }
     }
 }

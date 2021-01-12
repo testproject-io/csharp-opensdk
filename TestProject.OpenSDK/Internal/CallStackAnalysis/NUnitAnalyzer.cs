@@ -25,6 +25,7 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
     public class NUnitAnalyzer : IMethodAnalyzer
     {
         private const string TestAttribute = "TestAttribute";
+        private const string SetUpAttribute = "SetUpAttribute";
         private const string NUnitFrameworkNamespace = "NUnit.Framework";
 
         /// <summary>
@@ -44,6 +45,17 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
 
             return method.DeclaringType.GetCustomAttributes()
                 .Any(a => a.GetType().Namespace.Equals(NUnitFrameworkNamespace));
+        }
+
+        /// <summary>
+        /// Determines whether or not the given method is run inside an MSTest [TestInitialize] method.
+        /// </summary>
+        /// <param name="method">The method to be analyzed.</param>
+        /// <returns>True if the method is run inside [TestInitialize], false otherwise.</returns>
+        public bool IsSetupMethod(MethodBase method)
+        {
+            // NUnit setup methods are identified by [SetUpAttribute] on the method
+            return method.GetCustomAttributes(true).Any(a => a.GetType().Name.Contains(SetUpAttribute));
         }
     }
 }

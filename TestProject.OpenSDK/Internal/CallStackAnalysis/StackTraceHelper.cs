@@ -56,7 +56,8 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
         /// <returns>The inferred project name.</returns>
         public string GetInferredProjectName()
         {
-            return this.TryDetectTestMethod().DeclaringType.Namespace.Split('.').Last();
+            MethodBase method = this.TryDetectSetupMethod() ?? this.TryDetectTestMethod();
+            return method.DeclaringType.Namespace.Split('.').Last();
         }
 
         /// <summary>
@@ -65,14 +66,15 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
         /// <returns>The inferred job name.</returns>
         public string GetInferredJobName()
         {
-            return this.TryDetectTestMethod().DeclaringType.Name;
+            MethodBase method = this.TryDetectSetupMethod() ?? this.TryDetectTestMethod();
+            return method.DeclaringType.Name;
         }
 
         /// <summary>
         /// Checks whether we are running inside <see cref="IWait{T}.Until{TResult}"/>.
         /// </summary>
         /// <returns>True if we are running inside a WebDriverWait, false otherwise.</returns>
-        public bool IsRunningWithRepeats()
+        public bool IsRunningInsideWait()
         {
             var wait = typeof(IWait<>);
             return new StackTrace().GetFrames()
@@ -117,6 +119,16 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
             }
 
             return callingMethod;
+        }
+
+        /// <summary>
+        /// Checks if we're running inside a setup method and returns said method.
+        /// </summary>
+        /// <returns>The setup method currently running, or null if none was detected.</returns>
+        private MethodBase TryDetectSetupMethod()
+        {
+            StackFrame[] stackFrames = new StackTrace().GetFrames();
+            return stackFrames.Select(f => f.GetMethod()).FirstOrDefault(m => this.analyzers.Any(a => a.IsSetupMethod(m)));
         }
     }
 }
