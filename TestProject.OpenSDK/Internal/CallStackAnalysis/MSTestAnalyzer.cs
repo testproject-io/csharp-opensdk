@@ -25,6 +25,7 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
     public class MSTestAnalyzer : IMethodAnalyzer
     {
         private const string TestAttribute = "TestMethod";
+        private const string SetUpAttribute = "TestInitialize";
         private const string TestClassAttribute = "TestClass";
         private const string MSTestFrameworkNamespace = "Microsoft.VisualStudio.TestTools.UnitTesting";
 
@@ -37,6 +38,19 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
         {
             // MSTest tests are identified by [TestMethod] on the method and [TestClass] on the class (must be both)
             return method.GetCustomAttributes(true).Any(a => a.GetType().Name.Contains(TestAttribute)
+            && a.GetType().Namespace.Equals(MSTestFrameworkNamespace))
+                && method.DeclaringType.GetCustomAttributes(true).Any(a => a.GetType().Name.Contains(TestClassAttribute) && a.GetType().Namespace.Equals(MSTestFrameworkNamespace));
+        }
+
+        /// <summary>
+        /// Determines whether or not the given method is run inside an MSTest [TestInitialize] method.
+        /// </summary>
+        /// <param name="method">The method to be analyzed.</param>
+        /// <returns>True if the method is run inside [TestInitialize], false otherwise.</returns>
+        public bool IsSetupMethod(MethodBase method)
+        {
+            // MSTest setup methods are identified by [TestInitialize] on the method and [TestClass] on the class (must be both)
+            return method.GetCustomAttributes(true).Any(a => a.GetType().Name.Contains(SetUpAttribute)
             && a.GetType().Namespace.Equals(MSTestFrameworkNamespace))
                 && method.DeclaringType.GetCustomAttributes(true).Any(a => a.GetType().Name.Contains(TestClassAttribute) && a.GetType().Namespace.Equals(MSTestFrameworkNamespace));
         }

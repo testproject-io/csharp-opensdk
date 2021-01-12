@@ -36,5 +36,16 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
             method.GetCustomAttributes(true)
                 .Any(a => AttributeNames.Contains(a.GetType().Name) &&
                           (a.GetType().Namespace?.Equals(XUnitNamespace) ?? false));
+
+        /// <summary>
+        /// Determines whether or not the given method is run inside an xUnit.NET setup method.
+        /// </summary>
+        /// <param name="method">The method to be analyzed.</param>
+        /// <returns>True if the method is run inside a setup method, false otherwise.</returns>
+        public bool IsSetupMethod(MethodBase method)
+        {
+            // xUnit.NET does not support setup methods, so this is always false.
+            return false;
+        }
     }
 }
