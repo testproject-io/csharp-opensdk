@@ -51,6 +51,8 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
 
         private ITestProjectCommandExecutor commandExecutor;
 
+        private StashedCommand stashedCommand;
+
         private string currentTestName;
 
         /// <summary>
@@ -103,8 +105,41 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
                 result = new Dictionary<string, object>();
             }
 
-            // TODO: add logic to detect if we're inside a WebDriverWait
+            if (StackTraceHelper.Instance.IsRunningInsideWait())
+            {
+                // We're only interested in reporting the final FindElement or FindElements call
+                // (these are executed by the ExpectedConditions helper methods)
+                if (
+                    command.Name.Equals(DriverCommand.FindElement) ||
+                    command.Name.Equals(DriverCommand.FindElements))
+                {
+                    this.stashedCommand = new StashedCommand(command, result, response.IsPassed());
+                }
+
+                // Do not report the command right away if it's executed inside a WebDriverWait
+                return;
+            }
+
+            // If we have a previously stashed command to report, report it first.
+            if (this.stashedCommand != null)
+            {
+                this.SendCommandToAgent(this.stashedCommand.Command, this.stashedCommand.Result, this.stashedCommand.Passed);
+                this.stashedCommand = null;
+            }
+
             this.SendCommandToAgent(command, result, response.IsPassed());
+        }
+
+        /// <summary>
+        /// Clear stashed command by reporting it to TestProject.
+        /// </summary>
+        public void ClearStash()
+        {
+            if (this.stashedCommand != null)
+            {
+                this.SendCommandToAgent(this.stashedCommand.Command, this.stashedCommand.Result, this.stashedCommand.Passed);
+                this.stashedCommand = null;
+            }
         }
 
         /// <summary>
