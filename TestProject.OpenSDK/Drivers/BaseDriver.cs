@@ -122,7 +122,9 @@ namespace TestProject.OpenSDK.Drivers
         /// </summary>
         public void Stop()
         {
-            // TODO: make sure that pending (stashed) reports are sent before closing the session
+            // Report any stashed commands
+            this.commandExecutor.ReportingCommandExecutor.ClearStash();
+
             this.IsRunning = false;
 
             base.Quit();
