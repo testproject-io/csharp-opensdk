@@ -28,6 +28,11 @@ namespace TestProject.OpenSDK.Internal
     public class ReportsQueue
     {
         /// <summary>
+        /// Maximum amount of time to wait in milliseconds before forcibly terminating the queue.
+        /// </summary>
+        private const int REPORTS_QUEUE_TIMEOUT = 10000;
+
+        /// <summary>
         /// HTTP client used to send reports to the Agent.
         /// </summary>
         private RestClient client;
@@ -82,6 +87,16 @@ namespace TestProject.OpenSDK.Internal
             this.running = false;
 
             this.reportItems.Add(new QueueItem(null, null));
+
+            this.reportItems.CompleteAdding();
+
+            // Wait until all pending items are reported or the timeout has been reached.
+            bool reportingCompleted = SpinWait.SpinUntil(() => this.reportItems.Count == 0, REPORTS_QUEUE_TIMEOUT);
+
+            if (!reportingCompleted)
+            {
+                Logger.Warn($"There are {this.reportItems.Count} unreported items left in the queue.");
+            }
         }
 
         /// <summary>
@@ -97,11 +112,6 @@ namespace TestProject.OpenSDK.Internal
                 {
                     this.SendReport(itemToReport);
                 }
-            }
-
-            if (this.reportItems.Count > 0)
-            {
-                Logger.Warn($"There are {this.reportItems.Count} unreported items left in the queue.");
             }
         }
 
