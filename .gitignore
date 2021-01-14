@@ -286,3 +286,9 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+
+# Output pack (nuget) artifacts
+build
+
+# SpecFlow auto generated files
+TestProject.OpenSDK.SpecFlowExamples/SpecFlow
