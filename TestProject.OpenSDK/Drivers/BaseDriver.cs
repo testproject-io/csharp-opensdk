@@ -22,6 +22,7 @@ namespace TestProject.OpenSDK.Drivers
     using OpenQA.Selenium;
     using OpenQA.Selenium.Remote;
     using TestProject.OpenSDK.Drivers.Web;
+    using TestProject.OpenSDK.Internal.Addons;
     using TestProject.OpenSDK.Internal.CallStackAnalysis;
     using TestProject.OpenSDK.Internal.Helpers;
     using TestProject.OpenSDK.Internal.Helpers.CommandExecutors;
@@ -104,6 +105,15 @@ namespace TestProject.OpenSDK.Drivers
         public Reporter Report()
         {
             return new Reporter(this.commandExecutor.ReportingCommandExecutor);
+        }
+
+        /// <summary>
+        /// Enables access to the TestProject addon execution actions from the driver object.
+        /// </summary>
+        /// <returns><see cref="AddonHelper"/> object exposing TestProject action execution methods.</returns>
+        public AddonHelper Addons()
+        {
+            return new AddonHelper();
         }
 
         /// <summary>
