@@ -17,11 +17,14 @@
 namespace TestProject.OpenSDK.Internal.Rest
 {
     using System;
+    using System.Collections.Generic;
+    using System.Net;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using NLog;
     using OpenQA.Selenium;
     using RestSharp;
+    using TestProject.OpenSDK.Internal.Addons;
     using TestProject.OpenSDK.Internal.CallStackAnalysis;
     using TestProject.OpenSDK.Internal.Exceptions;
     using TestProject.OpenSDK.Internal.Helpers;
@@ -67,6 +70,11 @@ namespace TestProject.OpenSDK.Internal.Rest
         /// Minimum Agent version that support session reuse.
         /// </summary>
         private readonly Version minSessionReuseCapableVersion = new Version("0.64.32");
+
+        /// <summary>
+        /// The default timeout in milliseconds for the <see cref="RestClient"/> class.
+        /// </summary>
+        private readonly int defaultRestClientTimeoutInMilliseconds = 100 * 1000;
 
         /// <summary>
         /// The current version of the Agent in use.
@@ -243,6 +251,43 @@ namespace TestProject.OpenSDK.Internal.Rest
             sendStepReportRequest.AddJsonBody(json);
 
             this.reportsQueue.Submit(sendStepReportRequest, stepReport);
+        }
+
+        /// <summary>
+        /// Executes a specified action proxy from an addon.
+        /// </summary>
+        /// <param name="actionProxy">The <see cref="ActionProxy"/> to execute.</param>
+        /// <param name="timeout">The action execution timeout (in milliseconds).</param>
+        /// <returns>The response from the Agent upon executing the action proxy.</returns>
+        public ActionExecutionResponse ExecuteProxy(ActionProxy actionProxy, int timeout)
+        {
+            RestRequest sendActionProxyRequest = new RestRequest(Endpoints.EXECUTE_ACTION_PROXY, Method.POST);
+            sendActionProxyRequest.RequestFormat = DataFormat.Json;
+
+            string json = CustomJsonSerializer.ToJson(actionProxy.ProxyDescriptor, this.serializerSettings);
+
+            sendActionProxyRequest.AddJsonBody(json);
+
+            if (timeout > 0)
+            {
+                // Since action proxy execution can take a while, you can override the default timeout.
+                this.client.Timeout = timeout;
+            }
+
+            IRestResponse sendActionProxyResponse = this.client.Execute(sendActionProxyRequest);
+
+            if (sendActionProxyResponse.StatusCode.Equals(HttpStatusCode.NotFound))
+            {
+                string errorMessage = $"Action {actionProxy.ProxyDescriptor.ClassName} in addon {actionProxy.ProxyDescriptor.Guid} is not installed for your account.";
+
+                Logger.Error(errorMessage);
+                throw new AddonNotInstalledException(errorMessage);
+            }
+
+            // Reset the client timeout to the RestSharp default.
+            this.client.Timeout = this.defaultRestClientTimeoutInMilliseconds;
+
+            return CustomJsonSerializer.FromJson<ActionExecutionResponse>(sendActionProxyResponse.Content, this.serializerSettings);
         }
 
         /// <summary>
@@ -472,6 +517,11 @@ namespace TestProject.OpenSDK.Internal.Rest
             /// Endpoint for reporting a step.
             /// </summary>
             public const string REPORT_STEP = "/api/development/report/step";
+
+            /// <summary>
+            /// Endpoint for execution action proxies.
+            /// </summary>
+            public const string EXECUTE_ACTION_PROXY = "/api/addons/executions";
         }
     }
 }
