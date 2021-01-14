@@ -35,8 +35,8 @@ namespace TestProject.OpenSDK.SpecFlowExamples.Features
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "SpecFlowScenarioOutlineExample", "\tIn order to see beautiful SpecFlow reports on TestProject Cloud\r\n\tAs a TestProje" +
-                    "ct user\r\n\tI want to run SpecFlow scenarios supported by the SDK", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "SpecFlowScenarioOutlineExample", "\tIn order to see beautiful SpecFlow reports on TestProject Cloud\n\tAs a TestProjec" +
+                    "t user\n\tI want to run SpecFlow scenarios supported by the SDK", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -88,7 +88,7 @@ namespace TestProject.OpenSDK.SpecFlowExamples.Features
             argumentsOfScenario.Add("password", password);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User tries to log in to the TestProject demo application", null, tagsOfScenario, argumentsOfScenario);
 #line 6
-this.ScenarioInitialize(scenarioInfo);
+ this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
             bool isFeatureIgnored = default(bool);
@@ -108,13 +108,13 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 7
-    testRunner.Given(string.Format("{0} wants to use the TestProject demo application", firstname), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+  testRunner.Given(string.Format("{0} wants to use the TestProject demo application", firstname), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 8
- testRunner.When(string.Format("he logs in with username {0} and password {1}", username, password), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+  testRunner.When(string.Format("he logs in with username {0} and password {1}", username, password), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 9
- testRunner.Then("he gains access to the secure part of the application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+  testRunner.Then("he gains access to the secure part of the application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
