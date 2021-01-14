@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-namespace TestProject.SpecFlowPlugin
+namespace TestProject.OpenSDK.SpecFlowPlugin
 {
     /// <summary>
     /// Static class containing information about the current SpecFlow step that is being executed.

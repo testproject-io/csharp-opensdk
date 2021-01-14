@@ -18,11 +18,11 @@ using TechTalk.SpecFlow.Bindings;
 using TechTalk.SpecFlow.Plugins;
 using TechTalk.SpecFlow.Tracing;
 using TechTalk.SpecFlow.UnitTestProvider;
-using TestProject.SpecFlowPlugin;
+using TestProject.OpenSDK.SpecFlowPlugin;
 
 [assembly: RuntimePlugin(typeof(TestProjectPlugin))]
 
-namespace TestProject.SpecFlowPlugin
+namespace TestProject.OpenSDK.SpecFlowPlugin
 {
     /// <summary>
     /// SpecFlow plugin to automatically report scenario steps to TestProject.

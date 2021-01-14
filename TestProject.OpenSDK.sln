@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject.OpenSDK", "Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject.OpenSDK.Tests", "TestProject.OpenSDK.Tests\TestProject.OpenSDK.Tests.csproj", "{CD8CB508-4D67-4B0B-8D91-6854759E2E80}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject.SpecFlowPlugin", "TestProject.SpecFlowPlugin\TestProject.SpecFlowPlugin.csproj", "{2A2FAEB5-48F5-4405-AB01-0985BD6784BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject.OpenSDK.SpecFlowPlugin", "TestProject.OpenSDK.SpecFlowPlugin\TestProject.OpenSDK.SpecFlowPlugin.csproj", "{2A2FAEB5-48F5-4405-AB01-0985BD6784BD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject.OpenSDK.SpecFlowExamples", "TestProject.OpenSDK.SpecFlowExamples\TestProject.OpenSDK.SpecFlowExamples.csproj", "{3917A9F2-5C16-421F-8B2E-A0D9C6F0695C}"
 EndProject

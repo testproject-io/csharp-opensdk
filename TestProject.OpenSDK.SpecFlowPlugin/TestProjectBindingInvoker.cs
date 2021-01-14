@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-namespace TestProject.SpecFlowPlugin
+namespace TestProject.OpenSDK.SpecFlowPlugin
 {
     using System;
     using TechTalk.SpecFlow.Bindings;
