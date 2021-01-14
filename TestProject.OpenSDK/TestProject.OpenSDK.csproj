@@ -2,16 +2,22 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Title>TestProject OpenSDK for C#</Title>
     <Description>The TestProject C# OpenSDK is a single, integrated interface to scripting with the most popular open source test automation frameworks.
 
 From now on, you can effortlessly execute Selenium and Appium native tests using a single automation platform that already takes care of all the complex setup, maintenance and configs.</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://testproject.io/</PackageProjectUrl>
+    <MinClientVersion>4.3.0</MinClientVersion>
     <Authors>TestProject</Authors>
     <Version>0.64.4</Version>
     <Copyright>2020 TestProject (https://testproject.io)</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
+    <RepositoryType>git</RepositoryType> 
     <RepositoryUrl>https://github.com/testproject-io/csharp-sdk</RepositoryUrl>
+    <PackageIconUrl>https://storage-static.testproject.io/templates/TP-Template-Logo-Square.png</PackageIconUrl>
+    <PackageTags>TestProject;Selenium;Appium;OpenSDK;SpecFlow</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,6 +36,10 @@ From now on, you can effortlessly execute Selenium and Appium native tests using
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\README.md">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
