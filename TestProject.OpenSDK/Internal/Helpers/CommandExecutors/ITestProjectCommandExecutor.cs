@@ -14,10 +14,10 @@
 // limitations under the License.
 // </copyright>
 
-using OpenQA.Selenium.Remote;
-
 namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
 {
+    using OpenQA.Selenium.Remote;
+
     /// <summary>
     /// Interface to be implemented by all TestProject command executors.
     /// </summary>

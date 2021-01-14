@@ -14,14 +14,14 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using OpenQA.Selenium.Support.UI;
-
 namespace TestProject.OpenSDK.Internal.CallStackAnalysis
 {
+    using System;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Reflection;
+    using OpenQA.Selenium.Support.UI;
+
     /// <summary>
     /// Helps analyzing stack trace.
     /// </summary>

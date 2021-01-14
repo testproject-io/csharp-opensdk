@@ -14,13 +14,13 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenQA.Selenium.Remote;
-using TestProject.OpenSDK.Internal.Helpers;
-
 namespace TestProject.OpenSDK.Tests.UnitTests.Internal.Helpers
 {
+    using System;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using OpenQA.Selenium.Remote;
+    using TestProject.OpenSDK.Internal.Helpers;
+
     /// <summary>
     /// Class containing unit tests for the <see cref="ExtensionMethods"/> class.
     /// </summary>

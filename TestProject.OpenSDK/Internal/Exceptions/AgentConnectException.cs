@@ -14,10 +14,10 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-
 namespace TestProject.OpenSDK.Internal.Exceptions
 {
+    using System;
+
     /// <summary>
     /// Exception object thrown when the SDK version used is not supported by the Agent.
     /// </summary>

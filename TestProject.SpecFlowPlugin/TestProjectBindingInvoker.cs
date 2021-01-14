@@ -14,15 +14,15 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using TechTalk.SpecFlow.Bindings;
-using TechTalk.SpecFlow.Configuration;
-using TechTalk.SpecFlow.ErrorHandling;
-using TechTalk.SpecFlow.Infrastructure;
-using TechTalk.SpecFlow.Tracing;
-
 namespace TestProject.SpecFlowPlugin
 {
+    using System;
+    using TechTalk.SpecFlow.Bindings;
+    using TechTalk.SpecFlow.Configuration;
+    using TechTalk.SpecFlow.ErrorHandling;
+    using TechTalk.SpecFlow.Infrastructure;
+    using TechTalk.SpecFlow.Tracing;
+
     /// <summary>
     /// Defines custom actions to be executed whenever specific binding methods are invoked.
     /// </summary>

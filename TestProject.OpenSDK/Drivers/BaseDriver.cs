@@ -14,21 +14,21 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using System.Collections.Generic;
-using NLog;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Remote;
-using TestProject.OpenSDK.Drivers.Web;
-using TestProject.OpenSDK.Internal.CallStackAnalysis;
-using TestProject.OpenSDK.Internal.Helpers;
-using TestProject.OpenSDK.Internal.Helpers.CommandExecutors;
-using TestProject.OpenSDK.Internal.Helpers.Threading;
-using TestProject.OpenSDK.Internal.Reporting;
-using TestProject.OpenSDK.Internal.Rest;
-
 namespace TestProject.OpenSDK.Drivers
 {
+    using System;
+    using System.Collections.Generic;
+    using NLog;
+    using OpenQA.Selenium;
+    using OpenQA.Selenium.Remote;
+    using TestProject.OpenSDK.Drivers.Web;
+    using TestProject.OpenSDK.Internal.CallStackAnalysis;
+    using TestProject.OpenSDK.Internal.Helpers;
+    using TestProject.OpenSDK.Internal.Helpers.CommandExecutors;
+    using TestProject.OpenSDK.Internal.Helpers.Threading;
+    using TestProject.OpenSDK.Internal.Reporting;
+    using TestProject.OpenSDK.Internal.Rest;
+
     /// <summary>
     /// Extension of <see cref="OpenQA.Selenium.Chrome.ChromeDriver">ChromeDriver</see> for use with TestProject.
     /// Instead of initializing a new session, it starts it in the TestProject Agent and then reconnects to it.

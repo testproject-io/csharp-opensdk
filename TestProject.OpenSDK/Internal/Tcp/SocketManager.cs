@@ -14,14 +14,14 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using System.Net.Sockets;
-using NLog;
-using TestProject.OpenSDK.Internal.Exceptions;
-using TestProject.OpenSDK.Internal.Helpers.Threading;
-
 namespace TestProject.OpenSDK.Internal.Tcp
 {
+    using System;
+    using System.Net.Sockets;
+    using NLog;
+    using TestProject.OpenSDK.Internal.Exceptions;
+    using TestProject.OpenSDK.Internal.Helpers.Threading;
+
     /// <summary>
     /// Manages the TCP socket connection for a development session.
     /// </summary>

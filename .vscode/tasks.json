@@ -1,0 +1,57 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "args": [
+                "build",
+                "/p:Version=${env:TP_SDK_VERSION}",
+                "${workspaceFolder}/TestProject.OpenSDK.sln",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "clean",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "clean",
+                "${workspaceFolder}/TestProject.OpenSDK.sln"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "publish",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "/p:Version=${env:TP_SDK_VERSION}",
+                "${workspaceFolder}/TestProject.OpenSDK.sln"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "pack",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "pack",
+                "--no-restore",
+                "/p:Version=${env:TP_SDK_VERSION}",
+                "--output",
+                "${workspaceFolder}/build/out",
+                "${workspaceFolder}/TestProject.OpenSDK.sln",
+            ],
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}

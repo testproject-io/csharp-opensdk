@@ -14,11 +14,11 @@
 // limitations under the License.
 // </copyright>
 
-using System.Linq;
-using Newtonsoft.Json.Serialization;
-
 namespace TestProject.OpenSDK.Internal.Helpers
 {
+    using System.Linq;
+    using Newtonsoft.Json.Serialization;
+
     /// <summary>
     /// A custom naming strategy, used to transform Pascal-cased enum values to lower case words separated by spaces.
     /// </summary>

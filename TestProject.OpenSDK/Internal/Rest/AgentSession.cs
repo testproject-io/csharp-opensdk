@@ -14,11 +14,11 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using OpenQA.Selenium;
-
 namespace TestProject.OpenSDK.Internal.Rest
 {
+    using System;
+    using OpenQA.Selenium;
+
     /// <summary>
     /// Agent session model containing data related to a specific Agent session.
     /// </summary>

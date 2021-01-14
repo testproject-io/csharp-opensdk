@@ -14,12 +14,12 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using System.Collections.Generic;
-using NLog;
-
 namespace TestProject.OpenSDK.Internal.Helpers
 {
+    using System;
+    using System.Collections.Generic;
+    using NLog;
+
     /// <summary>
     /// This class contains helper methods to convert WebDriver commands to formats that the Agent understands.
     /// </summary>

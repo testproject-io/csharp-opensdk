@@ -14,15 +14,15 @@
 // limitations under the License.
 // </copyright>
 
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Edge;
-using OpenQA.Selenium.Firefox;
-using OpenQA.Selenium.IE;
-using OpenQA.Selenium.Safari;
-using TestProject.OpenSDK.Internal.Exceptions;
-
 namespace TestProject.OpenSDK.Internal.Helpers.DriverOptions
 {
+    using OpenQA.Selenium.Chrome;
+    using OpenQA.Selenium.Edge;
+    using OpenQA.Selenium.Firefox;
+    using OpenQA.Selenium.IE;
+    using OpenQA.Selenium.Safari;
+    using TestProject.OpenSDK.Internal.Exceptions;
+
     /// <summary>
     /// Provides utility methods to patch <see cref="DriverOptions"/> objects to make them suitable to start a session with the Agent.
     /// </summary>

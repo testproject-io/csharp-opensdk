@@ -14,12 +14,12 @@
 // limitations under the License.
 // </copyright>
 
-using OpenQA.Selenium;
-using TestProject.OpenSDK.Drivers.Web;
-using Xunit;
-
 namespace TestProject.OpenSDK.Tests.Examples.Frameworks.XUnit
 {
+    using OpenQA.Selenium;
+    using TestProject.OpenSDK.Drivers.Web;
+    using Xunit;
+
     /// <summary>
     /// This class contains examples of using the TestProject C# SDK with XUnit and explicit reporting.
     /// </summary>

@@ -14,10 +14,10 @@
 // limitations under the License.
 // </copyright>
 
-using TestProject.OpenSDK.Drivers.Web;
-
 namespace TestProject.OpenSDK.Internal.Helpers.DriverOptions
 {
+    using TestProject.OpenSDK.Drivers.Web;
+
     /// <summary>
     /// An enumeration of supported browser types.
     /// </summary>

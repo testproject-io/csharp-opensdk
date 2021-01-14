@@ -14,10 +14,10 @@
 // limitations under the License.
 // </copyright>
 
-using System.Threading;
-
 namespace TestProject.OpenSDK.Internal.Helpers.Threading
 {
+    using System.Threading;
+
     /// <summary>
     /// A BaseThread object used for composition as <see cref="System.Threading.Thread"/> cannot be inherited from directly.
     /// </summary>

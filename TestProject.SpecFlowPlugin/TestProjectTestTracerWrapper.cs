@@ -14,18 +14,18 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using NLog;
-using TechTalk.SpecFlow.Bindings;
-using TechTalk.SpecFlow.BindingSkeletons;
-using TechTalk.SpecFlow.Configuration;
-using TechTalk.SpecFlow.Tracing;
-using TestProject.OpenSDK.Internal.Exceptions;
-using TestProject.OpenSDK.Internal.Rest;
-using TestProject.OpenSDK.Internal.Rest.Messages;
-
 namespace TestProject.SpecFlowPlugin
 {
+    using System;
+    using NLog;
+    using TechTalk.SpecFlow.Bindings;
+    using TechTalk.SpecFlow.BindingSkeletons;
+    using TechTalk.SpecFlow.Configuration;
+    using TechTalk.SpecFlow.Tracing;
+    using TestProject.OpenSDK.Internal.Exceptions;
+    using TestProject.OpenSDK.Internal.Rest;
+    using TestProject.OpenSDK.Internal.Rest.Messages;
+
     /// <summary>
     /// A custom wrapper around the SpecFlow test tracer, handling post-test execution reporting.
     /// </summary>

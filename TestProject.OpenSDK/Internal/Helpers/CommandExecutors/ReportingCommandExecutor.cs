@@ -14,16 +14,16 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using System.Collections.Generic;
-using NLog;
-using OpenQA.Selenium.Remote;
-using TestProject.OpenSDK.Internal.CallStackAnalysis;
-using TestProject.OpenSDK.Internal.Rest;
-using TestProject.OpenSDK.Internal.Rest.Messages;
-
 namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
 {
+    using System;
+    using System.Collections.Generic;
+    using NLog;
+    using OpenQA.Selenium.Remote;
+    using TestProject.OpenSDK.Internal.CallStackAnalysis;
+    using TestProject.OpenSDK.Internal.Rest;
+    using TestProject.OpenSDK.Internal.Rest.Messages;
+
     /// <summary>
     /// Reports commands executed to Agent.
     /// </summary>

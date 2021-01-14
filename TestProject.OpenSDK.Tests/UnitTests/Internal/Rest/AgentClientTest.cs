@@ -14,11 +14,11 @@
 // limitations under the License.
 // </copyright>
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestProject.OpenSDK.Internal.Rest;
-
 namespace TestProject.OpenSDK.Tests.UnitTests.Internal.Rest
 {
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using TestProject.OpenSDK.Internal.Rest;
+
     /// <summary>
     /// Class containing unit tests for the <see cref="AgentClient"/> class.
     /// </summary>

@@ -14,13 +14,13 @@
 // limitations under the License.
 // </copyright>
 
-using NLog;
-using TestProject.OpenSDK.Internal.Helpers.CommandExecutors;
-using TestProject.OpenSDK.Internal.Rest;
-using TestProject.OpenSDK.Internal.Rest.Messages;
-
 namespace TestProject.OpenSDK.Internal.Reporting
 {
+    using NLog;
+    using TestProject.OpenSDK.Internal.Helpers.CommandExecutors;
+    using TestProject.OpenSDK.Internal.Rest;
+    using TestProject.OpenSDK.Internal.Rest.Messages;
+
     /// <summary>
     /// Exposes reporting actions to the WebDriver object.
     /// </summary>

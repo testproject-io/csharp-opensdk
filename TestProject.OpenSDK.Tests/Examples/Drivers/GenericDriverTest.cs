@@ -14,11 +14,11 @@
 // limitations under the License.
 // </copyright>
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestProject.OpenSDK.Drivers.Generic;
-
 namespace TestProject.OpenSDK.Tests.Examples.Drivers
 {
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using TestProject.OpenSDK.Drivers.Generic;
+
     /// <summary>
     /// This class contains examples of using the TestProject C# SDK with the <see cref="GenericDriver"/>.
     /// </summary>
