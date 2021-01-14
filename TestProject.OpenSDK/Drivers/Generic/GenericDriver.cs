@@ -14,15 +14,15 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using NLog;
-using TestProject.OpenSDK.Internal.CallStackAnalysis;
-using TestProject.OpenSDK.Internal.Helpers.CommandExecutors;
-using TestProject.OpenSDK.Internal.Reporting;
-using TestProject.OpenSDK.Internal.Rest;
-
 namespace TestProject.OpenSDK.Drivers.Generic
 {
+    using System;
+    using NLog;
+    using TestProject.OpenSDK.Internal.CallStackAnalysis;
+    using TestProject.OpenSDK.Internal.Helpers.CommandExecutors;
+    using TestProject.OpenSDK.Internal.Reporting;
+    using TestProject.OpenSDK.Internal.Rest;
+
     /// <summary>
     /// Generic driver that can be used to execute non-UI automation and upload the results to TestProject.
     /// </summary>

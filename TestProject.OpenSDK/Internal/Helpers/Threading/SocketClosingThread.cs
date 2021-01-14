@@ -14,11 +14,11 @@
 // limitations under the License.
 // </copyright>
 
-using NLog;
-using TestProject.OpenSDK.Internal.Tcp;
-
 namespace TestProject.OpenSDK.Internal.Helpers.Threading
 {
+    using NLog;
+    using TestProject.OpenSDK.Internal.Tcp;
+
     /// <summary>
     /// A class that spawns a separate thread to gracefully close an open development socket.
     /// </summary>

@@ -14,12 +14,12 @@
 // limitations under the License.
 // </copyright>
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
-
 namespace TestProject.OpenSDK.Internal.Helpers
 {
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
+    using Newtonsoft.Json.Serialization;
+
     /// <summary>
     /// Custom (de-)serialization settings for transforming message objects to and from JSON.
     /// </summary>

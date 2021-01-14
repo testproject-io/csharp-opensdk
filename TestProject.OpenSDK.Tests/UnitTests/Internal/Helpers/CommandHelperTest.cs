@@ -14,12 +14,12 @@
 // limitations under the License.
 // </copyright>
 
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestProject.OpenSDK.Internal.Helpers;
-
 namespace TestProject.OpenSDK.Tests.UnitTests.Internal.Helpers
 {
+    using System.Collections.Generic;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using TestProject.OpenSDK.Internal.Helpers;
+
     /// <summary>
     /// Class containing unit tests for the <see cref="CommandHelper"/> class.
     /// </summary>

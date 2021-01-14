@@ -14,10 +14,10 @@
 // limitations under the License.
 // </copyright>
 
-using OpenQA.Selenium.Chrome;
-
 namespace TestProject.OpenSDK.Internal.Rest.Messages
 {
+    using OpenQA.Selenium.Chrome;
+
     /// <summary>
     /// Payload object returned by the Agent when starting a development session.
     /// </summary>
@@ -36,7 +36,7 @@ namespace TestProject.OpenSDK.Internal.Rest.Messages
         /// <summary>
         /// ID of the session that has been initialized by the Agent.
         /// </summary>
-        public string SessionId { get; set;  }
+        public string SessionId { get; set; }
 
         /// <summary>
         /// Dialect of the session that has been initialized by the Agent.

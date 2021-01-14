@@ -14,11 +14,11 @@
 // limitations under the License.
 // </copyright>
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestProject.OpenSDK.Internal.CallStackAnalysis;
-
 namespace TestProject.OpenSDK.Tests.UnitTests.Internal.CallStackAnalysis
 {
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using TestProject.OpenSDK.Internal.CallStackAnalysis;
+
     /// <summary>
     /// Class containing unit tests for the <see cref="StackTraceHelper"/> class.
     /// </summary>

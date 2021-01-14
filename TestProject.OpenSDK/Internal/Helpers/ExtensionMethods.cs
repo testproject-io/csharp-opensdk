@@ -14,12 +14,12 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Remote;
-
 namespace TestProject.OpenSDK.Internal.Helpers
 {
+    using System;
+    using OpenQA.Selenium;
+    using OpenQA.Selenium.Remote;
+
     /// <summary>
     /// This class contains custom extension methods implementing SDK specific business logic.
     /// </summary>

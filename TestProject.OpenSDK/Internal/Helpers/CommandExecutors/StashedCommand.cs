@@ -14,11 +14,11 @@
 // limitations under the License.
 // </copyright>
 
-using System.Collections.Generic;
-using OpenQA.Selenium.Remote;
-
 namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
 {
+    using System.Collections.Generic;
+    using OpenQA.Selenium.Remote;
+
     /// <summary>
     /// Payload object sent to the Agent to report a WebDriver command.
     /// </summary>

@@ -14,10 +14,10 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-
 namespace TestProject.OpenSDK.Internal.Exceptions
 {
+    using System;
+
     /// <summary>
     /// Exception object thrown when the requested browser is not found on the machine running the tests.
     /// </summary>

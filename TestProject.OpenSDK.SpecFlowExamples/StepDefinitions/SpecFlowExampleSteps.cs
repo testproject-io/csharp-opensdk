@@ -14,13 +14,13 @@
 // limitations under the License.
 // </copyright>
 
-using NUnit.Framework;
-using OpenQA.Selenium;
-using TechTalk.SpecFlow;
-using TestProject.OpenSDK.Drivers.Web;
-
 namespace TestProject.OpenSDK.SpecFlowExamples.StepDefinitions
 {
+    using NUnit.Framework;
+    using OpenQA.Selenium;
+    using TechTalk.SpecFlow;
+    using TestProject.OpenSDK.Drivers.Web;
+
     /// <summary>
     /// This class contains the step definitions corresponding to the steps in the example scenario.
     /// </summary>

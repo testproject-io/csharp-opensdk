@@ -14,10 +14,10 @@
 // limitations under the License.
 // </copyright>
 
-using OpenQA.Selenium;
-
 namespace TestProject.OpenSDK.Internal.Rest.Messages
 {
+    using OpenQA.Selenium;
+
     /// <summary>
     /// Payload object sent to the Agent to start a development session.
     /// </summary>

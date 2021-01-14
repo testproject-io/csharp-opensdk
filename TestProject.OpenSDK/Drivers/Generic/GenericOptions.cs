@@ -14,10 +14,10 @@
 // limitations under the License.
 // </copyright>
 
-using OpenQA.Selenium;
-
 namespace TestProject.OpenSDK.Drivers.Generic
 {
+    using OpenQA.Selenium;
+
     /// <summary>
     /// Custom class extending <see cref="DriverOptions"/> to allow providing of capabilities for a <see cref="GenericDriver"/>.
     /// </summary>

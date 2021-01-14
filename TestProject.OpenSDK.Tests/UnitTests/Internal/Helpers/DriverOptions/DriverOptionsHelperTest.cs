@@ -14,12 +14,12 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestProject.OpenSDK.Internal.Helpers.DriverOptions;
-
 namespace TestProject.OpenSDK.Tests.UnitTests.Internal.Helpers.DriverOptions
 {
+    using System;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using TestProject.OpenSDK.Internal.Helpers.DriverOptions;
+
     /// <summary>
     /// Class containing unit tests for the <see cref="DriverOptionsHelper"/> class.
     /// </summary>

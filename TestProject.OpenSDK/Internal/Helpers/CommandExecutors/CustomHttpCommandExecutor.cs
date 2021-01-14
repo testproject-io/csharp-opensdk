@@ -14,12 +14,12 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using System.Collections.Generic;
-using OpenQA.Selenium.Remote;
-
 namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
 {
+    using System;
+    using System.Collections.Generic;
+    using OpenQA.Selenium.Remote;
+
     /// <summary>
     /// A custom commands executor for Selenium drivers.
     /// Extends the original functionality by restoring driver session initiated by the Agent.

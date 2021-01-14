@@ -35,8 +35,8 @@ namespace TestProject.OpenSDK.SpecFlowExamples.Features
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "SpecFlowScenarioOutlineExample", "\tIn order to see beautiful SpecFlow reports on TestProject Cloud\r\n\tAs a TestProje" +
-                    "ct user\r\n\tI want to run SpecFlow scenarios supported by the SDK", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "SpecFlowScenarioOutlineExample", "\tIn order to see beautiful SpecFlow reports on TestProject Cloud\n\tAs a TestProjec" +
+                    "t user\n\tI want to run SpecFlow scenarios supported by the SDK", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         

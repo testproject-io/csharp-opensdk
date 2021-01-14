@@ -14,12 +14,12 @@
 // limitations under the License.
 // </copyright>
 
-using NUnit.Framework;
-using OpenQA.Selenium;
-using TestProject.OpenSDK.Drivers.Web;
-
 namespace TestProject.OpenSDK.Tests.Examples.Frameworks.NUnit
 {
+    using global::NUnit.Framework;
+    using OpenQA.Selenium;
+    using TestProject.OpenSDK.Drivers.Web;
+
     /// <summary>
     /// This class contains examples of using the TestProject C# SDK with NUnit and inferred reporting.
     /// </summary>

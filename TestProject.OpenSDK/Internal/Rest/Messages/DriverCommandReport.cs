@@ -14,10 +14,10 @@
 // limitations under the License.
 // </copyright>
 
-using System.Collections.Generic;
-
 namespace TestProject.OpenSDK.Internal.Rest.Messages
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// Payload object sent to the Agent to report a WebDriver command.
     /// </summary>

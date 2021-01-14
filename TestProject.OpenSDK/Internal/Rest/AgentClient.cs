@@ -14,20 +14,20 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using NLog;
-using OpenQA.Selenium;
-using RestSharp;
-using TestProject.OpenSDK.Internal.CallStackAnalysis;
-using TestProject.OpenSDK.Internal.Exceptions;
-using TestProject.OpenSDK.Internal.Helpers;
-using TestProject.OpenSDK.Internal.Rest.Messages;
-using TestProject.OpenSDK.Internal.Tcp;
-
 namespace TestProject.OpenSDK.Internal.Rest
 {
+    using System;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+    using NLog;
+    using OpenQA.Selenium;
+    using RestSharp;
+    using TestProject.OpenSDK.Internal.CallStackAnalysis;
+    using TestProject.OpenSDK.Internal.Exceptions;
+    using TestProject.OpenSDK.Internal.Helpers;
+    using TestProject.OpenSDK.Internal.Rest.Messages;
+    using TestProject.OpenSDK.Internal.Tcp;
+
     /// <summary>
     /// Client used to communicate with the TestProject Agent process.
     /// </summary>

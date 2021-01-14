@@ -14,12 +14,12 @@
 // limitations under the License.
 // </copyright>
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenQA.Selenium;
-using TestProject.OpenSDK.Drivers.Web;
-
 namespace TestProject.OpenSDK.Tests.Examples.Frameworks.MSTest
 {
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using OpenQA.Selenium;
+    using TestProject.OpenSDK.Drivers.Web;
+
     /// <summary>
     /// This class contains examples of using the TestProject C# SDK with MSTest and explicit reporting.
     /// </summary>

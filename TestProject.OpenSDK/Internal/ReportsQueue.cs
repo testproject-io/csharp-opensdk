@@ -14,14 +14,14 @@
 // limitations under the License.
 // </copyright>
 
-using System.Collections.Concurrent;
-using System.Threading;
-using NLog;
-using RestSharp;
-using TestProject.OpenSDK.Internal.Rest.Messages;
-
 namespace TestProject.OpenSDK.Internal
 {
+    using System.Collections.Concurrent;
+    using System.Threading;
+    using NLog;
+    using RestSharp;
+    using TestProject.OpenSDK.Internal.Rest.Messages;
+
     /// <summary>
     /// A queue class managing the sending of report items to the Agent in a separate thread.
     /// </summary>

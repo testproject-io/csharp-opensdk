@@ -71,9 +71,6 @@
   <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
     <Rule Id="SA1600" Action="Error" /> <!-- Elements should be documented -->
     <Rule Id="SA1633" Action="Error" /> <!-- File should have header -->
-    <Rule Id="SA0001" Action="None" /> <!-- Disabled to skip checking auto-generated XML comments in .csproj files -->
-    <Rule Id="SA1623" Action="None" /> <!-- Disabled to allow documenting class properties without starting with 'Gets' -->
-    <Rule Id="SA1636" Action="None" /> <!-- Disabled to allow custom copyright text -->
     <Rule Id="SA1101" Action="Error" /> <!-- Prefix local calls with this -->
     <Rule Id="SA1407" Action="Error" /> <!-- Arithmetic expressions should declare precedence -->
     <Rule Id="SA1116" Action="Error" /> <!-- Split parameters should start on line after declaration -->
@@ -102,8 +99,13 @@
     <Rule Id="SA1203" Action="Error" /> <!-- Constants should appear before fields -->
     <Rule Id="SA1214" Action="Error" /> <!-- Readonly fields should appear before non-readonly fields -->
     <Rule Id="SA1133" Action="Error" /> <!-- Do not combine attributes -->
+    <Rule Id="SA1200" Action="Error" /> <!-- Using directive should appear within a namespace declaration -->
     <Rule Id="SA1202" Action="Error" /> <!-- Elements should be ordered by access -->
+    <!-- Ignored Rules -->
+    <Rule Id="SA0001" Action="None" /> <!-- Disabled to skip checking auto-generated XML comments in .csproj files -->
     <Rule Id="SA1201" Action="None" /> <!-- Disabled to allow elements to appear in the order we see fit -->
-	<Rule Id="SA1310" Action="None" /> <!-- Disabled to allow naming constants using underscores -->
+  	<Rule Id="SA1310" Action="None" /> <!-- Disabled to allow naming constants using underscores -->
+    <Rule Id="SA1623" Action="None" /> <!-- Disabled to allow documenting class properties without starting with 'Gets' -->
+    <Rule Id="SA1636" Action="None" /> <!-- Disabled to allow custom copyright text -->
   </Rules>
 </RuleSet>

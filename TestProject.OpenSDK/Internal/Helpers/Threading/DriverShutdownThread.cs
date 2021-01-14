@@ -14,11 +14,11 @@
 // limitations under the License.
 // </copyright>
 
-using NLog;
-using TestProject.OpenSDK.Drivers.Web;
-
 namespace TestProject.OpenSDK.Internal.Helpers.Threading
 {
+    using NLog;
+    using TestProject.OpenSDK.Drivers.Web;
+
     /// <summary>
     /// A class that spawns a separate thread to gracefully stop a browser session.
     /// </summary>

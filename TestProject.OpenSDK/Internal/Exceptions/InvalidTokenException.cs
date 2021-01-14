@@ -14,10 +14,10 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-
 namespace TestProject.OpenSDK.Internal.Exceptions
 {
+    using System;
+
     /// <summary>
     /// Exception object thrown when token provided is rejected by the Agent.
     /// </summary>

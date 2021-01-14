@@ -14,14 +14,14 @@
 // limitations under the License.
 // </copyright>
 
-using System.Collections.Generic;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Remote;
-using TestProject.OpenSDK.Internal.Helpers.CommandExecutors;
-using TestProject.OpenSDK.Internal.Rest;
-
 namespace TestProject.OpenSDK.Internal.Helpers
 {
+    using System.Collections.Generic;
+    using OpenQA.Selenium;
+    using OpenQA.Selenium.Remote;
+    using TestProject.OpenSDK.Internal.Helpers.CommandExecutors;
+    using TestProject.OpenSDK.Internal.Rest;
+
     /// <summary>
     /// This class contains helper methods to redact WebDriver commands before reporting them to the Agent.
     /// </summary>

@@ -14,12 +14,12 @@
 // limitations under the License.
 // </copyright>
 
-using System;
-using OpenQA.Selenium.IE;
-using TestProject.OpenSDK.Internal.Helpers.DriverOptions;
-
 namespace TestProject.OpenSDK.Drivers.Web
 {
+    using System;
+    using OpenQA.Selenium.IE;
+    using TestProject.OpenSDK.Internal.Helpers.DriverOptions;
+
     /// <summary>
     /// Extension of <see cref="OpenQA.Selenium.IE.InternetExplorerDriver">InternetExplorerDriver</see> for use with TestProject.
     /// Instead of initializing a new session, it starts it in the TestProject Agent and then reconnects to it.

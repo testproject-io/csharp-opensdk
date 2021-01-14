@@ -14,10 +14,10 @@
 // limitations under the License.
 // </copyright>
 
-using System.Reflection;
-
 namespace TestProject.OpenSDK.Internal.CallStackAnalysis
 {
+    using System.Reflection;
+
     /// <summary>
     /// Defines methods that are used to determine whether or not a method belongs to a unit testing framework class.
     /// </summary>
