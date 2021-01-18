@@ -36,7 +36,7 @@ namespace TestProject.OpenSDK.Internal.Rest.Messages
         /// <summary>
         /// The result of the command that was executed.
         /// </summary>
-        public Dictionary<string, object> Result { get; }
+        public object Result { get; }
 
         /// <summary>
         /// True if the command was executed successfully, false otherwise.
@@ -55,7 +55,7 @@ namespace TestProject.OpenSDK.Internal.Rest.Messages
         /// <param name="commandParameters">The command parameters.</param>
         /// <param name="result">Result of the command that was executed.</param>
         /// <param name="passed">True if the command was executed successfully, false otherwise.</param>
-        public DriverCommandReport(string commandName, Dictionary<string, object> commandParameters, Dictionary<string, object> result, bool passed)
+        public DriverCommandReport(string commandName, Dictionary<string, object> commandParameters, object result, bool passed)
         {
             this.CommandName = commandName;
             this.CommandParameters = commandParameters;
