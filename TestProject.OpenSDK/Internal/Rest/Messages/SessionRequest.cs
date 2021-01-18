@@ -17,6 +17,7 @@
 namespace TestProject.OpenSDK.Internal.Rest.Messages
 {
     using OpenQA.Selenium;
+    using TestProject.OpenSDK.Internal.Helpers;
 
     /// <summary>
     /// Payload object sent to the Agent to start a development session.
@@ -31,7 +32,7 @@ namespace TestProject.OpenSDK.Internal.Rest.Messages
         /// <summary>
         /// The current SDK version.
         /// </summary>
-        public string SdkVersion { get; } = "0.64.0"; // TODO: replace with proper logic
+        public string SdkVersion { get; } = VersionHelper.GetSdkVersion();
 
         /// <summary>
         /// The SDK language, always C#.
