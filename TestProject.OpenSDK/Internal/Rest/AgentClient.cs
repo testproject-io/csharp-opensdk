@@ -17,7 +17,6 @@
 namespace TestProject.OpenSDK.Internal.Rest
 {
     using System;
-    using System.Collections.Generic;
     using System.Net;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
