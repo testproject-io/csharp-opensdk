@@ -16,6 +16,7 @@
 
 namespace TestProject.OpenSDK.Internal.Rest.Messages
 {
+    using System.Collections.Generic;
     using OpenQA.Selenium;
     using TestProject.OpenSDK.Internal.Helpers;
 
@@ -27,7 +28,7 @@ namespace TestProject.OpenSDK.Internal.Rest.Messages
         /// <summary>
         /// Capabilities that should be sent to the Agent for driver initialization.
         /// </summary>
-        public DriverOptions Capabilities { get; }
+        public Dictionary<string, object> Capabilities { get; }
 
         /// <summary>
         /// The current SDK version.
@@ -62,7 +63,8 @@ namespace TestProject.OpenSDK.Internal.Rest.Messages
                 this.JobName = reportSettings.JobName;
             }
 
-            this.Capabilities = capabilities;
+            // Convert DriverOptions to a format that preserves arguments and extensions when serializing it.
+            this.Capabilities = capabilities.ToString().FromJson<Dictionary<string, object>>();
         }
 
         /// <summary>
