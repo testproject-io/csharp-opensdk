@@ -16,7 +16,6 @@
 
 namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
 {
-    using System;
     using System.Collections.Generic;
     using NLog;
     using OpenQA.Selenium.Remote;
@@ -94,17 +93,6 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
                 return;
             }
 
-            Dictionary<string, object> result;
-
-            try
-            {
-                result = (Dictionary<string, object>)response.Value;
-            }
-            catch (InvalidCastException)
-            {
-                result = new Dictionary<string, object>();
-            }
-
             if (StackTraceHelper.Instance.IsRunningInsideWait())
             {
                 // We're only interested in reporting the final FindElement or FindElements call
@@ -113,7 +101,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
                     command.Name.Equals(DriverCommand.FindElement) ||
                     command.Name.Equals(DriverCommand.FindElements))
                 {
-                    this.stashedCommand = new StashedCommand(command, result, response.IsPassed());
+                    this.stashedCommand = new StashedCommand(command, response.Value, response.IsPassed());
                 }
 
                 // Do not report the command right away if it's executed inside a WebDriverWait
@@ -127,7 +115,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
                 this.stashedCommand = null;
             }
 
-            this.SendCommandToAgent(command, result, response.IsPassed());
+            this.SendCommandToAgent(command, response.Value, response.IsPassed());
         }
 
         /// <summary>
@@ -204,7 +192,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         /// <param name="command">The WebDriver command that was executed.</param>
         /// <param name="result">The result of the command execution.</param>
         /// <param name="passed">True if command execution was successful, false otherwise.</param>
-        private void SendCommandToAgent(Command command, Dictionary<string, object> result, bool passed)
+        private void SendCommandToAgent(Command command, object result, bool passed)
         {
             if (this.ReportsDisabled || this.CommandReportsDisabled)
             {

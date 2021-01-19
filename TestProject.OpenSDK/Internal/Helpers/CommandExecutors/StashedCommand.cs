@@ -16,7 +16,6 @@
 
 namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
 {
-    using System.Collections.Generic;
     using OpenQA.Selenium.Remote;
 
     /// <summary>
@@ -32,7 +31,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         /// <summary>
         /// The command execution result.
         /// </summary>
-        public Dictionary<string, object> Result { get; }
+        public object Result { get; }
 
         /// <summary>
         /// True if the command was executed successfully, false otherwise.
@@ -45,7 +44,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         /// <param name="command">WebDriver command executed by the driver.</param>
         /// <param name="result">Result of the command that was executed.</param>
         /// <param name="passed">True if the command was executed successfully, false otherwise.</param>
-        public StashedCommand(Command command, Dictionary<string, object> result, bool passed)
+        public StashedCommand(Command command, object result, bool passed)
         {
             this.Command = command;
             this.Result = result;
