@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TestProject.OpenSDK.SpecFlowPlugin\TestProject.OpenSDK.SpecFlowPlugin.csproj" />
     <ProjectReference Include="..\TestProject.OpenSDK\TestProject.OpenSDK.csproj" />
   </ItemGroup>
 
