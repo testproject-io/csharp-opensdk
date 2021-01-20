@@ -18,6 +18,7 @@ namespace TestProject.OpenSDK.Drivers.Generic
 {
     using System;
     using NLog;
+    using TestProject.OpenSDK.Drivers.Web;
     using TestProject.OpenSDK.Internal.CallStackAnalysis;
     using TestProject.OpenSDK.Internal.Helpers.CommandExecutors;
     using TestProject.OpenSDK.Internal.Reporting;
@@ -26,8 +27,13 @@ namespace TestProject.OpenSDK.Drivers.Generic
     /// <summary>
     /// Generic driver that can be used to execute non-UI automation and upload the results to TestProject.
     /// </summary>
-    public class GenericDriver
+    public class GenericDriver : ITestProjectDriver
     {
+        /// <summary>
+        /// Flag that indicates whether or not the driver instance is running.
+        /// </summary>
+        public bool IsRunning { get; private set; }
+
         /// <summary>
         /// The minimum version of the Agent supporting the Generic driver.
         /// </summary>
@@ -84,10 +90,27 @@ namespace TestProject.OpenSDK.Drivers.Generic
         /// </summary>
         public void Quit()
         {
+            if (this.IsRunning)
+            {
+                this.Stop();
+            }
+            else
+            {
+                Logger.Info("Driver is not running, skipping shutdown sequence");
+            }
+        }
+
+        /// <summary>
+        /// Wraps up reporting for the current session.
+        /// </summary>
+        public void Stop()
+        {
             if (!this.commandExecutor.ReportingCommandExecutor.ReportsDisabled)
             {
                 this.commandExecutor.ReportingCommandExecutor.ReportTest(true);
             }
+
+            this.IsRunning = false;
 
             AgentClient.GetInstance().Stop();
         }
