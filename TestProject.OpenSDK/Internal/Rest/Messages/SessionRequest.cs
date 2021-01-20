@@ -18,6 +18,7 @@ namespace TestProject.OpenSDK.Internal.Rest.Messages
 {
     using System.Collections.Generic;
     using OpenQA.Selenium;
+    using TestProject.OpenSDK.Drivers.Generic;
     using TestProject.OpenSDK.Internal.Helpers;
 
     /// <summary>
@@ -64,7 +65,14 @@ namespace TestProject.OpenSDK.Internal.Rest.Messages
             }
 
             // Convert DriverOptions to a format that preserves arguments and extensions when serializing it.
-            this.Capabilities = capabilities.ToString().FromJson<Dictionary<string, object>>();
+            if (capabilities.GetType().Equals(typeof(GenericOptions)))
+            {
+                this.Capabilities = ((GenericOptions)capabilities).ToDictionary();
+            }
+            else
+            {
+                this.Capabilities = capabilities.ToString().FromJson<Dictionary<string, object>>();
+            }
         }
 
         /// <summary>
