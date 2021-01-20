@@ -21,7 +21,6 @@ namespace TestProject.OpenSDK.Drivers
     using NLog;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Remote;
-    using TestProject.OpenSDK.Drivers.Web;
     using TestProject.OpenSDK.Internal.Addons;
     using TestProject.OpenSDK.Internal.CallStackAnalysis;
     using TestProject.OpenSDK.Internal.Helpers;
@@ -34,7 +33,7 @@ namespace TestProject.OpenSDK.Drivers
     /// Extension of <see cref="OpenQA.Selenium.Chrome.ChromeDriver">ChromeDriver</see> for use with TestProject.
     /// Instead of initializing a new session, it starts it in the TestProject Agent and then reconnects to it.
     /// </summary>
-    public class BaseDriver : OpenQA.Selenium.Remote.RemoteWebDriver, ITestProjectDriver
+    public class BaseDriver : RemoteWebDriver, ITestProjectDriver
     {
         /// <summary>
         /// Flag that indicates whether or not the driver instance is running.
@@ -121,10 +120,17 @@ namespace TestProject.OpenSDK.Drivers
         /// </summary>
         public new void Quit()
         {
-            // Avoid performing the graceful shutdown more than once
-            AppDomain.CurrentDomain.ProcessExit -= (sender, eventArgs) => this.driverShutdownThread.RunThread();
+            if (this.IsRunning)
+            {
+                // Avoid performing the graceful shutdown more than once
+                AppDomain.CurrentDomain.ProcessExit -= (sender, eventArgs) => this.driverShutdownThread.RunThread();
 
-            this.Stop();
+                this.Stop();
+            }
+            else
+            {
+                Logger.Info("Driver is not running, skipping shutdown sequence");
+            }
         }
 
         /// <summary>
