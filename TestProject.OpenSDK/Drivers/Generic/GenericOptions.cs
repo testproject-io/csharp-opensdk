@@ -16,6 +16,7 @@
 
 namespace TestProject.OpenSDK.Drivers.Generic
 {
+    using System.Collections.Generic;
     using OpenQA.Selenium;
 
     /// <summary>
@@ -23,6 +24,11 @@ namespace TestProject.OpenSDK.Drivers.Generic
     /// </summary>
     public class GenericOptions : DriverOptions
     {
+        /// <summary>
+        /// The field name for the platform name property to use when creating a serializable dictionary.
+        /// </summary>
+        private readonly string fieldPlatformName = "PlatformName";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="GenericOptions"/> class.
         /// </summary>
@@ -51,6 +57,15 @@ namespace TestProject.OpenSDK.Drivers.Generic
         public override ICapabilities ToCapabilities()
         {
             throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// Returns the current <see cref="GenericOptions"/> object as a <see cref="Dictionary{TKey, TValue}"/>.
+        /// </summary>
+        /// <returns>A <see cref="Dictionary{TKey, TValue}"/> representing the current instance.</returns>
+        public Dictionary<string, object> ToDictionary()
+        {
+            return new Dictionary<string, object>() { { this.fieldPlatformName, this.PlatformName } };
         }
     }
 }
