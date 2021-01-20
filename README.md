@@ -209,13 +209,28 @@ ChromeDriver driver = new ChromeDriver(new ChromeOptions());
 driver.Report().DisableRedaction(true);
 ```
 
-# Logging
+# SpecFlow support
 
-TBD
+The SDK also supports automatic reporting of SpecFlow features, scenarios and steps through the [TestProject OpenSDK SpecFlow plugin](https://www.nuget.org/packages/TestProject.OpenSDK.SpecFlowPlugin/).
+
+After installing the plugin package using NuGet, SpecFlow-based scenarios that use an SDK driver will be automatically reported to TestProject Cloud.
+
+When the plugin detects that SpecFlow is used, it will disable the reporting of driver command and automatic reporting of tests.
+
+Instead, it will report:
+
+* A separate job for every feature file
+* A test for every scenario in a feature file
+* All steps in a scenario as steps in the corresponding test
+
+Steps are automatically marked as passed or failed, and Scenario Outlines are supported to create comprehensive living documentation from your specifications on TestProject Cloud.
+
+A working example project can be found [here](https://github.com/testproject-io/csharp-sdk/tree/main/TestProject.OpenSDK.SpecFlowExamples).
+
 
 # Examples
 
-Here are more [examples](https://github.com/testproject-io/csharp-sdk/tree/main/TestProject.OpenSDK.Tests/Examples):
+More usage examples for the SDK can be found [here](https://github.com/testproject-io/csharp-sdk/tree/main/TestProject.OpenSDK.Tests/Examples):
 
 * Drivers
   * [Chrome Test](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/ChromeDriverTest.cs)
