@@ -17,7 +17,7 @@
 namespace TestProject.OpenSDK.Internal.Helpers.Threading
 {
     using NLog;
-    using TestProject.OpenSDK.Drivers.Web;
+    using TestProject.OpenSDK.Drivers;
 
     /// <summary>
     /// A class that spawns a separate thread to gracefully stop a browser session.

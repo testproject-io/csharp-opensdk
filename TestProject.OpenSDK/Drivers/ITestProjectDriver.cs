@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-namespace TestProject.OpenSDK.Drivers.Web
+namespace TestProject.OpenSDK.Drivers
 {
     /// <summary>
     /// Interface defining methods that all TestProject driver classes should implement.
