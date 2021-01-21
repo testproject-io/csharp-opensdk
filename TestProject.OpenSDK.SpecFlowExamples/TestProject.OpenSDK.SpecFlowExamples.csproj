@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <SpecFlowObsoleteCodeBehindFiles Remove="Features\SpecFlowExample - Copy.feature.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
@@ -21,19 +17,6 @@
   <ItemGroup>
     <ProjectReference Include="..\TestProject.OpenSDK.SpecFlowPlugin\TestProject.OpenSDK.SpecFlowPlugin.csproj" />
     <ProjectReference Include="..\TestProject.OpenSDK\TestProject.OpenSDK.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Features\SpecFlowScenarioOutlineExample.feature.cs">
-      <DependentUpon>SpecFlowScenarioOutlineExample.feature</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <SpecFlowFeatureFiles Update="Features\SpecFlowScenarioOutlineExample.feature">
-      <Visible>$(UsingMicrosoftNETSdk)</Visible>
-      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
-    </SpecFlowFeatureFiles>
   </ItemGroup>
 
 </Project>
