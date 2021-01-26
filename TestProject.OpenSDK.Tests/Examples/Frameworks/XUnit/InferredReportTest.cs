@@ -28,7 +28,7 @@ namespace TestProject.OpenSDK.Tests.Examples.Frameworks.XUnit
         /// <summary>
         /// An example test logging in to the TestProject demo application with Chrome.
         /// </summary>
-        [Fact]
+        [Fact(DisplayName = "XUnit Example Using Chrome Driver")]
         public void ExampleTestUsingChromeDriver()
         {
             ChromeDriver driver = new ChromeDriver();  // Project and job names are inferred.
