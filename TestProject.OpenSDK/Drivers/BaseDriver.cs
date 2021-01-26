@@ -35,21 +35,31 @@ namespace TestProject.OpenSDK.Drivers
     /// </summary>
     public class BaseDriver : RemoteWebDriver, ITestProjectDriver
     {
+        private const string KeepSessionEnvironmentVariable = "TP_KEEP_DRIVER_SESSION";
+        private static readonly bool KeepDriverSession;
+
         /// <summary>
         /// Flag that indicates whether or not the driver instance is running.
         /// </summary>
         public bool IsRunning { get; private set; }
 
-        private DriverShutdownThread driverShutdownThread;
+        private readonly DriverShutdownThread driverShutdownThread;
 
-        private string sessionId;
+        private readonly string sessionId;
 
-        private CustomHttpCommandExecutor commandExecutor;
+        private readonly CustomHttpCommandExecutor commandExecutor;
 
         /// <summary>
         /// Logger instance for this class.
         /// </summary>
         private static Logger Logger { get; set; } = LogManager.GetCurrentClassLogger();
+
+        static BaseDriver()
+        {
+            var keepSessionVariable = Environment.GetEnvironmentVariable(KeepSessionEnvironmentVariable);
+            bool.TryParse(keepSessionVariable, out bool result);
+            KeepDriverSession = result;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseDriver"/> class.
@@ -143,7 +153,11 @@ namespace TestProject.OpenSDK.Drivers
 
             this.IsRunning = false;
 
-            base.Quit();
+            // Need to keep session alive if TP_KEEP_DRIVER_SESSION was specified.
+            if (!KeepDriverSession)
+            {
+                base.Quit();
+            }
         }
 
         /// <summary>
