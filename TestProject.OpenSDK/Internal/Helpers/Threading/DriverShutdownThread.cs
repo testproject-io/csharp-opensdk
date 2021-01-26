@@ -17,14 +17,18 @@
 namespace TestProject.OpenSDK.Internal.Helpers.Threading
 {
     using NLog;
+    using System;
     using TestProject.OpenSDK.Drivers;
 
     /// <summary>
     /// A class that spawns a separate thread to gracefully stop a browser session.
     /// </summary>
-    public class DriverShutdownThread : BaseThread
+    public class DriverShutdownThread : BaseThread, IDisposable
     {
+        private static int priorityCounter = 0;
+
         private ITestProjectDriver driver;
+        private int priority;
 
         private static Logger Logger { get; set; } = LogManager.GetCurrentClassLogger();
 
@@ -36,6 +40,8 @@ namespace TestProject.OpenSDK.Internal.Helpers.Threading
             : base()
         {
             this.driver = driver;
+            this.priority = priorityCounter++;
+            ShutdownThreadHelper.Instance.Register(this.priority, this);
         }
 
         /// <summary>
@@ -48,6 +54,12 @@ namespace TestProject.OpenSDK.Internal.Helpers.Threading
             {
                 this.driver.Stop();
             }
+        }
+
+        /// <inheritdoc cref="IDisposable"/>
+        public void Dispose()
+        {
+            ShutdownThreadHelper.Instance.Unregister(this.priority);
         }
     }
 }
