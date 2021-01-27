@@ -116,9 +116,9 @@ If any of these unit testing frameworks is detected, the following reporting set
   
 Examples of implicit project and job names inferred from annotations:
 
-* [MSTest example](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Frameworks/MSTest/InferredReportTest.cs)
-* [NUnit example](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Frameworks/NUnit/InferredReportTest.cs)
-* [XUnit example](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Frameworks/XUnit/InferredReportTest.cs)
+* [MSTest example](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Frameworks/MSTest/InferredReportTest.cs)
+* [NUnit example](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Frameworks/NUnit/InferredReportTest.cs)
+* [XUnit example](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Frameworks/XUnit/InferredReportTest.cs)
 
 ## Explicit Names
 
@@ -130,9 +130,9 @@ ChromeDriver driver = new ChromeDriver(projectName: "your_project_name", jobName
 
 Examples of explicit project and job name configuration:
 
-* [MSTest example](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Frameworks/MSTest/ExplicitReportTest.cs)
-* [NUnit example](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Frameworks/NUnit/ExplicitReportTest.cs)
-* [XUnit example](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Frameworks/XUnit/ExplicitReportTest.cs)
+* [MSTest example](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Frameworks/MSTest/ExplicitReportTest.cs)
+* [NUnit example](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Frameworks/NUnit/ExplicitReportTest.cs)
+* [XUnit example](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Frameworks/XUnit/ExplicitReportTest.cs)
 
 ## Tests Reports
 
@@ -225,31 +225,31 @@ Instead, it will report:
 
 Steps are automatically marked as passed or failed, and Scenario Outlines are supported to create comprehensive living documentation from your specifications on TestProject Cloud.
 
-A working example project can be found [here](https://github.com/testproject-io/csharp-sdk/tree/main/TestProject.OpenSDK.SpecFlowExamples).
+A working example project can be found [here](https://github.com/testproject-io/csharp-opensdk/tree/main/TestProject.OpenSDK.SpecFlowExamples).
 
 
 # Examples
 
-More usage examples for the OpenSDK can be found [here](https://github.com/testproject-io/csharp-sdk/tree/main/TestProject.OpenSDK.Tests/Examples):
+More usage examples for the OpenSDK can be found [here](https://github.com/testproject-io/csharp-opensdk/tree/main/TestProject.OpenSDK.Tests/Examples):
 
 * Drivers
-  * [Chrome Test](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/ChromeDriverTest.cs)
-  * [Edge Test](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/EdgeDriverTest.cs)
-  * [Firefox Test](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/FirefoxDriverTest.cs)
-  * [Internet Explorer Test](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/InternetExplorerDriverTest.cs)
-  * [Safari Test](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/SafariDriverTest.cs)
-  * [Remote Web Driver Test](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/RemoteWebDriverTest.cs)
-  * [Generic Driver Test](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/GenericDriverTest.cs)
+  * [Chrome Test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/ChromeDriverTest.cs)
+  * [Edge Test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/EdgeDriverTest.cs)
+  * [Firefox Test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/FirefoxDriverTest.cs)
+  * [Internet Explorer Test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/InternetExplorerDriverTest.cs)
+  * [Safari Test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/SafariDriverTest.cs)
+  * [Remote Web Driver Test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/RemoteWebDriverTest.cs)
+  * [Generic Driver Test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/GenericDriverTest.cs)
 * Frameworks
   * MSTest
-    * [Inferred Report](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Frameworks/MSTest/InferredReportTest.cs)
-    * [Explicit Report](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Frameworks/MSTest/ExplicitReportTest.cs)
+    * [Inferred Report](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Frameworks/MSTest/InferredReportTest.cs)
+    * [Explicit Report](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Frameworks/MSTest/ExplicitReportTest.cs)
   * NUnit
-    * [Inferred Report](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Frameworks/NUnit/InferredReportTest.cs)
-    * [Explicit Report](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Frameworks/NUnit/ExplicitReportTest.cs)
+    * [Inferred Report](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Frameworks/NUnit/InferredReportTest.cs)
+    * [Explicit Report](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Frameworks/NUnit/ExplicitReportTest.cs)
   * XUnit
-    * [Inferred Report](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Frameworks/XUnit/InferredReportTest.cs)
-    * [Explicit Report](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Frameworks/XUnit/ExplicitReportTest.cs)
+    * [Inferred Report](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Frameworks/XUnit/InferredReportTest.cs)
+    * [Explicit Report](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Frameworks/XUnit/ExplicitReportTest.cs)
 
 # License
 

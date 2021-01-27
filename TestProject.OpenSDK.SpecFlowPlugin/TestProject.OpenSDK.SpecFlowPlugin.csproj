@@ -12,7 +12,7 @@
     <Copyright>2020 TestProject (https://testproject.io)</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
     <RepositoryType>git</RepositoryType> 
-    <RepositoryUrl>https://github.com/testproject-io/csharp-sdk</RepositoryUrl>
+    <RepositoryUrl>https://github.com/testproject-io/csharp-opensdk</RepositoryUrl>
     <PackageIconUrl>https://storage-static.testproject.io/templates/TP-Template-Logo-Square.png</PackageIconUrl>
     <PackageTags>TestProject;Selenium;Appium;OpenSDK;SpecFlow</PackageTags>
   </PropertyGroup>
