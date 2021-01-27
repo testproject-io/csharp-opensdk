@@ -17,12 +17,13 @@
 namespace TestProject.OpenSDK.Internal.Helpers.Threading
 {
     using NLog;
+    using System;
     using TestProject.OpenSDK.Internal.Tcp;
 
     /// <summary>
     /// A class that spawns a separate thread to gracefully close an open development socket.
     /// </summary>
-    public class SocketClosingThread : BaseThread
+    public class SocketClosingThread : BaseThread, IDisposable
     {
         private static Logger Logger { get; set; } = LogManager.GetCurrentClassLogger();
 
@@ -32,6 +33,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.Threading
         public SocketClosingThread()
             : base()
         {
+            ShutdownThreadHelper.Instance.Register(int.MaxValue, this);
         }
 
         /// <summary>
@@ -41,6 +43,12 @@ namespace TestProject.OpenSDK.Internal.Helpers.Threading
         {
             Logger.Info("Closing socket gracefully...");
             SocketManager.GetInstance().CloseSocket();
+        }
+
+        /// <inheritdoc cref="IDisposable"/>
+        public void Dispose()
+        {
+            ShutdownThreadHelper.Instance.Unregister(int.MaxValue);
         }
     }
 }

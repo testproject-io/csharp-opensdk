@@ -97,7 +97,6 @@ namespace TestProject.OpenSDK.Drivers
 
             // Add shutdown hook for gracefully shutting down the driver
             this.driverShutdownThread = new DriverShutdownThread(this);
-            AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) => this.driverShutdownThread.RunThread();
 
             if (StackTraceHelper.Instance.TryDetectSpecFlow())
             {
@@ -133,7 +132,7 @@ namespace TestProject.OpenSDK.Drivers
             if (this.IsRunning)
             {
                 // Avoid performing the graceful shutdown more than once
-                AppDomain.CurrentDomain.ProcessExit -= (sender, eventArgs) => this.driverShutdownThread.RunThread();
+                this.driverShutdownThread.Dispose();
 
                 this.Stop();
             }

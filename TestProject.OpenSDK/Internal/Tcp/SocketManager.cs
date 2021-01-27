@@ -53,7 +53,6 @@ namespace TestProject.OpenSDK.Internal.Tcp
         private SocketManager()
         {
             socketClosingThread = new SocketClosingThread();
-            AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) => socketClosingThread.RunThread();
         }
 
         /// <summary>
