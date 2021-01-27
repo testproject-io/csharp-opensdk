@@ -25,6 +25,7 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
     public class XUnitAnalyzer : IMethodAnalyzer
     {
         private const string XUnitNamespace = "XUnit";
+        private const string TestNameProperty = "DisplayName";
         private static readonly string[] AttributeNames = { "Fact", "Theory" };
 
         /// <summary>
@@ -46,6 +47,17 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
         {
             // xUnit.NET does not support setup methods, so this is always false.
             return false;
+        }
+
+        /// <inheritdoc cref="IMethodAnalyzer"/>
+        public string GetTestName(MethodBase method)
+        {
+            // Attribute has a DisplayName property set this way: [TestMethod(DisplayName = "name")]
+            var attribute = method.GetCustomAttributes(true)
+                .FirstOrDefault(a => AttributeNames.Contains(a.GetType().Name) &&
+                          (a.GetType().Namespace?.Equals(XUnitNamespace) ?? false));
+
+            return attribute?.GetType().GetProperty(TestNameProperty)?.GetValue(attribute)?.ToString();
         }
     }
 }

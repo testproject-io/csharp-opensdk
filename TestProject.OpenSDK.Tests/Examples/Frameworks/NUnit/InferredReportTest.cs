@@ -43,7 +43,7 @@ namespace TestProject.OpenSDK.Tests.Examples.Frameworks.NUnit
         /// <summary>
         /// An example test logging in to the TestProject demo application with Chrome.
         /// </summary>
-        [Test]
+        [Test(Description = "NUnit Example Using Chrome Driver")]
         public void ExampleTestUsingChromeDriver()
         {
             this.driver.Navigate().GoToUrl("https://example.testproject.io");

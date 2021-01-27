@@ -36,5 +36,12 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
         /// <param name="method">The method to be analyzed.</param>
         /// <returns>True if the method is run inside a setup hook, false otherwise.</returns>
         bool IsSetupMethod(MethodBase method);
+
+        /// <summary>
+        /// Gets the test name, taking into account custom display names specified by the user.
+        /// </summary>
+        /// <param name="method">The method to be analyzed.</param>
+        /// <returns>Test name, or null if method not supported by this analyzer.</returns>
+        string GetTestName(MethodBase method);
     }
 }

@@ -28,6 +28,7 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
         private const string SetUpAttribute = "TestInitialize";
         private const string TestClassAttribute = "TestClass";
         private const string MSTestFrameworkNamespace = "Microsoft.VisualStudio.TestTools.UnitTesting";
+        private const string TestNameProperty = "DisplayName";
 
         /// <summary>
         /// Determines whether or not the class containing the method that is run belongs to MSTest.
@@ -53,6 +54,16 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
             return method.GetCustomAttributes(true).Any(a => a.GetType().Name.Contains(SetUpAttribute)
             && a.GetType().Namespace.Equals(MSTestFrameworkNamespace))
                 && method.DeclaringType.GetCustomAttributes(true).Any(a => a.GetType().Name.Contains(TestClassAttribute) && a.GetType().Namespace.Equals(MSTestFrameworkNamespace));
+        }
+
+        /// <inheritdoc cref="IMethodAnalyzer"/>
+        public string GetTestName(MethodBase method)
+        {
+            // Attribute has a DisplayName property set this way: [TestMethod("name")]
+            var attribute = method.GetCustomAttributes(true).FirstOrDefault(a =>
+                a.GetType().Name.Contains(TestAttribute)
+                && a.GetType().Namespace.Equals(MSTestFrameworkNamespace));
+            return attribute?.GetType().GetProperty(TestNameProperty)?.GetValue(attribute)?.ToString();
         }
     }
 }

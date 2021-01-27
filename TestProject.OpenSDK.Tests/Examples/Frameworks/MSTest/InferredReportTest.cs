@@ -43,7 +43,7 @@ namespace TestProject.OpenSDK.Tests.Examples.Frameworks.MSTest
         /// <summary>
         /// An example test logging in to the TestProject demo application with Chrome.
         /// </summary>
-        [TestMethod]
+        [TestMethod("MSTest Example Using Chrome Driver")]
         public void ExampleTestUsingChromeDriver()
         {
             this.driver.Navigate().GoToUrl("https://example.testproject.io");

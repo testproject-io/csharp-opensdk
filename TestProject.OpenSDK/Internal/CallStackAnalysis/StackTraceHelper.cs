@@ -46,7 +46,9 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
         /// <returns>The inferred test method name.</returns>
         public string GetInferredTestName()
         {
-            return this.TryDetectTestMethod().Name;
+            var testMethod = this.TryDetectTestMethod();
+            return this.analyzers.Select(a => a.GetTestName(testMethod)).FirstOrDefault(n => !string.IsNullOrEmpty(n))
+                ?? testMethod.Name;
         }
 
         /// <summary>
