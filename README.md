@@ -1,15 +1,15 @@
-﻿# TestProject SDK For C#
+﻿# TestProject OpenSDK For C#
 
 [TestProject](https://testproject.io) is a **Free** Test Automation platform for Web, Mobile and API testing.
-To get familiar with the TestProject, visit our main [documentation](https://docs.testproject.io/) website.
+To get familiar with TestProject, visit our main [documentation](https://docs.testproject.io/) website.
 
-TestProject SDK is a single, integrated interface to scripting with the most popular open source test automation frameworks.
+The TestProject OpenSDK is a single, integrated interface to scripting with the most popular open source test automation frameworks.
 
 From now on, you can effortlessly execute Selenium and Appium native tests using a single automation platform that already takes care of all the complex setup, maintenance and configs.
 
 With one unified SDK available across multiple languages, developers and testers receive a go-to toolset, solving some of the greatest challenges in open source test automation.
 
-With TestProject SDK, users save a bunch of time and enjoy the following benefits out of the box:
+With the TestProject OpenSDK, users save a bunch of time and enjoy the following benefits out of the box:
 
 * 100% open source and available as a [NuGet](https://www.nuget.org/packages/TestProject.OpenSDK/) dependency.
 * 5-minute simple Selenium and Appium setup with a single [Agent](https://docs.testproject.io/testproject-agents) deployment.
@@ -32,13 +32,13 @@ To get started, you need to complete the following prerequisites checklist:
 
 ## Installation
 
-The TestProject C# OpenSDK is [available via  NuGet](https://www.nuget.org/packages/TestProject.OpenSDK/).
+The TestProject C# OpenSDK is [available via NuGet](https://www.nuget.org/packages/TestProject.OpenSDK/).
 
-> This SDK supports .NET Standard 2.0 and newer.
+> This OpenSDK supports .NET Standard 2.0 and newer.
 
 # Test Development
 
-Using a TestProject driver is exactly identical to using a Selenium driver. Changing the import statement is enough in most cases.
+Using a TestProject driver is identical to using a Selenium driver. Changing the import statement is enough in most cases.
 
 > The following examples use the `ChromeDriver`, but they are applicable to all other supported drivers.
 
@@ -57,7 +57,7 @@ public class MyTest {
 
 # Drivers
 
-The TestProject SDK overrides standard Selenium/Appium drivers with extended functionality. Below is the packages structure containing all supported drivers:
+The TestProject OpenSDK overrides standard Selenium/Appium drivers with extended functionality. Below is the packages structure containing all supported drivers:
 
 ```ascii
 TestProject.OpenSDK.Drivers
@@ -76,7 +76,7 @@ TestProject.OpenSDK.Drivers
 
 ## Development Token
 
-The SDK uses a development token for communication with the Agent and the TestProject platform. Drivers search the developer token in an environment variable `TP_DEV_TOKEN`. This token can be also provided explicitly using the constructor:
+The OpenSDK uses a development token for communication with the Agent and the TestProject platform. Drivers search the developer token in an environment variable `TP_DEV_TOKEN`. This token can be also provided explicitly using the constructor:
 
 ```csharp
 ChromeDriver driver = new ChromeDriver(token: "your_token_goes_here");
@@ -96,7 +96,7 @@ It can also be set using the `TP_AGENT_URL` environment variable.
 
 # Reports
 
-TestProject SDK reports all driver commands and their results to the TestProject Cloud. Doing so allows us to present beautifully designed reports and statistics in its dashboards.
+The TestProject OpenSDK reports all driver commands and their results to the TestProject Cloud. Doing so allows us to present beautifully designed reports and statistics in its dashboards.
 
 Reports can be completely disabled using this constructor:
 
@@ -106,7 +106,7 @@ ChromeDriver driver = new ChromeDriver(disableReports: true);
 
 ## Implicit Project and Job Names
 
-By default, the SDK will attempt to infer Project and Job names when you're using NUnit, MSTest or XUnit as a testing framework.
+By default, the OpenSDK will attempt to infer Project and Job names when you're using NUnit, MSTest or XUnit as a testing framework.
 
 If any of these unit testing frameworks is detected, the following reporting settings will be inferred:
 
@@ -197,7 +197,7 @@ driver.Report().DisableCommandReports(true);
 
 ### Disable command redaction
 
-When reporting driver commands, the SDK performs redaction of sensitive data (values) sent to secured elements. If the element is one of the following:
+When reporting driver commands, the OpenSDK performs redaction of sensitive data (values) sent to secured elements. If the element is one of the following:
 
 * Any element with `type` attribute set to `password`
 * With XCUITest, on iOS an element type of `XCUIElementTypeSecureTextField`
@@ -211,9 +211,9 @@ driver.Report().DisableRedaction(true);
 
 # SpecFlow support
 
-The SDK also supports automatic reporting of SpecFlow features, scenarios and steps through the [TestProject OpenSDK SpecFlow plugin](https://www.nuget.org/packages/TestProject.OpenSDK.SpecFlowPlugin/).
+The OpenSDK also supports automatic reporting of SpecFlow features, scenarios and steps through the [TestProject OpenSDK SpecFlow plugin](https://www.nuget.org/packages/TestProject.OpenSDK.SpecFlowPlugin/).
 
-After installing the plugin package using NuGet, SpecFlow-based scenarios that use an SDK driver will be automatically reported to TestProject Cloud.
+After installing the plugin package using NuGet, SpecFlow-based scenarios that use an OpenSDK driver will be automatically reported to TestProject Cloud.
 
 When the plugin detects that SpecFlow is used, it will disable the reporting of driver command and automatic reporting of tests.
 
@@ -230,7 +230,7 @@ A working example project can be found [here](https://github.com/testproject-io/
 
 # Examples
 
-More usage examples for the SDK can be found [here](https://github.com/testproject-io/csharp-sdk/tree/main/TestProject.OpenSDK.Tests/Examples):
+More usage examples for the OpenSDK can be found [here](https://github.com/testproject-io/csharp-sdk/tree/main/TestProject.OpenSDK.Tests/Examples):
 
 * Drivers
   * [Chrome Test](https://github.com/testproject-io/csharp-sdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/ChromeDriverTest.cs)
@@ -253,4 +253,4 @@ More usage examples for the SDK can be found [here](https://github.com/testproje
 
 # License
 
-The TestProject SDK For C# is licensed under the LICENSE file in the root directory of this source tree.
+The TestProject OpenSDK For C# is licensed under the LICENSE file in the root directory of this source tree.
