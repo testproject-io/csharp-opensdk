@@ -108,7 +108,7 @@ namespace TestProject.OpenSDK.SpecFlowPlugin
             else
             {
                 string message = $"No active Agent development session found. Please ensure that driver.Quit() is called in an [After] method, not in a step definition method.";
-                
+
                 Logger.Error(message);
                 throw new AgentConnectException(message);
             }
