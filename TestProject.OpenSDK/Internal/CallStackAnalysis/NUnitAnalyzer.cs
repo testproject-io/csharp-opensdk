@@ -27,6 +27,7 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
         private const string TestAttribute = "TestAttribute";
         private const string SetUpAttribute = "SetUpAttribute";
         private const string NUnitFrameworkNamespace = "NUnit.Framework";
+        private const string TestNameProperty = "Description";
 
         /// <summary>
         /// Determines whether or not the class containing the method that is run belongs to NUnit.
@@ -56,6 +57,16 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
         {
             // NUnit setup methods are identified by [SetUpAttribute] on the method
             return method.GetCustomAttributes(true).Any(a => a.GetType().Name.Contains(SetUpAttribute));
+        }
+
+        /// <inheritdoc cref="IMethodAnalyzer"/>
+        public string GetTestName(MethodBase method)
+        {
+            // Attribute has a Description property set this way: [TestMethod(Description = "name")]
+            var attribute = method.GetCustomAttributes(true)
+                .FirstOrDefault(a => a.GetType().Name.Equals(TestAttribute)
+                                     && a.GetType().Namespace.Equals(NUnitFrameworkNamespace));
+            return attribute?.GetType().GetProperty(TestNameProperty)?.GetValue(attribute)?.ToString();
         }
     }
 }
