@@ -9,13 +9,16 @@ on:
     types: [published]
 
 jobs:
-  build:
+  build-test-publish:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         # dotnet-version: ["2.2.103", "3.0", "3.1.x"]
         dotnet-version: ["2.2.103"]
     steps:
+      ###############
+      ### Prepare ###
+      ###############
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0 # All history
@@ -23,42 +26,72 @@ jobs:
         run: |
           # Tags
           if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
-            SDK_VERSION=$(git describe --tags --exact-match)
+            TP_SDK_VERSION=$(git describe --tags --exact-match)
           else
             PARENT_TAG="$(git describe --tags --abbrev=0 || echo v0.0.0)"
-            SDK_VERSION="${PARENT_TAG}.$(git rev-list --all --count)-rc+$(git rev-parse --short HEAD)"
+            TP_SDK_VERSION="${PARENT_TAG}.$(git rev-list --all --count)-rc+$(git rev-parse --short HEAD)"
           fi
-          if [ "${SDK_VERSION:0:1}" != "v" ]; then
+          if [ "${TP_SDK_VERSION:0:1}" != "v" ]; then
             >&2 echo "Git tag does not start with a 'v'!"
             exit 1;
           fi
-          SDK_VERSION="${SDK_VERSION:1}"
-          echo "SDK_VERSION=${SDK_VERSION}" >> $GITHUB_ENV
+          TP_SDK_VERSION="${TP_SDK_VERSION:1}"
+          echo "TP_SDK_VERSION=${TP_SDK_VERSION}" >> $GITHUB_ENV
       - name: Set up Dotnet ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
+      #############
+      ### Build ###
+      #############
       - name: Restore dependencies
         run: |
           dotnet restore TestProject.OpenSDK.sln
       - name: Build
         run: |
-          dotnet build --no-restore /p:Version=${SDK_VERSION} --configuration Release TestProject.OpenSDK.sln
-      - name: Run unit-tests
+          dotnet build --no-restore /p:Version=${TP_SDK_VERSION} --configuration Release TestProject.OpenSDK.sln
+      ############
+      ### Test ###
+      ############
+      - name: Run unit tests
         run: |
-          dotnet test --verbosity normal --no-restore --filter UnitTests
+          dotnet test --no-restore --verbosity normal --filter UnitTests
+      - name: Run TestProject Agent
+        env:
+          TP_API_KEY: ${{ secrets.TP_CI_API_KEY }}
+        run: |
+          envsubst < .github/ci/docker-compose.yml > docker-compose.yml
+          docker-compose -f docker-compose.yml up -d
+      - name: Wait for Agent to Register
+        run: |
+          trap 'kill $(jobs -p)' EXIT
+          attempt_counter=0
+          max_attempts=45
+          mkdir -p build/reports/agent
+          docker-compose -f docker-compose.yml logs -f | tee build/reports/agent/log.txt&
+          until curl -s http://localhost:8585/api/status | jq '.registered' | grep true; do
+            if [ ${attempt_counter} -eq ${max_attempts} ]; then
+              echo "Agent failed to register. Terminating..."
+              exit 1
+            fi
+            attempt_counter=$(($attempt_counter+1))
+            sleep 1
+          done
       - name: Run flow tests
+        env:
+          TP_DEV_TOKEN: ${{ secrets.TP_CI_DEV_TOKEN }}
+          TP_AGENT_URL: http://localhost:8585
         run: |
-          echo "TODO..."
+          trap 'kill $(jobs -p)' EXIT
+          export TP_DEBUG_SDK_VERSION=${TP_SDK_VERSION}
+          docker-compose -f docker-compose.yml logs -f --tail=0 >> build/reports/agent/log.txt&
+          dotnet test --no-restore --verbosity normal --filter FlowTests
+      ###############
+      ### Publish ###
+      ###############
       - name: Create Nuget packages
         run: |
-          dotnet pack --no-restore /p:Version=${SDK_VERSION} --output ${GITHUB_WORKSPACE}/build/out TestProject.OpenSDK.sln
-      - name: Archive Nuget packages
-        uses: actions/upload-artifact@v2
-        with:
-          name: nuget-packages
-          path: |
-            build/out/*.nupkg
+          dotnet pack --no-restore /p:Version=${TP_SDK_VERSION} --output ${GITHUB_WORKSPACE}/build/out TestProject.OpenSDK.sln
       - name: Push to Nuget
         if: startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/heads/main')
         env:
@@ -68,3 +101,18 @@ jobs:
           for pkg in build/out/*.nupkg; do
             dotnet nuget push "${pkg}" --api-key "${NUGET_API_KEY}" --source https://api.nuget.org/v3/index.json
           done
+      ###############
+      ### Archive ###
+      ###############
+      - name: Archive Nuget packages
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: nuget-packages
+          path: build/out
+      - name: Archive reports
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: reports
+          path: build/reports

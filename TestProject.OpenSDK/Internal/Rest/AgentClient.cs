@@ -340,9 +340,12 @@ namespace TestProject.OpenSDK.Internal.Rest
                 sessionResponse.SessionId = Guid.NewGuid().ToString();
             }
 
+            // For the generic driver, the server address is empty
+            Uri serverAddress = sessionResponse.ServerAddress.Equals(string.Empty) ? null : new Uri(sessionResponse.ServerAddress);
+
             Logger.Info($"Session [{sessionResponse.SessionId}] initialized");
 
-            this.AgentSession = new AgentSession(new Uri(sessionResponse.ServerAddress), sessionResponse.SessionId, sessionResponse.Dialect, sessionResponse.Capabilities);
+            this.AgentSession = new AgentSession(serverAddress, sessionResponse.SessionId, sessionResponse.Dialect, sessionResponse.Capabilities);
 
             SocketManager.GetInstance().OpenSocket(this.remoteAddress.Host, sessionResponse.DevSocketPort);
 
