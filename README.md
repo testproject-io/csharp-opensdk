@@ -45,13 +45,14 @@ Using a TestProject driver is identical to using a Selenium driver. Changing the
 Here's an example of how to create a TestProject version of `ChromeDriver`:
 
 ```csharp
-// using OpenQA.Selenium.Chrome;; <-- Replaced
+// using OpenQA.Selenium.Chrome; <-- Replaced
 using TestProject.OpenSDK.Drivers.Web;
+using ChromeOptions = OpenQA.Selenium.Chrome.ChromeOptions;
 
 ...
 
 public class MyTest {
-  ChromeDriver driver = new ChromeDriver(chromeOptions: ChromeOptions());
+  ChromeDriver driver = new ChromeDriver(chromeOptions: new ChromeOptions());
 }
 ```
 
@@ -149,7 +150,7 @@ This is supported for MSTest, NUnit and XUnit.
 To report tests manually, you can use the `driver.Report().Test()` method, for example:
 
 ```csharp
-ChromeDriver driver = new ChromeDriver(new ChromeOptions());
+ChromeDriver driver = new ChromeDriver(chromeOptions: new ChromeOptions());
 driver.Report().Test("My First Test");
 ```
 
@@ -160,7 +161,7 @@ driver.Report().Test("My First Test");
 Steps are reported automatically when driver commands are executed. If this feature is disabled, or in addition, manual reports can be performed, for example:
 
 ```csharp
-ChromeDriver driver = new ChromeDriver(new ChromeOptions());
+ChromeDriver driver = new ChromeDriver(chromeOptions: new ChromeOptions());
 driver.Report().Step("User logged in successfully");
 ```
 
@@ -173,7 +174,7 @@ If reports were **not** disabled when the driver was created, they can be disabl
 This will disable all types of reports:
 
 ```csharp
-ChromeDriver driver = new ChromeDriver(new ChromeOptions());
+ChromeDriver driver = new ChromeDriver(chromeOptions: new ChromeOptions());
 driver.Report().DisableReports(true);
 ```
 
@@ -182,7 +183,7 @@ driver.Report().DisableReports(true);
 This will disable automatic test reporting. All steps will end up in a single test report, unless tests are reported manually using `driver.Report().Test()`:
 
 ```csharp
-ChromeDriver driver = new ChromeDriver(new ChromeOptions());
+ChromeDriver driver = new ChromeDriver(chromeOptions: new ChromeOptions());
 driver.Report().DisableAutoTestReports(true);
 ```
 
@@ -191,7 +192,7 @@ driver.Report().DisableAutoTestReports(true);
 This will disable driver _command_ reporting. The resulting report will have no steps, unless reported manually using `driver.Report().Step()`:
 
 ```csharp
-ChromeDriver driver = new ChromeDriver(new ChromeOptions());
+ChromeDriver driver = new ChromeDriver(chromeOptions: new ChromeOptions());
 driver.Report().DisableCommandReports(true);
 ```
 
@@ -205,7 +206,7 @@ When reporting driver commands, the OpenSDK performs redaction of sensitive data
 the values sent to these elements will be converted to three asterisks - `***`. This behavior can be disabled as follows:
 
 ```csharp
-ChromeDriver driver = new ChromeDriver(new ChromeOptions());
+ChromeDriver driver = new ChromeDriver(chromeOptions: new ChromeOptions());
 driver.Report().DisableRedaction(true);
 ```
 
