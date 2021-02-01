@@ -16,8 +16,8 @@
 
 namespace TestProject.OpenSDK.Internal.Helpers.Threading
 {
-    using NLog;
     using System;
+    using NLog;
     using TestProject.OpenSDK.Drivers;
 
     /// <summary>
