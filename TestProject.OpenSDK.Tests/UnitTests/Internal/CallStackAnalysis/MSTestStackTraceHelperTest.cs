@@ -1,4 +1,4 @@
-﻿// <copyright file="StackTraceHelperTest.cs" company="TestProject">
+﻿// <copyright file="MSTestStackTraceHelperTest.cs" company="TestProject">
 // Copyright 2020 TestProject (https://testproject.io)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,10 +20,10 @@ namespace TestProject.OpenSDK.Tests.UnitTests.Internal.CallStackAnalysis
     using TestProject.OpenSDK.Internal.CallStackAnalysis;
 
     /// <summary>
-    /// Class containing unit tests for the <see cref="StackTraceHelper"/> class.
+    /// Class containing unit tests for the <see cref="StackTraceHelper"/> class using MSTest.
     /// </summary>
     [TestClass]
-    public class StackTraceHelperTest
+    public class MSTestStackTraceHelperTest
     {
         private string projectNameFromTestInitialize;
         private string jobNameFromTestInitialize;
@@ -50,6 +50,17 @@ namespace TestProject.OpenSDK.Tests.UnitTests.Internal.CallStackAnalysis
         }
 
         /// <summary>
+        /// Inferring the current test name should return the expected value when using a description in the annotation.
+        /// </summary>
+        [TestMethod("Custom test name")]
+        public void GetInferredTestName__UsingCustomTestName_CheckResult_ShouldEqualCurrentTestMethodName()
+        {
+            string testName = StackTraceHelper.Instance.GetInferredTestName();
+
+            Assert.AreEqual("Custom test name", testName);
+        }
+
+        /// <summary>
         /// Inferring the job name should return the expected value.
         /// </summary>
         [TestMethod]
@@ -57,7 +68,7 @@ namespace TestProject.OpenSDK.Tests.UnitTests.Internal.CallStackAnalysis
         {
             string jobName = StackTraceHelper.Instance.GetInferredJobName();
 
-            Assert.AreEqual("StackTraceHelperTest", jobName);
+            Assert.AreEqual("MSTestStackTraceHelperTest", jobName);
         }
 
         /// <summary>
@@ -86,7 +97,7 @@ namespace TestProject.OpenSDK.Tests.UnitTests.Internal.CallStackAnalysis
         [TestMethod]
         public void CheckInferredJobNameFromTestInitialize_ShouldEqualCurrentTestClass()
         {
-            Assert.AreEqual("StackTraceHelperTest", this.jobNameFromTestInitialize);
+            Assert.AreEqual("MSTestStackTraceHelperTest", this.jobNameFromTestInitialize);
         }
     }
 }
