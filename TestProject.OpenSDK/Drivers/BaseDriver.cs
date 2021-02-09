@@ -18,6 +18,7 @@ namespace TestProject.OpenSDK.Drivers
 {
     using System;
     using System.Collections.Generic;
+    using System.Reflection;
     using NLog;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Remote;
@@ -83,15 +84,21 @@ namespace TestProject.OpenSDK.Drivers
             this.sessionId = AgentClient.GetInstance().AgentSession.SessionId;
 
             // Set the session ID for the base driver object to the session ID returned by the Agent.
-            var sessionIdBase = this.GetType()
-                .BaseType
-                .GetField(
-                    "sessionId",
-                    System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-            sessionIdBase.SetValue(this, this.sessionId);
+            FieldInfo sessionIdField = typeof(RemoteWebDriver).GetField("sessionId", BindingFlags.Instance | BindingFlags.NonPublic);
+            sessionIdField.SetValue(this, new SessionId(this.sessionId));
 
             // Create a new command executor for this driver session and set disable reporting flag
             this.commandExecutor = new CustomHttpCommandExecutor(AgentClient.GetInstance().AgentSession.RemoteAddress, disableReports);
+
+            // If the driver returned by the Agent is in W3C mode, we need to update the command info repository
+            // associated with the base RemoteWebDriver to the W3C command info repository (default is OSS).
+            if (AgentClient.GetInstance().IsInW3CMode())
+            {
+                FieldInfo executorField = typeof(RemoteWebDriver).GetField("executor", BindingFlags.IgnoreCase | BindingFlags.NonPublic | BindingFlags.Instance);
+                ICommandExecutor executor = (ICommandExecutor)executorField.GetValue(this);
+                FieldInfo commandInfoRepositoryField = executor.GetType().GetField("commandInfoRepository", BindingFlags.Instance | BindingFlags.NonPublic);
+                commandInfoRepositoryField.SetValue(executor, new W3CWireProtocolCommandInfoRepository());
+            }
 
             this.IsRunning = true;
 
@@ -173,21 +180,20 @@ namespace TestProject.OpenSDK.Drivers
                 resp.Status = WebDriverResult.Success;
                 resp.SessionId = this.sessionId;
                 resp.Value = new Dictionary<string, object>();
+
                 return resp;
             }
 
             // The Agent does not understand the default way Selenium sends the driver command parameters for SendKeys
             // This means we'll need to patch them so these commands can be executed.
-            if (driverCommandToExecute.ShouldBePatched())
+            if (!AgentClient.GetInstance().IsInW3CMode() && driverCommandToExecute.ShouldBePatched())
             {
                 parameters = CommandHelper.UpdateSendKeysParameters(parameters);
             }
 
             Command command = new Command(new SessionId(this.sessionId), driverCommandToExecute, parameters);
 
-            Response commandResponse = this.commandExecutor.Execute(command);
-
-            return commandResponse;
+            return this.commandExecutor.Execute(command);
         }
     }
 }
