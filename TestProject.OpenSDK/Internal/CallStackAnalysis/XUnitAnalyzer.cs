@@ -24,9 +24,9 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
     /// </summary>
     public class XUnitAnalyzer : IMethodAnalyzer
     {
-        private const string XUnitNamespace = "XUnit";
+        private const string XUnitNamespace = "Xunit";
         private const string TestNameProperty = "DisplayName";
-        private static readonly string[] AttributeNames = { "Fact", "Theory" };
+        private static readonly string[] AttributeNames = { "FactAttribute", "TheoryAttribute" };
 
         /// <summary>
         /// Determines whether or not the class containing the method that is run belongs to XUnit.
