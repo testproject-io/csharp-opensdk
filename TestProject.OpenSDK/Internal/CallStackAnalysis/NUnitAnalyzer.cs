@@ -36,23 +36,17 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
         /// <returns>True if the class containing the method is an NUnit class, false otherwise.</returns>
         public bool IsTestClass(MethodBase method)
         {
-            // NUnit either has [Test] attribute on test or [TestFixture] on class
-            if (method.GetCustomAttributes(true)
+            // NUnit has [Test] attribute on test methods.
+            return method.GetCustomAttributes(true)
                 .Any(a => a.GetType().Name.Equals(TestAttribute)
-                && a.GetType().Namespace.Equals(NUnitFrameworkNamespace)))
-            {
-                return true;
-            }
-
-            return method.DeclaringType.GetCustomAttributes()
-                .Any(a => a.GetType().Namespace.Equals(NUnitFrameworkNamespace));
+                && a.GetType().Namespace.Equals(NUnitFrameworkNamespace));
         }
 
         /// <summary>
-        /// Determines whether or not the given method is run inside an MSTest [TestInitialize] method.
+        /// Determines whether or not the given method is run inside an NUnit [SetUp] method.
         /// </summary>
         /// <param name="method">The method to be analyzed.</param>
-        /// <returns>True if the method is run inside [TestInitialize], false otherwise.</returns>
+        /// <returns>True if the method is run inside [SetUp], false otherwise.</returns>
         public bool IsSetupMethod(MethodBase method)
         {
             // NUnit setup methods are identified by [SetUpAttribute] on the method
