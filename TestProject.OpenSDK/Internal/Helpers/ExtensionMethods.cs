@@ -19,6 +19,7 @@ namespace TestProject.OpenSDK.Internal.Helpers
     using System;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Remote;
+    using TestProject.OpenSDK.Internal.Rest;
 
     /// <summary>
     /// This class contains custom extension methods implementing SDK specific business logic.
@@ -62,6 +63,16 @@ namespace TestProject.OpenSDK.Internal.Helpers
             {
                 return originalUri;
             }
+        }
+
+        /// <summary>
+        /// Checks whether the session associated with the given AgentClient is a W3C compatible session.
+        /// </summary>
+        /// <param name="agentClient">The <see cref="AgentClient"/> that we want to check W3C compatibility for.</param>
+        /// <returns>True if the session is W3C compatible, false otherwise.</returns>
+        public static bool IsInW3CMode(this AgentClient agentClient)
+        {
+            return agentClient.AgentSession.Dialect.Equals("W3C");
         }
     }
 }
