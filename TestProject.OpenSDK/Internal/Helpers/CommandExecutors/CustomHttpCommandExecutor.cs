@@ -18,7 +18,9 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
 {
     using System;
     using System.Collections.Generic;
+    using System.Reflection;
     using OpenQA.Selenium.Remote;
+    using TestProject.OpenSDK.Internal.Rest;
 
     /// <summary>
     /// A custom commands executor for Selenium drivers.
@@ -50,6 +52,14 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         public CustomHttpCommandExecutor(Uri addressOfRemoteServer, bool disableReports, TimeSpan remoteConnectionTimeout)
             : base(addressOfRemoteServer, remoteConnectionTimeout)
         {
+            // If the driver returned by the Agent is in W3C mode, we need to update the command info repository
+            // associated with the base HttpCommandExecutor to the W3C command info repository (default is OSS).
+            if (AgentClient.GetInstance().IsInW3CMode())
+            {
+                FieldInfo commandInfoRepositoryField = typeof(HttpCommandExecutor).GetField("commandInfoRepository", BindingFlags.Instance | BindingFlags.NonPublic);
+                commandInfoRepositoryField.SetValue(this, new W3CWireProtocolCommandInfoRepository());
+            }
+
             this.ReportingCommandExecutor = new ReportingCommandExecutor(this, disableReports);
         }
 
