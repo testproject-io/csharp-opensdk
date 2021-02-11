@@ -86,12 +86,12 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         {
             // The Selenium HttpCommandExecutor modifies the command parameters, removing properties we need along the way
             // We want to use the original command parameters when reporting, not the modified one after command execution.
-            Dictionary<string, object> originalParameters = new Dictionary<string, object>(commandToExecute.Parameters);
+            var originalParameters = new Dictionary<string, object>(commandToExecute.Parameters);
 
             Response response = base.Execute(commandToExecute);
 
             // Create a command to report using the original parameters instead of the modified ones.
-            Command commandToReport = new Command(commandToExecute.SessionId, commandToExecute.Name, originalParameters);
+            var commandToReport = new Command(commandToExecute.SessionId, commandToExecute.Name, originalParameters);
 
             if (!skipReporting)
             {
