@@ -19,6 +19,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
     using System;
     using System.Collections.Generic;
     using System.Reflection;
+    using OpenQA.Selenium;
     using OpenQA.Selenium.Remote;
     using TestProject.OpenSDK.Internal.Rest;
 
@@ -28,6 +29,18 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
     /// </summary>
     public class CustomHttpCommandExecutor : HttpCommandExecutor, ITestProjectCommandExecutor
     {
+        private const string KeepSessionEnvironmentVariable = "TP_KEEP_DRIVER_SESSION";
+
+
+        private static readonly bool KeepDriverSession;
+
+        static CustomHttpCommandExecutor()
+        {
+            var keepSessionVariable = Environment.GetEnvironmentVariable(KeepSessionEnvironmentVariable);
+            bool.TryParse(keepSessionVariable, out bool result);
+            KeepDriverSession = result;
+        }
+
         /// <summary>
         /// Object responsible for executing reporting to TestProject.
         /// </summary>
@@ -88,7 +101,17 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
             // We want to use the original command parameters when reporting, not the modified one after command execution.
             var originalParameters = new Dictionary<string, object>(commandToExecute.Parameters);
 
-            Response response = base.Execute(commandToExecute);
+            Response response;
+
+            // Need to keep session alive if TP_KEEP_DRIVER_SESSION was specified.
+            if (commandToExecute.Name.Equals(DriverCommand.Quit) && KeepDriverSession)
+            {
+                response = new Response { SessionId = commandToExecute.SessionId.ToString(), Status = WebDriverResult.Success };
+            }
+            else
+            {
+                response = base.Execute(commandToExecute);
+            }
 
             // Create a command to report using the original parameters instead of the modified ones.
             var commandToReport = new Command(commandToExecute.SessionId, commandToExecute.Name, originalParameters);
