@@ -16,12 +16,12 @@
 
 namespace TestProject.OpenSDK.Internal.Rest.Messages
 {
-    using OpenQA.Selenium.Chrome;
+    using OpenQA.Selenium;
 
     /// <summary>
     /// Payload object returned by the Agent when starting a development session.
     /// </summary>
-    public class SessionResponse
+    public abstract class SessionResponse
     {
         /// <summary>
         /// Port number that Agent is listening on for the SDK to connect.
@@ -42,11 +42,6 @@ namespace TestProject.OpenSDK.Internal.Rest.Messages
         /// Dialect of the session that has been initialized by the Agent.
         /// </summary>
         public string Dialect { get; set; }
-
-        /// <summary>
-        /// Capabilities of the session that has been initialized by the Agent.
-        /// </summary>
-        public ChromeOptions Capabilities { get; set; }
 
         /// <summary>
         /// The current version of the Agent.
