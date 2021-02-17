@@ -17,6 +17,7 @@
 namespace TestProject.OpenSDK.Internal.Helpers
 {
     using System;
+    using System.Reflection;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Remote;
     using TestProject.OpenSDK.Internal.Rest;
@@ -73,6 +74,44 @@ namespace TestProject.OpenSDK.Internal.Helpers
         public static bool IsInW3CMode(this AgentClient agentClient)
         {
             return agentClient.AgentSession.Dialect.Equals("W3C");
+        }
+
+        /// <summary>
+        /// Retrieves field info for a field in a given type or any of its supertypes, using reflection.
+        /// </summary>
+        /// <param name="type">The type for which a field is to be found.</param>
+        /// <param name="name">The name of the field that should be found.</param>
+        /// <param name="flags">The binding flags to be applied when looking for the specified field.</param>
+        /// <returns>A <see cref="FieldInfo"/> object representing the field, or null if none was found.</returns>
+        public static FieldInfo GetInheritedField(this Type type, string name, BindingFlags flags)
+        {
+            FieldInfo fieldInfo = null;
+            while (type != null)
+            {
+                fieldInfo = type.GetField(name, flags);
+                if (fieldInfo != null)
+                {
+                    break;
+                }
+
+                type = type.BaseType;
+            }
+
+            return fieldInfo;
+        }
+
+        /// <summary>
+        /// Call private method.
+        /// </summary>
+        /// <param name="type">Object.</param>
+        /// <param name="methodName">Method name.</param>
+        /// <param name="args">Arguments.</param>
+        /// <returns>Return value.</returns>
+        public static object CallPrivateStaticMethod(this Type type, string methodName, params object[] args)
+        {
+            MethodInfo methodInfo = type.GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Static);
+
+            return methodInfo == null ? null : methodInfo.Invoke(null, args);
         }
     }
 }
