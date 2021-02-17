@@ -17,17 +17,26 @@
 namespace TestProject.OpenSDK.Internal.Rest
 {
     using System;
+    using System.Collections.Generic;
     using System.Net;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using NLog;
     using OpenQA.Selenium;
+    using OpenQA.Selenium.Appium;
+    using OpenQA.Selenium.Chrome;
+    using OpenQA.Selenium.Edge;
+    using OpenQA.Selenium.Firefox;
+    using OpenQA.Selenium.IE;
+    using OpenQA.Selenium.Safari;
     using RestSharp;
+    using TestProject.OpenSDK.Drivers.Generic;
     using TestProject.OpenSDK.Internal.Addons;
     using TestProject.OpenSDK.Internal.CallStackAnalysis;
     using TestProject.OpenSDK.Internal.Exceptions;
     using TestProject.OpenSDK.Internal.Helpers;
     using TestProject.OpenSDK.Internal.Rest.Messages;
+    using TestProject.OpenSDK.Internal.Rest.Messages.SessionResponses;
     using TestProject.OpenSDK.Internal.Tcp;
 
     /// <summary>
@@ -332,28 +341,126 @@ namespace TestProject.OpenSDK.Internal.Rest
                 return;
             }
 
-            SessionResponse sessionResponse = CustomJsonSerializer.FromJson<SessionResponse>(startSessionResponse.Content, this.serializerSettings);
-
-            // A session request for the generic driver returns a partial response, so we generate our own session ID.
-            if (sessionResponse.SessionId == null)
-            {
-                sessionResponse.SessionId = Guid.NewGuid().ToString();
-            }
-
-            // For the generic driver, the server address is empty
-            Uri serverAddress = sessionResponse.ServerAddress.Equals(string.Empty) ? null : new Uri(sessionResponse.ServerAddress);
-
-            Logger.Info($"Session [{sessionResponse.SessionId}] initialized");
-
-            this.AgentSession = new AgentSession(serverAddress, sessionResponse.SessionId, sessionResponse.Dialect, sessionResponse.Capabilities);
-
-            SocketManager.GetInstance().OpenSocket(this.remoteAddress.Host, sessionResponse.DevSocketPort);
+            this.StartSdkSession(startSessionResponse, capabilities);
 
             // Only retrieve the Agent version when it has not yet been set
             if (this.agentVersion == null)
             {
                 this.agentVersion = this.GetAgentVersion();
             }
+        }
+
+        private void StartSdkSession(IRestResponse startSessionResponse, DriverOptions capabilities)
+        {
+            if (capabilities is AppiumOptions)
+            {
+                // Appium capabilities cannot be deserialized directly into an AppiumOptions instance,
+                // so we need to do this ourselves
+                Logger.Info($"Creating Appium options from capabilities returned by Agent...");
+
+                AppiumSessionResponse sessionResponse = CustomJsonSerializer.FromJson<AppiumSessionResponse>(startSessionResponse.Content, this.serializerSettings);
+
+                AppiumOptions appiumOptions = this.CreateAppiumOptions(sessionResponse.Capabilities);
+
+                this.CreateAgentSession(sessionResponse, appiumOptions);
+
+                this.OpenSocketConnectionUsing(sessionResponse);
+            }
+            else
+            {
+                // Capabilities for web browsers and the generic driver can be serialized directly.
+                // Since there's a separate Options class for each supported browser, we'll have to
+                // differentiate between them as well.
+                if (capabilities is ChromeOptions)
+                {
+                    ChromeSessionResponse sessionResponse = CustomJsonSerializer.FromJson<ChromeSessionResponse>(startSessionResponse.Content, this.serializerSettings);
+
+                    this.CreateAgentSession(sessionResponse, sessionResponse.Capabilities);
+
+                    this.OpenSocketConnectionUsing(sessionResponse);
+                }
+                else if (capabilities is FirefoxOptions)
+                {
+                    FirefoxSessionResponse sessionResponse = CustomJsonSerializer.FromJson<FirefoxSessionResponse>(startSessionResponse.Content, this.serializerSettings);
+
+                    this.CreateAgentSession(sessionResponse, sessionResponse.Capabilities);
+
+                    this.OpenSocketConnectionUsing(sessionResponse);
+                }
+                else if (capabilities is EdgeOptions)
+                {
+                    EdgeSessionResponse sessionResponse = CustomJsonSerializer.FromJson<EdgeSessionResponse>(startSessionResponse.Content, this.serializerSettings);
+
+                    this.CreateAgentSession(sessionResponse, sessionResponse.Capabilities);
+
+                    this.OpenSocketConnectionUsing(sessionResponse);
+                }
+                else if (capabilities is SafariOptions)
+                {
+                    SafariSessionResponse sessionResponse = CustomJsonSerializer.FromJson<SafariSessionResponse>(startSessionResponse.Content, this.serializerSettings);
+
+                    this.CreateAgentSession(sessionResponse, sessionResponse.Capabilities);
+
+                    this.OpenSocketConnectionUsing(sessionResponse);
+                }
+                else if (capabilities is InternetExplorerOptions)
+                {
+                    IESessionResponse sessionResponse = CustomJsonSerializer.FromJson<IESessionResponse>(startSessionResponse.Content, this.serializerSettings);
+
+                    this.CreateAgentSession(sessionResponse, sessionResponse.Capabilities);
+
+                    this.OpenSocketConnectionUsing(sessionResponse);
+                }
+                else if (capabilities is GenericOptions)
+                {
+                    GenericSessionResponse sessionResponse = CustomJsonSerializer.FromJson<GenericSessionResponse>(startSessionResponse.Content, this.serializerSettings);
+
+                    this.CreateAgentSession(sessionResponse, sessionResponse.Capabilities);
+
+                    this.OpenSocketConnectionUsing(sessionResponse);
+                }
+                else
+                {
+                    throw new SdkException($"The options type '{capabilities.GetType().Name}' is not supported by the OpenSDK.");
+                }
+            }
+        }
+
+        private void CreateAgentSession(SessionResponse sessionResponse, DriverOptions options)
+        {
+            // A generic driver session request returns a partial response, so we'll need to fill in the server address and session ID ourselves.
+            Uri serverAddress = sessionResponse.ServerAddress.Equals(string.Empty) ? null : new Uri(sessionResponse.ServerAddress);
+
+            if (sessionResponse.SessionId == null)
+            {
+                sessionResponse.SessionId = Guid.NewGuid().ToString();
+            }
+
+            this.AgentSession = new AgentSession(serverAddress, sessionResponse.SessionId, sessionResponse.Dialect, options);
+
+            Logger.Info($"Session [{sessionResponse.SessionId}] initialized");
+        }
+
+        private void OpenSocketConnectionUsing(SessionResponse sessionResponse)
+        {
+            SocketManager.GetInstance().OpenSocket(this.remoteAddress.Host, sessionResponse.DevSocketPort);
+        }
+
+        private AppiumOptions CreateAppiumOptions(Dictionary<string, object> caps)
+        {
+            if (caps.Count == 0)
+            {
+                return new AppiumOptions();
+            }
+
+            AppiumOptions options = new AppiumOptions();
+
+            foreach (KeyValuePair<string, object> entry in caps)
+            {
+                options.AddAdditionalCapability(entry.Key, entry.Value);
+            }
+
+            return options;
         }
 
         /// <summary>
