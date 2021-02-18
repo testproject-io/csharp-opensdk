@@ -21,7 +21,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.DriverOptions
     using OpenQA.Selenium.Firefox;
     using OpenQA.Selenium.IE;
     using OpenQA.Selenium.Safari;
-    using TestProject.OpenSDK.Internal.Exceptions;
+    using TestProject.OpenSDK.Exceptions;
 
     /// <summary>
     /// Provides utility methods to patch <see cref="DriverOptions"/> objects to make them suitable to start a session with the Agent.

@@ -19,7 +19,7 @@ namespace TestProject.OpenSDK.Internal.Tcp
     using System;
     using System.Net.Sockets;
     using NLog;
-    using TestProject.OpenSDK.Internal.Exceptions;
+    using TestProject.OpenSDK.Exceptions;
     using TestProject.OpenSDK.Internal.Helpers.Threading;
 
     /// <summary>

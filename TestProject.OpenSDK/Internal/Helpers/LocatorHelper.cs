@@ -18,7 +18,7 @@ namespace TestProject.OpenSDK.Internal.Helpers
 {
     using System.Collections.Generic;
     using OpenQA.Selenium;
-    using TestProject.OpenSDK.Internal.Exceptions;
+    using TestProject.OpenSDK.Exceptions;
 
     /// <summary>
     /// Class containing extension methods for Selenium <see cref="By"/> locators.
