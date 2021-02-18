@@ -1,4 +1,4 @@
-﻿// <copyright file="MissingBrowserException.cs" company="TestProject">
+﻿// <copyright file="AgentConnectException.cs" company="TestProject">
 // Copyright 2020 TestProject (https://testproject.io)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,20 +14,20 @@
 // limitations under the License.
 // </copyright>
 
-namespace TestProject.OpenSDK.Internal.Exceptions
+namespace TestProject.OpenSDK.Exceptions
 {
     using System;
 
     /// <summary>
-    /// Exception object thrown when the requested browser is not found on the machine running the tests.
+    /// Exception object thrown when the SDK version used is not supported by the Agent.
     /// </summary>
-    public class MissingBrowserException : Exception
+    public class AgentConnectException : Exception
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="MissingBrowserException"/> class with the provided message.
+        /// Initializes a new instance of the <see cref="AgentConnectException"/> class with the provided message.
         /// </summary>
         /// <param name="message">Exception message to be set.</param>
-        public MissingBrowserException(string message)
+        public AgentConnectException(string message)
             : base(message)
         {
         }

@@ -1,4 +1,4 @@
-﻿// <copyright file="ObsoleteVersionException.cs" company="TestProject">
+﻿// <copyright file="SdkException.cs" company="TestProject">
 // Copyright 2020 TestProject (https://testproject.io)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,20 +14,20 @@
 // limitations under the License.
 // </copyright>
 
-namespace TestProject.OpenSDK.Internal.Exceptions
+namespace TestProject.OpenSDK.Exceptions
 {
     using System;
 
     /// <summary>
-    /// Exception object thrown when the SDK version used is not supported by the Agent.
+    /// Exception object thrown whenever something unexpected happens in the SDK code.
     /// </summary>
-    public class ObsoleteVersionException : Exception
+    public class SdkException : Exception
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ObsoleteVersionException"/> class with the provided message.
+        /// Initializes a new instance of the <see cref="SdkException"/> class with the provided message.
         /// </summary>
         /// <param name="message">Exception message to be set.</param>
-        public ObsoleteVersionException(string message)
+        public SdkException(string message)
             : base(message)
         {
         }
