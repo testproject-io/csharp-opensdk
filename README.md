@@ -69,6 +69,8 @@ TestProject.OpenSDK.Drivers
 │   ├── InternetExplorerDriver
 │   ├── SafariDriver
 │   └── RemoteWebDriver
+├── Android
+│   └── AndroidDriver
 ├── Generic
 │   └── GenericDriver
 ```
@@ -234,13 +236,19 @@ A working example project can be found [here](https://github.com/testproject-io/
 More usage examples for the OpenSDK can be found [here](https://github.com/testproject-io/csharp-opensdk/tree/main/TestProject.OpenSDK.Tests/Examples):
 
 * Drivers
-  * [Chrome Test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/ChromeDriverTest.cs)
-  * [Edge Test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/EdgeDriverTest.cs)
-  * [Firefox Test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/FirefoxDriverTest.cs)
-  * [Internet Explorer Test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/InternetExplorerDriverTest.cs)
-  * [Safari Test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/SafariDriverTest.cs)
-  * [Remote Web Driver Test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/RemoteWebDriverTest.cs)
-  * [Generic Driver Test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/GenericDriverTest.cs)
+  * Web
+    * [Chrome Test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/ChromeDriverTest.cs)
+    * [Edge Test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/EdgeDriverTest.cs)
+    * [Firefox Test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/FirefoxDriverTest.cs)
+    * [Internet Explorer Test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/InternetExplorerDriverTest.cs)
+    * [Safari Test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/SafariDriverTest.cs)
+    * [Remote Web Driver Test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/RemoteWebDriverTest.cs)
+  * Android
+    * [Android native test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/AndroidDriverTest.cs)
+    * [Android native app](https://github.com/testproject-io/android-demo-app)
+    * [Web test on mobile Chrome](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/AndroidDriverChromeTest.cs)
+  * Generic
+    * [Generic Driver Test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/GenericDriverTest.cs)
 * Frameworks
   * MSTest
     * [Inferred Report](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Frameworks/MSTest/InferredReportTest.cs)
