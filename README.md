@@ -15,6 +15,7 @@ With the TestProject OpenSDK, users save a bunch of time and enjoy the following
 * 5-minute simple Selenium and Appium setup with a single [Agent](https://docs.testproject.io/testproject-agents) deployment.
 * Automatic test reports in HTML/PDF format (including screenshots). 
 * Collaborative reporting dashboards with execution history and RESTful API support.
+* Automatic distribution and deployment of test artifacts in case uploaded to the platform.
 * Always up-to-date with the latest and stable Selenium driver version.
 * A simplified, familiar syntax for both web and mobile applications.
 * Complete test runner capabilities for both local and remote executions, anywhere.
@@ -230,6 +231,38 @@ Steps are automatically marked as passed or failed, and Scenario Outlines are su
 
 A working example project can be found [here](https://github.com/testproject-io/csharp-opensdk/tree/main/TestProject.OpenSDK.SpecFlowExamples).
 
+# Package & Upload Tests to TestProject
+
+Tests can be executed locally using the SDK, or triggered remotely from the TestProject platform.  
+Before uploading your Tests, they should be packaged into a ZIP file.
+
+### Packaging
+
+Packaging can be done in two ways:
+
+**1. Using Visual Studio:**
+
+* Right-click your solution in the *Solution Explorer* panel and select *Publish...*
+* If this is your first time publishing, create a new publishing target:
+  * Choose *Folder* as your publish target, and press *Next*.
+  * Choose *Folder* again, and press *Next*.
+  * Change the folder your code is built in to `out` and press *Finish*.
+* Press *Publish* next to the *FolderProfile* target to create this folder.
+* Right-click your solution in the *Solution Explorer* panel and select *Open Folder in File Explorer*.
+* Zip the newly created `out` folder (The entire folder, not just the contents).
+
+**2. Using terminal/PowerShell:**
+
+* Open a terminal or powershell window in your solution folder.
+* Run the following command: `dotnet publish -o out <your-solution-file>`
+* Zip the newly created `out` folder (The entire folder, not just the contents).
+
+Now your code is ready to be uploaded to TestProject's platform!
+
+### Supported Frameworks
+
+TestProject platform supports the upload and execution of NUnit, xUnit and MSTest testing frameworks.  
+It also supports SpecFlow tests that use [OpenSDK's SpecFlow plugin](#specflow-support).
 
 # Examples
 
