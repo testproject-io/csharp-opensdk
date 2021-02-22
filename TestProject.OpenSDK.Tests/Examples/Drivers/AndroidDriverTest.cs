@@ -23,7 +23,7 @@ namespace TestProject.OpenSDK.Tests.Examples.Drivers
     using OpenQA.Selenium.Appium.Enums;
     using OpenQA.Selenium.Remote;
     using TestProject.OpenSDK.Drivers.Android;
-    using TestProject.OpenSDK.Internal.Exceptions;
+    using TestProject.OpenSDK.Exceptions;
 
     /// <summary>
     /// This class contains examples of using the TestProject C# SDK with a native Android app.

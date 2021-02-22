@@ -14,7 +14,7 @@
 // limitations under the License.
 // </copyright>
 
-namespace TestProject.OpenSDK.Internal.Exceptions
+namespace TestProject.OpenSDK.Exceptions
 {
     using System;
 

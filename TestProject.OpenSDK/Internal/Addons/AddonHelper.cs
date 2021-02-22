@@ -21,7 +21,7 @@ namespace TestProject.OpenSDK.Internal.Addons
     using Newtonsoft.Json;
     using NLog;
     using OpenQA.Selenium;
-    using TestProject.OpenSDK.Internal.Exceptions;
+    using TestProject.OpenSDK.Exceptions;
     using TestProject.OpenSDK.Internal.Helpers;
     using TestProject.OpenSDK.Internal.Rest;
     using TestProject.OpenSDK.Internal.Rest.Messages;

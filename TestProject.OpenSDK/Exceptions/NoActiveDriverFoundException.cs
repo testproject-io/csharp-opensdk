@@ -1,4 +1,4 @@
-﻿// <copyright file="InvalidTokenException.cs" company="TestProject">
+﻿// <copyright file="NoActiveDriverFoundException.cs" company="TestProject">
 // Copyright 2020 TestProject (https://testproject.io)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,20 +14,20 @@
 // limitations under the License.
 // </copyright>
 
-namespace TestProject.OpenSDK.Internal.Exceptions
+namespace TestProject.OpenSDK.Exceptions
 {
     using System;
 
     /// <summary>
-    /// Exception object thrown when token provided is rejected by the Agent.
+    /// Exception object thrown when the SDK version used is not supported by the Agent.
     /// </summary>
-    public class InvalidTokenException : Exception
+    public class NoActiveDriverFoundException : Exception
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="InvalidTokenException"/> class with the provided message.
+        /// Initializes a new instance of the <see cref="NoActiveDriverFoundException"/> class with the provided message.
         /// </summary>
         /// <param name="message">Exception message to be set.</param>
-        public InvalidTokenException(string message)
+        public NoActiveDriverFoundException(string message)
             : base(message)
         {
         }

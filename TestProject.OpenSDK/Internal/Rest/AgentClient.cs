@@ -31,9 +31,9 @@ namespace TestProject.OpenSDK.Internal.Rest
     using OpenQA.Selenium.Safari;
     using RestSharp;
     using TestProject.OpenSDK.Drivers.Generic;
+    using TestProject.OpenSDK.Exceptions;
     using TestProject.OpenSDK.Internal.Addons;
     using TestProject.OpenSDK.Internal.CallStackAnalysis;
-    using TestProject.OpenSDK.Internal.Exceptions;
     using TestProject.OpenSDK.Internal.Helpers;
     using TestProject.OpenSDK.Internal.Rest.Messages;
     using TestProject.OpenSDK.Internal.Rest.Messages.SessionResponses;

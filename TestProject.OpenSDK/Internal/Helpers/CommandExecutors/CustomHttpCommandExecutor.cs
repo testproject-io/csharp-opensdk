@@ -31,7 +31,6 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
     {
         private const string KeepSessionEnvironmentVariable = "TP_KEEP_DRIVER_SESSION";
 
-
         private static readonly bool KeepDriverSession;
 
         static CustomHttpCommandExecutor()

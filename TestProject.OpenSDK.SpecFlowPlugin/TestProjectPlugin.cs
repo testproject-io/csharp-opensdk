@@ -18,7 +18,7 @@ using NLog;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Plugins;
 using TechTalk.SpecFlow.UnitTestProvider;
-using TestProject.OpenSDK.Internal.Exceptions;
+using TestProject.OpenSDK.Exceptions;
 using TestProject.OpenSDK.Internal.Rest;
 using TestProject.OpenSDK.Internal.Rest.Messages;
 using TestProject.OpenSDK.SpecFlowPlugin;
@@ -107,10 +107,11 @@ namespace TestProject.OpenSDK.SpecFlowPlugin
             }
             else
             {
-                string message = $"No active Agent development session found. Please ensure that driver.Quit() is called in an [After] method, not in a step definition method.";
+                string message = $"No active Agent development session found. Please ensure that you have an instance of a TestProject OpenSDK driver running.\n" +
+                    $"More information on how to do that can be found in the README at https://github.com/testproject-io/csharp-opensdk";
 
                 Logger.Error(message);
-                throw new AgentConnectException(message);
+                throw new NoActiveDriverFoundException(message);
             }
         }
     }

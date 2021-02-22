@@ -1,4 +1,4 @@
-﻿// <copyright file="SdkException.cs" company="TestProject">
+﻿// <copyright file="InvalidTokenException.cs" company="TestProject">
 // Copyright 2020 TestProject (https://testproject.io)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,20 +14,20 @@
 // limitations under the License.
 // </copyright>
 
-namespace TestProject.OpenSDK.Internal.Exceptions
+namespace TestProject.OpenSDK.Exceptions
 {
     using System;
 
     /// <summary>
-    /// Exception object thrown whenever something unexpected happens in the SDK code.
+    /// Exception object thrown when token provided is rejected by the Agent.
     /// </summary>
-    public class SdkException : Exception
+    public class InvalidTokenException : Exception
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SdkException"/> class with the provided message.
+        /// Initializes a new instance of the <see cref="InvalidTokenException"/> class with the provided message.
         /// </summary>
         /// <param name="message">Exception message to be set.</param>
-        public SdkException(string message)
+        public InvalidTokenException(string message)
             : base(message)
         {
         }
