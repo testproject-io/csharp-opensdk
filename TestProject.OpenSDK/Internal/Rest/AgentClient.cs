@@ -335,6 +335,14 @@ namespace TestProject.OpenSDK.Internal.Rest
 
             IRestResponse startSessionResponse = this.client.Execute(startSessionRequest);
 
+            if (startSessionResponse.ErrorException != null)
+            {
+                string errorMessage = $"An error occurred connecting to the Agent. Is your Agent running at {this.remoteAddress}?";
+
+                Logger.Error(errorMessage);
+                throw new AgentConnectException(errorMessage);
+            }
+
             if ((int)startSessionResponse.StatusCode >= 400)
             {
                 this.HandleSessionStartFailure(startSessionResponse);
