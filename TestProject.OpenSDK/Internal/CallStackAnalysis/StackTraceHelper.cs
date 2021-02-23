@@ -46,7 +46,7 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
         /// <returns>The inferred test method name.</returns>
         public string GetInferredTestName()
         {
-            var testMethod = this.TryDetectTestMethod();
+            MethodBase testMethod = this.TryDetectTestMethod();
             return this.analyzers.Select(a => a.GetTestName(testMethod)).FirstOrDefault(n => !string.IsNullOrEmpty(n))
                 ?? testMethod.Name;
         }
@@ -59,6 +59,7 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
         public string GetInferredProjectName()
         {
             MethodBase method = this.TryDetectSetupMethod() ?? this.TryDetectTestMethod();
+
             return method.DeclaringType.Namespace.Split('.').Last();
         }
 
@@ -68,8 +69,10 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
         /// <returns>The inferred job name.</returns>
         public string GetInferredJobName()
         {
-            MethodBase method = this.TryDetectSetupMethod() ?? this.TryDetectTestMethod();
-            return method.DeclaringType.Name;
+            MethodBase testMethod = this.TryDetectSetupMethod() ?? this.TryDetectTestMethod();
+
+            return this.analyzers.Select(a => a.GetTestClassDescription(testMethod)).FirstOrDefault(n => !string.IsNullOrEmpty(n))
+                ?? testMethod.DeclaringType.Name;
         }
 
         /// <summary>
