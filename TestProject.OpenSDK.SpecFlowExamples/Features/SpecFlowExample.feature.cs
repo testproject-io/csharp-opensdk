@@ -20,8 +20,8 @@ namespace TestProject.OpenSDK.SpecFlowExamples.Features
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.5.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("SpecFlowExample")]
-    public partial class SpecFlowExampleFeature
+    [NUnit.Framework.DescriptionAttribute("A sample SpecFlow feature")]
+    public partial class ASampleSpecFlowFeatureFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
@@ -35,7 +35,7 @@ namespace TestProject.OpenSDK.SpecFlowExamples.Features
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "SpecFlowExample", "\tIn order to see beautiful SpecFlow reports on TestProject Cloud\r\n\tAs a TestProje" +
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "A sample SpecFlow feature", "\tIn order to see beautiful SpecFlow reports on TestProject Cloud\r\n\tAs a TestProje" +
                     "ct user\r\n\tI want to run SpecFlow scenarios supported by the SDK", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
