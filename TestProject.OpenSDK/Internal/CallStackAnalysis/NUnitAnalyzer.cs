@@ -18,6 +18,7 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
 {
     using System.Linq;
     using System.Reflection;
+    using NUnit.Framework;
 
     /// <summary>
     /// Defines methods that are used to determine whether or not a method belongs to NUnit.
@@ -26,8 +27,9 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
     {
         private const string TestAttribute = "TestAttribute";
         private const string SetUpAttribute = "SetUpAttribute";
+        private const string TestClassDescriptionAttribute = "DescriptionAttribute";
         private const string NUnitFrameworkNamespace = "NUnit.Framework";
-        private const string TestNameProperty = "Description";
+        private const string DescriptionProperty = "Description";
 
         /// <summary>
         /// Determines whether or not the class containing the method that is run belongs to NUnit.
@@ -60,7 +62,18 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
             var attribute = method.GetCustomAttributes(true)
                 .FirstOrDefault(a => a.GetType().Name.Equals(TestAttribute)
                                      && a.GetType().Namespace.Equals(NUnitFrameworkNamespace));
-            return attribute?.GetType().GetProperty(TestNameProperty)?.GetValue(attribute)?.ToString();
+            return attribute?.GetType().GetProperty(DescriptionProperty)?.GetValue(attribute)?.ToString();
+        }
+
+        /// <inheritdoc cref="IMethodAnalyzer"/>
+        public string GetTestClassDescription(MethodBase method)
+        {
+            // Test class has a Description property set this way: [TestFixture(Description = "name")]
+            DescriptionAttribute attribute = method.DeclaringType.GetCustomAttributes<DescriptionAttribute>(true)
+                .FirstOrDefault(a => a.GetType().Name.Equals(TestClassDescriptionAttribute)
+                                     && a.GetType().Namespace.Equals(NUnitFrameworkNamespace));
+
+            return attribute?.Properties.Get(DescriptionProperty).ToString();
         }
     }
 }

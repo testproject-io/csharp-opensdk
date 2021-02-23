@@ -59,5 +59,12 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
 
             return attribute?.GetType().GetProperty(TestNameProperty)?.GetValue(attribute)?.ToString();
         }
+
+        /// <inheritdoc cref="IMethodAnalyzer"/>
+        public string GetTestClassDescription(MethodBase method)
+        {
+            // xUnit does not support description attributes at the test class level.
+            return null;
+        }
     }
 }
