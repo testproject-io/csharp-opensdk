@@ -30,7 +30,14 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
         /// </summary>
         /// <param name="method">The method to be analyzed.</param>
         /// <returns>True if the method is running inside a SpecFlow scenario, false otherwise.</returns>
-        public bool IsSpecFlow(MethodBase method) =>
-            method.DeclaringType.Namespace.StartsWith(SpecFlowNamespace);
+        public bool IsSpecFlow(MethodBase method)
+        {
+            if (method.DeclaringType.Namespace != null)
+            {
+                return method.DeclaringType.Namespace.StartsWith(SpecFlowNamespace);
+            }
+
+            return false;
+        }
     }
 }
