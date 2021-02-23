@@ -43,5 +43,12 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
         /// <param name="method">The method to be analyzed.</param>
         /// <returns>Test name, or null if method not supported by this analyzer.</returns>
         string GetTestName(MethodBase method);
+
+        /// <summary>
+        /// Gets the value of the description attribute for the test class.
+        /// </summary>
+        /// <param name="method">The method to be analyzed.</param>
+        /// <returns>The test class description value, or null if none is present or test class descriptions are not supported.</returns>
+        string GetTestClassDescription(MethodBase method);
     }
 }
