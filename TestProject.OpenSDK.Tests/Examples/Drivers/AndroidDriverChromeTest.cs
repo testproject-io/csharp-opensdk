@@ -61,7 +61,7 @@ namespace TestProject.OpenSDK.Tests.Examples.Drivers
         }
 
         /// <summary>
-        /// An example test logging in to the TestProject native demo application on Android.
+        /// An example test logging in to the TestProject web demo application on Android.
         /// </summary>
         [TestMethod]
         public void ExampleTestUsingAndroidChromeDriver()
