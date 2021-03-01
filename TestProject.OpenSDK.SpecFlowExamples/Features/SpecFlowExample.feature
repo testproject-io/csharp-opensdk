@@ -1,4 +1,4 @@
-﻿Feature: SpecFlowExample
+﻿Feature: A sample SpecFlow feature
 	In order to see beautiful SpecFlow reports on TestProject Cloud
 	As a TestProject user
 	I want to run SpecFlow scenarios supported by the SDK

@@ -65,5 +65,12 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
                 && a.GetType().Namespace.Equals(MSTestFrameworkNamespace));
             return attribute?.GetType().GetProperty(TestNameProperty)?.GetValue(attribute)?.ToString();
         }
+
+        /// <inheritdoc cref="IMethodAnalyzer"/>
+        public string GetTestClassDescription(MethodBase method)
+        {
+            // MSTest does not support description attributes at the test class level.
+            return null;
+        }
     }
 }
