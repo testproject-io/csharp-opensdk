@@ -72,6 +72,8 @@ TestProject.OpenSDK.Drivers
 │   └── RemoteWebDriver
 ├── Android
 │   └── AndroidDriver
+├── iOS
+│   └── IOSDriver
 ├── Generic
 │   └── GenericDriver
 ```
@@ -280,6 +282,10 @@ More usage examples for the OpenSDK can be found [here](https://github.com/testp
     * [Android native test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/AndroidDriverTest.cs)
     * [Android native app](https://github.com/testproject-io/android-demo-app)
     * [Web test on mobile Chrome](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/AndroidDriverChromeTest.cs)
+  * iOS
+    * [iOS native test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/IOSDriverTest.cs)
+    * [iOS native app](https://github.com/testproject-io/ios-demo-app)
+    * [Web test on mobile Safari](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/IOSDriverSafariTest.cs)
   * Generic
     * [Generic Driver Test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/GenericDriverTest.cs)
 * Frameworks
