@@ -17,7 +17,11 @@
 namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
 {
     using System;
+    using System.Collections.Generic;
+    using NLog;
+    using OpenQA.Selenium;
     using OpenQA.Selenium.Remote;
+    using TestProject.OpenSDK.Internal.Rest;
 
     /// <summary>
     /// A custom commands executor for the <see cref="GenericDriver"/>.
@@ -29,6 +33,11 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         /// Object responsible for executing reporting to TestProject.
         /// </summary>
         public ReportingCommandExecutor ReportingCommandExecutor { get; set; }
+
+        /// <summary>
+        /// Logger instance for this class.
+        /// </summary>
+        private static Logger Logger { get; set; } = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GenericCommandExecutor"/> class.
@@ -61,7 +70,22 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         /// <returns>The <see cref="Response"/> returned by the Agent.</returns>
         public Response Execute(Command commandToExecute, bool skipReporting)
         {
-            throw new NotImplementedException("Execute() is not implemented for the Generic driver");
+            if (commandToExecute.Name.Equals(DriverCommand.Screenshot))
+            {
+                // Handle users trying to take a screenshot using the generic driver
+                Logger.Info("The generic driver does not support taking screenshots");
+
+                Response response = new Response();
+                response.Status = WebDriverResult.UnableToCaptureScreen;
+                response.SessionId = AgentClient.GetInstance().AgentSession.SessionId;
+                response.Value = new Dictionary<string, object>();
+
+                return response;
+            }
+            else
+            {
+                throw new NotImplementedException($"The generic driver cannot execute the WebDriver command '{commandToExecute.Name}'");
+            }
         }
     }
 }
