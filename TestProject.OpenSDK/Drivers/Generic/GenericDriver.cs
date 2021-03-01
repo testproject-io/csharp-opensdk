@@ -18,7 +18,6 @@ namespace TestProject.OpenSDK.Drivers.Generic
 {
     using System;
     using NLog;
-    using TestProject.OpenSDK.Drivers.Web;
     using TestProject.OpenSDK.Internal.CallStackAnalysis;
     using TestProject.OpenSDK.Internal.Helpers.CommandExecutors;
     using TestProject.OpenSDK.Internal.Reporting;
@@ -67,6 +66,8 @@ namespace TestProject.OpenSDK.Drivers.Generic
             AgentClient agentClient = AgentClient.GetInstance(remoteAddress, token, new GenericOptions(), new ReportSettings(projectName, jobName), disableReports, this.minGenericDriverSupportedVersion);
 
             this.commandExecutor = new GenericCommandExecutor(remoteAddress, disableReports);
+
+            this.IsRunning = true;
 
             if (StackTraceHelper.Instance.TryDetectSpecFlow())
             {
