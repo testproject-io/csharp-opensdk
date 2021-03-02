@@ -22,7 +22,6 @@ namespace TestProject.OpenSDK.Drivers
     using NLog;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Remote;
-    using TestProject.OpenSDK.Exceptions;
     using TestProject.OpenSDK.Internal.Addons;
     using TestProject.OpenSDK.Internal.CallStackAnalysis;
     using TestProject.OpenSDK.Internal.Helpers;
@@ -171,7 +170,7 @@ namespace TestProject.OpenSDK.Drivers
             catch (ArgumentException)
             {
                 Logger.Error($"Could not find element located by {by.ToString()}");
-                throw new ElementNotFoundException($"Could not find element located by {by.ToString()}");
+                throw new NoSuchElementException($"Could not find element located by {by.ToString()}");
             }
         }
 
