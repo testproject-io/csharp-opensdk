@@ -1,4 +1,4 @@
-﻿// <copyright file="AndroidDriverChromeTest.cs" company="TestProject">
+﻿// <copyright file="IOSDriverSafariTest.cs" company="TestProject">
 // Copyright 2020 TestProject (https://testproject.io)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,21 +22,23 @@ namespace TestProject.OpenSDK.Tests.Examples.Drivers
     using OpenQA.Selenium.Appium;
     using OpenQA.Selenium.Appium.Enums;
     using OpenQA.Selenium.Remote;
-    using TestProject.OpenSDK.Drivers.Android;
+    using TestProject.OpenSDK.Drivers.IOS;
     using TestProject.OpenSDK.Exceptions;
 
     /// <summary>
-    /// This class contains examples of using the TestProject C# SDK with a Chrome browser on Android.
+    /// This class contains examples of using the TestProject C# SDK with a Safari driver on iOS.
     /// </summary>
     [TestClass]
-    public class AndroidDriverChromeTest
+    public class IOSDriverSafariTest
     {
-        private readonly string dutUdid = Environment.GetEnvironmentVariable("TP_ANDROID_DUT_UDID");
+        private readonly string deviceId = Environment.GetEnvironmentVariable("TP_IOS_DUT_UDID");
+
+        private readonly string deviceName = Environment.GetEnvironmentVariable("TP_IOS_DUT_NAME");
 
         /// <summary>
-        /// The TestProject AndroidDriver instance to be used in this test class.
+        /// The TestProject IOSDriver instance to be used in this test class.
         /// </summary>
-        private AndroidDriver<AppiumWebElement> driver;
+        private IOSDriver<AppiumWebElement> driver;
 
         /// <summary>
         /// Starts an Android driver with required AppiumOptions before each test.
@@ -44,30 +46,28 @@ namespace TestProject.OpenSDK.Tests.Examples.Drivers
         [TestInitialize]
         public void StartDriver()
         {
-            if (this.dutUdid == null)
+            if (this.deviceId == null || this.deviceName == null)
             {
-                throw new SdkException("TP_ANDROID_DUT_UDID variable was not set before the start of the test.");
+                throw new SdkException("Not all required environment variables were set before the start of the test.");
             }
 
             AppiumOptions appiumOptions = new AppiumOptions();
 
-            appiumOptions.AddAdditionalCapability(MobileCapabilityType.PlatformName, MobilePlatform.Android);
-            appiumOptions.AddAdditionalCapability(MobileCapabilityType.Udid, this.dutUdid);
+            appiumOptions.AddAdditionalCapability(MobileCapabilityType.PlatformName, MobilePlatform.IOS);
+            appiumOptions.AddAdditionalCapability(MobileCapabilityType.Udid, this.deviceId);
 
-            appiumOptions.AddAdditionalCapability(CapabilityType.BrowserName, MobileBrowserType.Chrome);
-            appiumOptions.AddAdditionalCapability(MobileCapabilityType.DeviceName, "Pixel_3a_API_29_x86 [emulator-5554]");
+            appiumOptions.AddAdditionalCapability(CapabilityType.BrowserName, MobileBrowserType.Safari);
+            appiumOptions.AddAdditionalCapability(MobileCapabilityType.DeviceName, this.deviceName);
 
-            this.driver = new AndroidDriver<AppiumWebElement>(appiumOptions: appiumOptions);
+            this.driver = new IOSDriver<AppiumWebElement>(appiumOptions: appiumOptions);
         }
 
         /// <summary>
-        /// An example test logging in to the TestProject web demo application on Android.
+        /// An example test logging in to the TestProject web demo application on iOS.
         /// </summary>
         [TestMethod]
-        public void ExampleTestUsingAndroidChromeDriver()
+        public void ExampleTestUsingIOSSafariDriver()
         {
-            this.driver.Navigate().GoToUrl("https://example.testproject.io");
-
             this.driver.FindElement(By.CssSelector("#name")).SendKeys("John Smith");
             this.driver.FindElement(By.CssSelector("#password")).SendKeys("12345");
             this.driver.FindElement(By.CssSelector("#login")).Click();
