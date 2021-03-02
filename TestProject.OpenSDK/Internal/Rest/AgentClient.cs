@@ -518,6 +518,14 @@ namespace TestProject.OpenSDK.Internal.Rest
 
             IRestResponse getAgentStatusResponse = this.client.Execute(getAgentStatusRequest);
 
+            if (getAgentStatusResponse.ErrorException != null)
+            {
+                string errorMessage = $"An error occurred connecting to the Agent. Is your Agent running at {this.remoteAddress}?";
+
+                Logger.Error(errorMessage);
+                throw new AgentConnectException(errorMessage);
+            }
+
             if ((int)getAgentStatusResponse.StatusCode >= 400)
             {
                 throw new AgentConnectException($"Failed to get Agent status: {getAgentStatusResponse.ErrorMessage}");
