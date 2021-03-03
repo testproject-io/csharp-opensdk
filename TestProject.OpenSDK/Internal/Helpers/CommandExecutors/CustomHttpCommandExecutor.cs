@@ -105,11 +105,31 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
             // Need to keep session alive if TP_KEEP_DRIVER_SESSION was specified.
             if (commandToExecute.Name.Equals(DriverCommand.Quit) && KeepDriverSession)
             {
-                response = new Response { SessionId = commandToExecute.SessionId.ToString(), Status = WebDriverResult.Success };
+                response = new Response
+                {
+                    SessionId = commandToExecute.SessionId.ToString(),
+                    Status = WebDriverResult.Success,
+                };
             }
             else
             {
-                response = base.Execute(commandToExecute);
+                try
+                {
+                    response = base.Execute(commandToExecute);
+                }
+                catch (WebDriverException)
+                {
+                    Dictionary<string, object> responseValue = new Dictionary<string, object>();
+                    responseValue.Add("error", "no such element");
+                    responseValue.Add("message", $"Unable to locate element {commandToExecute.ParametersAsJsonString}");
+
+                    response = new Response
+                    {
+                        Status = WebDriverResult.Timeout,
+                        SessionId = commandToExecute.SessionId.ToString(),
+                        Value = responseValue,
+                    };
+                }
             }
 
             // Create a command to report using the original parameters instead of the modified ones.
