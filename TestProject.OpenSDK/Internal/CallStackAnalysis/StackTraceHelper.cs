@@ -47,8 +47,15 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
         public string GetInferredTestName()
         {
             MethodBase testMethod = this.TryDetectTestMethod();
-            return this.analyzers.Select(a => a.GetTestName(testMethod)).FirstOrDefault(n => !string.IsNullOrEmpty(n))
-                ?? testMethod.Name;
+            if (testMethod == null)
+            {
+                return null;
+            }
+            else
+            {
+                return this.analyzers.Select(a => a.GetTestName(testMethod)).FirstOrDefault(n => !string.IsNullOrEmpty(n))
+                    ?? testMethod.Name;
+            }
         }
 
         /// <summary>
@@ -116,11 +123,23 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
             MethodBase callingMethod = stackFrames.Select(f => f.GetMethod()).FirstOrDefault(m => this.analyzers.Any(a => a.IsTestClass(m)));
             if (callingMethod == null)
             {
-                // No unit testing framework is detected, select the first method in the call stack
-                // where the assembly is equal to the assembly of the entry method (typically Main()).
-                // This is assumed to be the method that contains the driver calls.
-                Assembly currentAssembly = stackFrames.Last<StackFrame>().GetMethod().DeclaringType.Assembly;
-                callingMethod = stackFrames.Select(f => f.GetMethod()).FirstOrDefault(f => f.DeclaringType.Assembly.Equals(currentAssembly));
+                // Check to see if we are inside a setup or teardown method.
+                // Commands executed inside a setup method should not be reported in a separate test,
+                // this is why we return null in that case.
+                MethodBase setupMethod = stackFrames.Select(f => f.GetMethod()).FirstOrDefault(m => this.analyzers.Any(a => a.IsSetupMethod(m)));
+
+                if (setupMethod != null)
+                {
+                    callingMethod = null;
+                }
+                else
+                {
+                    // No unit testing framework is detected, select the first method in the call stack
+                    // where the assembly is equal to the assembly of the entry method (typically Main()).
+                    // This is assumed to be the method that contains the driver calls.
+                    Assembly currentAssembly = stackFrames.Last<StackFrame>().GetMethod().DeclaringType.Assembly;
+                    callingMethod = stackFrames.Select(f => f.GetMethod()).FirstOrDefault(f => f.DeclaringType.Assembly.Equals(currentAssembly));
+                }
             }
 
             return callingMethod;
