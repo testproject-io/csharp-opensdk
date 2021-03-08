@@ -1,4 +1,4 @@
-﻿// <copyright file="MissingBrowserException.cs" company="TestProject">
+﻿// <copyright file="MissingBrowserOrDeviceException.cs" company="TestProject">
 // Copyright 2020 TestProject (https://testproject.io)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,15 +19,15 @@ namespace TestProject.OpenSDK.Exceptions
     using System;
 
     /// <summary>
-    /// Exception object thrown when the requested browser is not found on the machine running the tests.
+    /// Exception object thrown when the requested browser or mobile device is not found on the machine running the tests.
     /// </summary>
-    public class MissingBrowserException : Exception
+    public class MissingBrowserOrDeviceException : Exception
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="MissingBrowserException"/> class with the provided message.
+        /// Initializes a new instance of the <see cref="MissingBrowserOrDeviceException"/> class with the provided message.
         /// </summary>
         /// <param name="message">Exception message to be set.</param>
-        public MissingBrowserException(string message)
+        public MissingBrowserOrDeviceException(string message)
             : base(message)
         {
         }
