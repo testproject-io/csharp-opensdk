@@ -497,8 +497,8 @@ namespace TestProject.OpenSDK.Internal.Rest
                         " and set it in the TP_DEV_TOKEN environment variable");
                     throw new InvalidTokenException(responseMessage);
                 case 404:
-                    Logger.Error("Failed to initialize a session with the Agent - requested browser not found on this system");
-                    throw new MissingBrowserException(responseMessage);
+                    Logger.Error("Failed to initialize a session with the Agent - requested browser or mobile device not found on this system");
+                    throw new MissingBrowserOrDeviceException(responseMessage);
                 case 406:
                     Logger.Error("Failed to initialize a session with the Agent - obsolete SDK version");
                     throw new ObsoleteVersionException(responseMessage);
