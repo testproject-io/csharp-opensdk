@@ -35,13 +35,18 @@ namespace TestProject.OpenSDK.Drivers.Android
     /// Driver.
     /// </summary>
     /// <typeparam name="T">Type.</typeparam>
-    public class AndroidDriver<T> : OpenQA.Selenium.Appium.Android.AndroidDriver<T>, ITestProjectDriver
+    public class AndroidDriver<T> : OpenQA.Selenium.Appium.Android.AndroidDriver<T>, ITestProjectDriver, IHasTouchScreen
         where T : IWebElement
     {
         /// <summary>
         /// Flag that indicates whether or not the driver instance is running.
         /// </summary>
         public bool IsRunning { get; private set; }
+
+        /// <summary>
+        /// Allows execution of basic touch screen operations.
+        /// </summary>
+        public ITouchScreen TouchScreen { get; }
 
         private readonly DriverShutdownThread driverShutdownThread;
 
