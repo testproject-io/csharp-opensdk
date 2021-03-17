@@ -35,13 +35,18 @@ namespace TestProject.OpenSDK.Drivers.IOS
     /// Driver.
     /// </summary>
     /// <typeparam name="T">Type.</typeparam>
-    public class IOSDriver<T> : OpenQA.Selenium.Appium.iOS.IOSDriver<T>, ITestProjectDriver
+    public class IOSDriver<T> : OpenQA.Selenium.Appium.iOS.IOSDriver<T>, ITestProjectDriver, IHasTouchScreen
         where T : IWebElement
     {
         /// <summary>
         /// Flag that indicates whether or not the driver instance is running.
         /// </summary>
         public bool IsRunning { get; private set; }
+
+        /// <summary>
+        /// Allows execution of basic touch screen operations.
+        /// </summary>
+        public ITouchScreen TouchScreen { get; }
 
         private readonly DriverShutdownThread driverShutdownThread;
 
