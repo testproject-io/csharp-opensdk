@@ -76,12 +76,14 @@ namespace TestProject.OpenSDK.SpecFlowExamples.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Alex tries to log in to the TestProject demo application")]
+        [NUnit.Framework.CategoryAttribute("web")]
         public virtual void AlexTriesToLogInToTheTestProjectDemoApplication()
         {
-            string[] tagsOfScenario = ((string[])(null));
+            string[] tagsOfScenario = new string[] {
+                    "web"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Alex tries to log in to the TestProject demo application", null, tagsOfScenario, argumentsOfScenario);
-#line 6
+#line 7
  this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -101,13 +103,13 @@ namespace TestProject.OpenSDK.SpecFlowExamples.Features
             else
             {
                 this.ScenarioStart();
-#line 7
+#line 8
   testRunner.Given("Alex wants to use the TestProject demo application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 8
+#line 9
   testRunner.When("he logs in with username John Smith and password 12345", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 9
+#line 10
   testRunner.Then("he gains access to the secure part of the application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -116,12 +118,14 @@ namespace TestProject.OpenSDK.SpecFlowExamples.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Bernard tries to log in to the TestProject demo application")]
+        [NUnit.Framework.CategoryAttribute("web")]
         public virtual void BernardTriesToLogInToTheTestProjectDemoApplication()
         {
-            string[] tagsOfScenario = ((string[])(null));
+            string[] tagsOfScenario = new string[] {
+                    "web"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Bernard tries to log in to the TestProject demo application", null, tagsOfScenario, argumentsOfScenario);
-#line 11
+#line 13
  this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -141,13 +145,13 @@ namespace TestProject.OpenSDK.SpecFlowExamples.Features
             else
             {
                 this.ScenarioStart();
-#line 12
+#line 14
   testRunner.Given("Bernard wants to use the TestProject demo application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 13
+#line 15
   testRunner.When("he logs in with username John Smith and password 98765", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 14
+#line 16
   testRunner.Then("he gains access to the secure part of the application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -156,12 +160,14 @@ namespace TestProject.OpenSDK.SpecFlowExamples.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Claire tries to log in to the TestProject demo application")]
+        [NUnit.Framework.CategoryAttribute("web")]
         public virtual void ClaireTriesToLogInToTheTestProjectDemoApplication()
         {
-            string[] tagsOfScenario = ((string[])(null));
+            string[] tagsOfScenario = new string[] {
+                    "web"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Claire tries to log in to the TestProject demo application", null, tagsOfScenario, argumentsOfScenario);
-#line 16
+#line 19
  this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -181,13 +187,13 @@ namespace TestProject.OpenSDK.SpecFlowExamples.Features
             else
             {
                 this.ScenarioStart();
-#line 17
+#line 20
   testRunner.Given("Claire wants to use the TestProject demo application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 18
+#line 21
   testRunner.When("she logs in with username John Smith and password 12345", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 19
+#line 22
   testRunner.Then("she gains access to the secure part of the application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }

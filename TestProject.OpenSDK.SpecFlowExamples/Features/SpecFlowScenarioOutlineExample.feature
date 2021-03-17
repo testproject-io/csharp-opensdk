@@ -3,6 +3,7 @@
 	As a TestProject user
 	I want to run SpecFlow scenarios supported by the SDK
 
+	@web
 	Scenario Outline: User tries to log in to the TestProject demo application
 		Given <firstname> wants to use the TestProject demo application
 		When he logs in with username <username> and password <password>

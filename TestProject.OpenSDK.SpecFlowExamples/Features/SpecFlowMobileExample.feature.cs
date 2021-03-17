@@ -20,22 +20,22 @@ namespace TestProject.OpenSDK.SpecFlowExamples.Features
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.5.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("SpecFlow example containing a scenario outline")]
-    public partial class SpecFlowExampleContainingAScenarioOutlineFeature
+    [NUnit.Framework.DescriptionAttribute("A sample SpecFlow feature using a mobile driver")]
+    public partial class ASampleSpecFlowFeatureUsingAMobileDriverFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
         private string[] _featureTags = ((string[])(null));
         
-#line 1 "SpecFlowScenarioOutlineExample.feature"
+#line 1 "SpecFlowMobileExample.feature"
 #line hidden
         
         [NUnit.Framework.OneTimeSetUpAttribute()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "SpecFlow example containing a scenario outline", "\tIn order to see beautiful SpecFlow reports on TestProject Cloud\r\n\tAs a TestProje" +
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "A sample SpecFlow feature using a mobile driver", "\tIn order to see beautiful SpecFlow reports on TestProject Cloud\r\n\tAs a TestProje" +
                     "ct user\r\n\tI want to run SpecFlow scenarios supported by the SDK", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
@@ -75,25 +75,14 @@ namespace TestProject.OpenSDK.SpecFlowExamples.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("User tries to log in to the TestProject demo application")]
-        [NUnit.Framework.CategoryAttribute("web")]
-        [NUnit.Framework.TestCaseAttribute("Alex", "John Smith", "12345", null)]
-        [NUnit.Framework.TestCaseAttribute("Bernard", "John Smith", "98765", null)]
-        [NUnit.Framework.TestCaseAttribute("Claire", "John Smith", "12345", null)]
-        public virtual void UserTriesToLogInToTheTestProjectDemoApplication(string firstname, string username, string password, string[] exampleTags)
+        [NUnit.Framework.DescriptionAttribute("Diana tries to log in to the TestProject demo application on their mobile device")]
+        [NUnit.Framework.CategoryAttribute("mobile")]
+        public virtual void DianaTriesToLogInToTheTestProjectDemoApplicationOnTheirMobileDevice()
         {
-            string[] @__tags = new string[] {
-                    "web"};
-            if ((exampleTags != null))
-            {
-                @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
-            }
-            string[] tagsOfScenario = @__tags;
+            string[] tagsOfScenario = new string[] {
+                    "mobile"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            argumentsOfScenario.Add("firstname", firstname);
-            argumentsOfScenario.Add("username", username);
-            argumentsOfScenario.Add("password", password);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User tries to log in to the TestProject demo application", null, tagsOfScenario, argumentsOfScenario);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Diana tries to log in to the TestProject demo application on their mobile device", null, tagsOfScenario, argumentsOfScenario);
 #line 7
  this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -115,13 +104,13 @@ namespace TestProject.OpenSDK.SpecFlowExamples.Features
             {
                 this.ScenarioStart();
 #line 8
-  testRunner.Given(string.Format("{0} wants to use the TestProject demo application", firstname), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+  testRunner.Given("Diana wants to use the TestProject demo application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 9
-  testRunner.When(string.Format("he logs in with username {0} and password {1}", username, password), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+  testRunner.When("she logs in with username John Smith and password 12345", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 10
-  testRunner.Then("he gains access to the secure part of the application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+  testRunner.Then("she gains access to the secure part of the application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
