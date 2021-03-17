@@ -20,6 +20,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
     using System.Collections.Generic;
     using System.Reflection;
     using OpenQA.Selenium;
+    using OpenQA.Selenium.Appium;
     using OpenQA.Selenium.Remote;
     using TestProject.OpenSDK.Internal.Rest;
 
@@ -69,7 +70,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
             if (AgentClient.GetInstance().IsInW3CMode())
             {
                 FieldInfo commandInfoRepositoryField = typeof(HttpCommandExecutor).GetField("commandInfoRepository", BindingFlags.Instance | BindingFlags.NonPublic);
-                commandInfoRepositoryField.SetValue(this, new W3CWireProtocolCommandInfoRepository());
+                commandInfoRepositoryField.SetValue(this, typeof(AppiumCommand).CallPrivateStaticMethod("Merge", new object[] { new W3CWireProtocolCommandInfoRepository() }));
             }
 
             this.ReportingCommandExecutor = new ReportingCommandExecutor(this, disableReports);
