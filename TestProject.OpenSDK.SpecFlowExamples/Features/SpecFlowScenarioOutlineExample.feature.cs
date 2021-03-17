@@ -76,18 +76,25 @@ namespace TestProject.OpenSDK.SpecFlowExamples.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("User tries to log in to the TestProject demo application")]
+        [NUnit.Framework.CategoryAttribute("web")]
         [NUnit.Framework.TestCaseAttribute("Alex", "John Smith", "12345", null)]
         [NUnit.Framework.TestCaseAttribute("Bernard", "John Smith", "98765", null)]
         [NUnit.Framework.TestCaseAttribute("Claire", "John Smith", "12345", null)]
         public virtual void UserTriesToLogInToTheTestProjectDemoApplication(string firstname, string username, string password, string[] exampleTags)
         {
-            string[] tagsOfScenario = exampleTags;
+            string[] @__tags = new string[] {
+                    "web"};
+            if ((exampleTags != null))
+            {
+                @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
+            }
+            string[] tagsOfScenario = @__tags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("firstname", firstname);
             argumentsOfScenario.Add("username", username);
             argumentsOfScenario.Add("password", password);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User tries to log in to the TestProject demo application", null, tagsOfScenario, argumentsOfScenario);
-#line 6
+#line 7
  this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -107,13 +114,13 @@ namespace TestProject.OpenSDK.SpecFlowExamples.Features
             else
             {
                 this.ScenarioStart();
-#line 7
+#line 8
   testRunner.Given(string.Format("{0} wants to use the TestProject demo application", firstname), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 8
+#line 9
   testRunner.When(string.Format("he logs in with username {0} and password {1}", username, password), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 9
+#line 10
   testRunner.Then("he gains access to the secure part of the application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
