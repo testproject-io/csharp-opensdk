@@ -231,7 +231,11 @@ Instead, it will report:
 
 Steps are automatically marked as passed or failed, and Scenario Outlines are supported to create comprehensive living documentation from your specifications on TestProject Cloud.
 
-A working example project can be found [here](https://github.com/testproject-io/csharp-opensdk/tree/main/TestProject.OpenSDK.SpecFlowExamples).
+A working example project can be found [here](https://github.com/testproject-io/csharp-opensdk/tree/main/TestProject.OpenSDK.SpecFlowExamples). This project contains:
+
+* [A feature with scenarios using desktop Chrome](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.SpecFlowExamples/Features/SpecFlowExample.feature)
+* [A feature with a scenario outline using desktop Chrome](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.SpecFlowExamples/Features/SpecFlowScenarioOutlineExample.feature)
+* [A feature with a scenario using a native Android app](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.SpecFlowExamples/Features/SpecFlowMobileExample.feature)
 
 # Package & Upload Tests to TestProject
 
