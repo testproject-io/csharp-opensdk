@@ -28,15 +28,15 @@ namespace TestProject.OpenSDK.SpecFlowExamples.StepDefinitions
     public class SpecFlowExampleSteps
     {
         /// <summary>
-        /// The TestProject ChromeDriver instance to be used in this test class.
+        /// The TestProject driver instance to be used in this test class.
         /// </summary>
         private ChromeDriver driver;
 
         /// <summary>
-        /// Start a new browser session before each scenario.
+        /// Start a new Chrome browser session before each web scenario.
         /// </summary>
-        [Before]
-        public void StartBrowser()
+        [Before("web")]
+        public void StartWebBrowser()
         {
             this.driver = new ChromeDriver();
         }
@@ -46,6 +46,7 @@ namespace TestProject.OpenSDK.SpecFlowExamples.StepDefinitions
         /// </summary>
         /// <param name="firstName">The first name of the user wanting to log in to the TestProject demo application.</param>
         [Given(@"(.+) wants to use the TestProject demo application")]
+        [Scope(Tag = "web")]
         public void GivenWantsToUseTheTestProjectDemoApplication(string firstName)
         {
             this.driver.Navigate().GoToUrl("https://example.testproject.io");
@@ -57,6 +58,7 @@ namespace TestProject.OpenSDK.SpecFlowExamples.StepDefinitions
         /// <param name="username">The username to be provided when logging in.</param>
         /// <param name="password">The password to be provided when logging in.</param>
         [When(@"s?he logs in with username (.+) and password (.+)")]
+        [Scope(Tag = "web")]
         public void WhenTheyLogInWithUserNameAndPassword(string username, string password)
         {
             this.driver.FindElement(By.CssSelector("#name")).SendKeys(username);
@@ -68,6 +70,7 @@ namespace TestProject.OpenSDK.SpecFlowExamples.StepDefinitions
         /// Implementation of the 'Then' step.
         /// </summary>
         [Then(@"s?he gains access to the secure part of the application")]
+        [Scope(Tag = "web")]
         public void ThenTheyGainAccessToTheSecurePartOfTheApplication()
         {
             Assert.IsTrue(this.driver.FindElement(By.CssSelector("#greetings")).Displayed);
@@ -76,10 +79,10 @@ namespace TestProject.OpenSDK.SpecFlowExamples.StepDefinitions
         /// <summary>
         /// Close the browser after each scenario.
         /// </summary>
-        [After]
+        [After("web")]
         public void CloseBrowser()
         {
-            this.driver.Quit();
+            this.driver?.Quit();
         }
     }
 }
