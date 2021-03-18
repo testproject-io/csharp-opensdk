@@ -194,12 +194,20 @@ driver.Report().DisableAutoTestReports(true);
 
 ### Disable driver command reports
 
-This will disable driver _command_ reporting. The resulting report will have no steps, unless reported manually using `driver.Report().Step()`:
+This will disable driver _command_ reporting. There are three options here:
+
+* `DisableCommandReports(DriverCommands.All)` disables the reporting of all driver commands.
+* `DisableCommandReports(DriverCommands.Passing)` disables the reporting of passing driver commands. Failing driver commands will still be reported as manual steps, including a screenshot.
+* `DisableCommandReports(DriverCommands.None)` reports all driver commands as normal.
+
+For example, the following:
 
 ```csharp
 ChromeDriver driver = new ChromeDriver(chromeOptions: new ChromeOptions());
-driver.Report().DisableCommandReports(true);
+driver.Report().DisableCommandReports(DriverCommands.All);
 ```
+
+will result in a report with no steps, unless they are reported manually using `driver.Report().Step()`.
 
 ### Disable command redaction
 
