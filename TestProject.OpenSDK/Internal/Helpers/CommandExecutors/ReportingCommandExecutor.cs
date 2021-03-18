@@ -19,6 +19,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
     using System.Collections.Generic;
     using NLog;
     using OpenQA.Selenium.Remote;
+    using TestProject.OpenSDK.Enums;
     using TestProject.OpenSDK.Internal.CallStackAnalysis;
     using TestProject.OpenSDK.Internal.Rest;
     using TestProject.OpenSDK.Internal.Rest.Messages;
@@ -36,7 +37,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         /// <summary>
         /// Flag to enable / disable automatic driver command reporting.
         /// </summary>
-        public bool CommandReportsDisabled { get; set; }
+        public DriverCommandsFilter CommandReportsDisabled { get; set; }
 
         /// <summary>
         /// Flag to enable / disable automatic test reporting.
@@ -194,25 +195,41 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         /// <param name="passed">True if command execution was successful, false otherwise.</param>
         private void SendCommandToAgent(Command command, object result, bool passed)
         {
-            if (this.ReportsDisabled || this.CommandReportsDisabled)
+            if (this.ReportsDisabled || this.CommandReportsDisabled.Equals(DriverCommandsFilter.All))
             {
                 Logger.Trace($"Command '{command.Name}' {(passed ? "passed" : "failed")}");
                 return;
             }
 
-            if (!this.RedactionDisabled)
+            if (this.CommandReportsDisabled.Equals(DriverCommandsFilter.Passing) && !passed)
             {
-                command = RedactHelper.RedactCommand(this.commandExecutor, command);
+                // Report failed driver commands in a user friendly way if explicitly requested by the user
+                StepReport stepReport = new StepReport(
+                    description: $"Failed to execute driver command '{command.Name}'",
+                    message: result.ToJson(),
+                    passed: false,
+                    screenshot: this.GetScreenshot());
+
+                AgentClient.GetInstance().ReportStep(stepReport);
+                return;
             }
 
-            DriverCommandReport driverCommandReport = new DriverCommandReport(command.Name, command.Parameters, result, passed);
-
-            if (!passed)
+            if (this.CommandReportsDisabled.Equals(DriverCommandsFilter.None))
             {
-                driverCommandReport.Screenshot = this.GetScreenshot();
-            }
+                if (!this.RedactionDisabled)
+                {
+                    command = RedactHelper.RedactCommand(this.commandExecutor, command);
+                }
 
-            AgentClient.GetInstance().ReportDriverCommand(driverCommandReport);
+                DriverCommandReport driverCommandReport = new DriverCommandReport(command.Name, command.Parameters, result, passed);
+
+                if (!passed)
+                {
+                    driverCommandReport.Screenshot = this.GetScreenshot();
+                }
+
+                AgentClient.GetInstance().ReportDriverCommand(driverCommandReport);
+            }
         }
     }
 }
