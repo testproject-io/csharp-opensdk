@@ -1,4 +1,4 @@
-﻿// <copyright file="ITestProjectDriver.cs" company="TestProject">
+﻿// <copyright file="IWebDriver.cs" company="TestProject">
 // Copyright 2020 TestProject (https://testproject.io)
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,10 +16,13 @@
 
 namespace TestProject.OpenSDK.Drivers
 {
+    using TestProject.OpenSDK.Internal.Addons;
+    using TestProject.OpenSDK.Internal.Reporting;
+
     /// <summary>
     /// Interface defining methods that all TestProject driver classes should implement.
     /// </summary>
-    public interface ITestProjectDriver
+    public interface IWebDriver : OpenQA.Selenium.IWebDriver
     {
         /// <summary>
         /// Flag that indicates whether or not the driver instance is running.
@@ -27,9 +30,21 @@ namespace TestProject.OpenSDK.Drivers
         bool IsRunning { get; }
 
         /// <summary>
+        /// Enables access to the TestProject reporting actions from the driver object.
+        /// </summary>
+        /// <returns><see cref="Reporter"/> object exposing TestProject reporting methods.</returns>
+        Reporter Report();
+
+        /// <summary>
+        /// Enables access to the TestProject addon execution actions from the driver object.
+        /// </summary>
+        /// <returns><see cref="AddonHelper"/> object exposing TestProject action execution methods.</returns>
+        AddonHelper Addons();
+
+        /// <summary>
         /// Quits the driver and stops the session with the Agent, cleaning up after itself.
         /// </summary>
-        void Quit();
+        new void Quit();
 
         /// <summary>
         /// Sends any pending reports and closes the browser session.

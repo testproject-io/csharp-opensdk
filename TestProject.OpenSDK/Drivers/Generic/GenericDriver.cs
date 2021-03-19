@@ -26,7 +26,7 @@ namespace TestProject.OpenSDK.Drivers.Generic
     /// <summary>
     /// Generic driver that can be used to execute non-UI automation and upload the results to TestProject.
     /// </summary>
-    public class GenericDriver : ITestProjectDriver
+    public class GenericDriver
     {
         /// <summary>
         /// Flag that indicates whether or not the driver instance is running.

@@ -34,7 +34,7 @@ namespace TestProject.OpenSDK.Drivers
     /// Extension of <see cref="OpenQA.Selenium.Chrome.ChromeDriver">ChromeDriver</see> for use with TestProject.
     /// Instead of initializing a new session, it starts it in the TestProject Agent and then reconnects to it.
     /// </summary>
-    public class BaseDriver : RemoteWebDriver, ITestProjectDriver
+    public class BaseDriver : RemoteWebDriver, IWebDriver
     {
         /// <summary>
         /// Flag that indicates whether or not the driver instance is running.

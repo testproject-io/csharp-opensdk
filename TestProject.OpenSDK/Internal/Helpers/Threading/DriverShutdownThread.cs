@@ -27,7 +27,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.Threading
     {
         private static int priorityCounter = 0;
 
-        private ITestProjectDriver driver;
+        private IWebDriver driver;
         private int priority;
 
         private static Logger Logger { get; set; } = LogManager.GetCurrentClassLogger();
@@ -36,7 +36,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.Threading
         /// Initializes a new instance of the <see cref="DriverShutdownThread"/> class.
         /// </summary>
         /// <param name="driver">The driver object to shutdown gracefully.</param>
-        public DriverShutdownThread(ITestProjectDriver driver)
+        public DriverShutdownThread(IWebDriver driver)
             : base()
         {
             this.driver = driver;
