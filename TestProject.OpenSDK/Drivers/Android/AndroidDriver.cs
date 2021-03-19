@@ -20,7 +20,6 @@ namespace TestProject.OpenSDK.Drivers.Android
     using System.Collections.Generic;
     using System.Reflection;
     using NLog;
-    using OpenQA.Selenium;
     using OpenQA.Selenium.Appium;
     using OpenQA.Selenium.Remote;
     using TestProject.OpenSDK.Internal.Addons;
@@ -35,8 +34,8 @@ namespace TestProject.OpenSDK.Drivers.Android
     /// Driver.
     /// </summary>
     /// <typeparam name="T">Type.</typeparam>
-    public class AndroidDriver<T> : OpenQA.Selenium.Appium.Android.AndroidDriver<T>, ITestProjectDriver, IHasTouchScreen
-        where T : IWebElement
+    public class AndroidDriver<T> : OpenQA.Selenium.Appium.Android.AndroidDriver<T>, IWebDriver, OpenQA.Selenium.IHasTouchScreen
+        where T : OpenQA.Selenium.IWebElement
     {
         /// <summary>
         /// Flag that indicates whether or not the driver instance is running.
@@ -46,7 +45,7 @@ namespace TestProject.OpenSDK.Drivers.Android
         /// <summary>
         /// Allows execution of basic touch screen operations.
         /// </summary>
-        public ITouchScreen TouchScreen { get; }
+        public OpenQA.Selenium.ITouchScreen TouchScreen { get; }
 
         private readonly DriverShutdownThread driverShutdownThread;
 
@@ -173,7 +172,7 @@ namespace TestProject.OpenSDK.Drivers.Android
             if (driverCommandToExecute.Equals(DriverCommand.NewSession))
             {
                 var resp = new Response();
-                resp.Status = WebDriverResult.Success;
+                resp.Status = OpenQA.Selenium.WebDriverResult.Success;
                 resp.SessionId = this.sessionId;
                 resp.Value = new Dictionary<string, object>();
 
