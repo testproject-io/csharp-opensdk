@@ -22,6 +22,7 @@ namespace TestProject.OpenSDK.Drivers
     using NLog;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Remote;
+    using TestProject.OpenSDK.Enums;
     using TestProject.OpenSDK.Internal.Addons;
     using TestProject.OpenSDK.Internal.CallStackAnalysis;
     using TestProject.OpenSDK.Internal.Helpers;
@@ -102,7 +103,7 @@ namespace TestProject.OpenSDK.Drivers
             if (StackTraceHelper.Instance.TryDetectSpecFlow())
             {
                 Logger.Info("SpecFlow detected, applying SpecFlow-specific reporting settings...");
-                this.Report().DisableCommandReports(true);
+                this.Report().DisableCommandReports(DriverCommandsFilter.All);
                 this.Report().DisableAutoTestReports(true);
             }
         }

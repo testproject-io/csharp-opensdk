@@ -18,6 +18,7 @@ namespace TestProject.OpenSDK.Drivers.Generic
 {
     using System;
     using NLog;
+    using TestProject.OpenSDK.Enums;
     using TestProject.OpenSDK.Internal.CallStackAnalysis;
     using TestProject.OpenSDK.Internal.Helpers.CommandExecutors;
     using TestProject.OpenSDK.Internal.Reporting;
@@ -72,7 +73,7 @@ namespace TestProject.OpenSDK.Drivers.Generic
             if (StackTraceHelper.Instance.TryDetectSpecFlow())
             {
                 Logger.Info("SpecFlow detected, applying SpecFlow-specific reporting settings...");
-                this.Report().DisableCommandReports(true);
+                this.Report().DisableCommandReports(DriverCommandsFilter.All);
                 this.Report().DisableAutoTestReports(true);
             }
         }

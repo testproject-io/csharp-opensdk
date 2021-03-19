@@ -22,6 +22,7 @@ namespace TestProject.OpenSDK.Drivers.Android
     using NLog;
     using OpenQA.Selenium.Appium;
     using OpenQA.Selenium.Remote;
+    using TestProject.OpenSDK.Enums;
     using TestProject.OpenSDK.Internal.Addons;
     using TestProject.OpenSDK.Internal.CallStackAnalysis;
     using TestProject.OpenSDK.Internal.Helpers;
@@ -106,7 +107,7 @@ namespace TestProject.OpenSDK.Drivers.Android
 
             if (StackTraceHelper.Instance.TryDetectSpecFlow())
             {
-                this.Report().DisableCommandReports(true);
+                this.Report().DisableCommandReports(DriverCommandsFilter.All);
                 this.Report().DisableAutoTestReports(true);
                 Logger.Info("SpecFlow detected, applying SpecFlow-specific reporting settings...");
             }
