@@ -19,6 +19,7 @@ namespace TestProject.OpenSDK.Tests.Examples.Reports
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using OpenQA.Selenium;
     using TestProject.OpenSDK.Drivers.Web;
+    using TestProject.OpenSDK.Enums;
 
     /// <summary>
     /// This class contains examples of using the TestProject C# SDK with manual reporting steps.
@@ -40,6 +41,13 @@ namespace TestProject.OpenSDK.Tests.Examples.Reports
             this.driver = new ChromeDriver(
                 projectName: "Examples",
                 jobName: "Manual reporting examples");
+
+            // Disabling the automatic reporting of tests, so only manually reported tests will show up in the report.
+            this.driver.Report().DisableAutoTestReports(true);
+
+            // Disabling the reporting of all driver commands (both passed and failed ones),
+            // so only manually reported steps will show up in the report.
+            this.driver.Report().DisableCommandReports(DriverCommandsFilter.All);
         }
 
         /// <summary>

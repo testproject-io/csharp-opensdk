@@ -16,7 +16,9 @@
 
 namespace TestProject.OpenSDK.Internal.Reporting
 {
+    using System;
     using NLog;
+    using TestProject.OpenSDK.Enums;
     using TestProject.OpenSDK.Internal.Helpers.CommandExecutors;
     using TestProject.OpenSDK.Internal.Rest;
     using TestProject.OpenSDK.Internal.Rest.Messages;
@@ -110,9 +112,19 @@ namespace TestProject.OpenSDK.Internal.Reporting
         /// Enables / disables automatic driver command reporting.
         /// </summary>
         /// <param name="disable">True to disable automatic driver command reporting, false to enable.</param>
+        [Obsolete("Please use DisableCommandReports(ReportDriverCommand) instead.")]
         public void DisableCommandReports(bool disable)
         {
-            this.reportingCommandExecutor.CommandReportsDisabled = disable;
+            this.reportingCommandExecutor.CommandReportsDisabled = disable ? DriverCommandsFilter.All : DriverCommandsFilter.None;
+        }
+
+        /// <summary>
+        /// Enables / disables automatic driver command reporting.
+        /// </summary>
+        /// <param name="driverCommandsToSkip">Preferred settings for reporting driver commands.</param>
+        public void DisableCommandReports(DriverCommandsFilter driverCommandsToSkip)
+        {
+            this.reportingCommandExecutor.CommandReportsDisabled = driverCommandsToSkip;
         }
 
         /// <summary>
