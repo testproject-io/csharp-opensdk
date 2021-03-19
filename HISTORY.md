@@ -6,6 +6,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.66.0] - 2021-03-19
+
+### Added
+
+- Support for Android and iOS mobile drivers
+- Examples for mobile drivers (Android and iOS), including SpecFlow-based examples
+
+### Changed
+
+- ([#136](https://github.com/testproject-io/csharp-opensdk/issues/136)) - Open SDK reporting does not show failures
+- ([#131](https://github.com/testproject-io/csharp-opensdk/issues/131)) - Additional NulllPointer is thrown when device not found
+- ([#116](https://github.com/testproject-io/csharp-opensdk/issues/116)) - Generic driver shouldn't try to take screenshot
+- ([#111](https://github.com/testproject-io/csharp-opensdk/issues/111)) - Improve job name inferring logic in SpecFlow plugin to reflect feature name
+- ([#105](https://github.com/testproject-io/csharp-opensdk/issues/105)) - Improve exception handling and error message in case no driver is found when using the SpecFlow plugin
+
+### Fixed
+
+- ([#144](https://github.com/testproject-io/csharp-opensdk/issues/144)) - Unable to run same multi browser tests with OpenSDK features
+- ([#129](https://github.com/testproject-io/csharp-opensdk/issues/129)) - The IWebDriver object must implement or wrap a driver that implements IHasTouchScreen
+- ([#127](https://github.com/testproject-io/csharp-opensdk/issues/127)) - Implicit timeout command is not reported in the proper test
+- ([#125](https://github.com/testproject-io/csharp-opensdk/issues/125)) - ResetApp throws System.NullReferenceException
+- ([#123](https://github.com/testproject-io/csharp-opensdk/issues/123)) - Failing driver command is not reported when using implicit wait 
+- ([#117](https://github.com/testproject-io/csharp-opensdk/issues/117)) - [NUnit] elementDictionary (Parameter 'The specified dictionary does not contain an element reference')'
+- ([#109](https://github.com/testproject-io/csharp-opensdk/issues/109)) - SDK throws NullReferenceException when agent isn't running
+- ([#106](https://github.com/testproject-io/csharp-opensdk/issues/106)) - All Scenarios and Steps are under a single test when using GenericDriver with SpecFlow plugin
+- ([#103](https://github.com/testproject-io/csharp-opensdk/issues/103)) - When TP_KEEP_DRIVER_SESSION is set, test names are not reported
+- ([#91](https://github.com/testproject-io/csharp-opensdk/issues/91)) - Generated reports on xunit contain wrong test details
+- ([#90](https://github.com/testproject-io/csharp-opensdk/issues/90)) - driver.ExecuteScript fails when using driver from OpenSDK
+- ([#89](https://github.com/testproject-io/csharp-opensdk/issues/89)) - element.GetAttribute(*) returns null when using FirefoxDriver
+- ([#88](https://github.com/testproject-io/csharp-opensdk/issues/88)) - Test name in report is wrong (after using driver.Quit())
+- ([#87](https://github.com/testproject-io/csharp-opensdk/issues/87)) - Updated incorrect code samples in README.md
+- ([#85](https://github.com/testproject-io/csharp-opensdk/issues/85)) - Stub OpenSDK C# test fails in ChromeDriver constructor
+
 ## [0.65.1] - 2021-01-28
 
 ### Added
