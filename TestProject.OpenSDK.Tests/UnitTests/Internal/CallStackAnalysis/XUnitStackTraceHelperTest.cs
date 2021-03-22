@@ -24,6 +24,18 @@ namespace TestProject.OpenSDK.Tests.UnitTests.Internal.CallStackAnalysis
     /// </summary>
     public class XUnitStackTraceHelperTest
     {
+        private readonly string projectNameFromConstructor;
+        private readonly string jobNameFromConstructor;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XUnitStackTraceHelperTest"/> class.
+        /// </summary>
+        public XUnitStackTraceHelperTest()
+        {
+            this.projectNameFromConstructor = StackTraceHelper.Instance.GetInferredProjectName();
+            this.jobNameFromConstructor = StackTraceHelper.Instance.GetInferredJobName();
+        }
+
         /// <summary>
         /// Inferring the current test name should return the expected value.
         /// </summary>
@@ -66,6 +78,24 @@ namespace TestProject.OpenSDK.Tests.UnitTests.Internal.CallStackAnalysis
             string projectName = StackTraceHelper.Instance.GetInferredProjectName();
 
             Assert.Equal("CallStackAnalysis", projectName);
+        }
+
+        /// <summary>
+        /// Inferring the project name inside an XUnit test class constructor should return the expected value.
+        /// </summary>
+        [Fact]
+        public void GetInferredProjectNameFromConstructor_CheckResult_ShouldEqualFinalPartOfCurrentNamespace()
+        {
+            Assert.Equal("CallStackAnalysis", this.projectNameFromConstructor);
+        }
+
+        /// <summary>
+        /// Inferring the job name inside an XUnit test class constructor should return the expected value.
+        /// </summary>
+        [Fact]
+        public void GetInferredJobNameFromConstructor_CheckResult_ShouldEqualCurrentTestClass()
+        {
+            Assert.Equal("XUnitStackTraceHelperTest", this.jobNameFromConstructor);
         }
     }
 }
