@@ -65,7 +65,7 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
         /// <returns>The inferred project name.</returns>
         public string GetInferredProjectName()
         {
-            MethodBase method = this.TryDetectSetupMethod() ?? this.TryDetectTestMethod();
+            MethodBase method = this.TryDetectSetupMethod() ?? this.TryDetectTestMethod() ?? this.TryDetectConstructor() ?? this.GetTestMethod();
 
             return method.DeclaringType.Namespace.Split('.').Last();
         }
@@ -76,7 +76,7 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
         /// <returns>The inferred job name.</returns>
         public string GetInferredJobName()
         {
-            MethodBase testMethod = this.TryDetectSetupMethod() ?? this.TryDetectTestMethod();
+            MethodBase testMethod = this.TryDetectSetupMethod() ?? this.TryDetectTestMethod() ?? this.TryDetectConstructor() ?? this.GetTestMethod();
 
             return this.analyzers.Select(a => a.GetTestClassDescription(testMethod)).FirstOrDefault(n => !string.IsNullOrEmpty(n))
                 ?? testMethod.DeclaringType.Name;
@@ -121,6 +121,7 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
         {
             StackFrame[] stackFrames = new StackTrace().GetFrames();
             MethodBase callingMethod = stackFrames.Select(f => f.GetMethod()).FirstOrDefault(m => this.analyzers.Any(a => a.IsTestClass(m)));
+
             if (callingMethod == null)
             {
                 // Check to see if we are inside a setup or teardown method.
@@ -130,15 +131,7 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
 
                 if (setupMethod != null)
                 {
-                    callingMethod = null;
-                }
-                else
-                {
-                    // No unit testing framework is detected, select the first method in the call stack
-                    // where the assembly is equal to the assembly of the entry method (typically Main()).
-                    // This is assumed to be the method that contains the driver calls.
-                    Assembly currentAssembly = stackFrames.Last<StackFrame>().GetMethod().DeclaringType.Assembly;
-                    callingMethod = stackFrames.Select(f => f.GetMethod()).FirstOrDefault(f => f.DeclaringType.Assembly.Equals(currentAssembly));
+                    return null;
                 }
             }
 
@@ -153,6 +146,33 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
         {
             StackFrame[] stackFrames = new StackTrace().GetFrames();
             return stackFrames.Select(f => f.GetMethod()).FirstOrDefault(m => this.analyzers.Any(a => a.IsSetupMethod(m)));
+        }
+
+        /// <summary>
+        /// Checks if we're running inside a (test) class constructor and returns said constructor.
+        /// We always return the last constructor from the call stack, as that is the constructor of
+        /// the actual test class where the project / job inferring initiated and whose data should be used.
+        /// </summary>
+        /// <returns>The constructor method currently running, or null if none was detected.</returns>
+        private MethodBase TryDetectConstructor()
+        {
+            StackFrame[] stackFrames = new StackTrace().GetFrames();
+            return stackFrames.Select(f => f.GetMethod()).LastOrDefault(m => m.MemberType.Equals(MemberTypes.Constructor));
+        }
+
+        /// <summary>
+        /// Get the method that (presumably) contains the driver calls when no unit testing framework is found
+        /// and the driver calls are not made from within a test class constructor.
+        /// </summary>
+        /// <returns>The method that (presumably) contains the driver calls.</returns>
+        private MethodBase GetTestMethod()
+        {
+            // Select the first method in the call stack where the assembly is equal
+            // to the assembly of the entry method (typically Main()).
+            // This is assumed to be the method that contains the driver calls.
+            StackFrame[] stackFrames = new StackTrace().GetFrames();
+            Assembly currentAssembly = stackFrames.Last<StackFrame>().GetMethod().DeclaringType.Assembly;
+            return stackFrames.Select(f => f.GetMethod()).FirstOrDefault(f => f.DeclaringType.Assembly.Equals(currentAssembly));
         }
     }
 }
