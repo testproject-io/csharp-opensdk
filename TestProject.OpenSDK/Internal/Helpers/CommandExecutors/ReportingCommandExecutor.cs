@@ -147,12 +147,10 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
                 this.currentTestName = inferredTestName;
             }
 
-            if (inferredTestName == null)
-            {
-                return;
-            }
-
-            if (!inferredTestName.Equals(this.currentTestName) || force)
+            // Only report a test if:
+            // - The inferred test name is not null and not equal to the current test name
+            // - The force flag is set (== driver.Quit() is called)
+            if ((inferredTestName == null ? false : !inferredTestName.Equals(this.currentTestName)) || force)
             {
                 if (this.ReportsDisabled)
                 {
