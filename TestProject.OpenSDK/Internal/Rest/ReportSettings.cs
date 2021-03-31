@@ -16,6 +16,8 @@
 
 namespace TestProject.OpenSDK.Internal.Rest
 {
+    using TestProject.OpenSDK.Enums;
+
     /// <summary>
     /// Report settings model provided to the Agent upon session initialization.
     /// </summary>
@@ -32,14 +34,21 @@ namespace TestProject.OpenSDK.Internal.Rest
         public string JobName { get; }
 
         /// <summary>
+        /// The report type of the execution.
+        /// </summary>
+        public ReportType ReportType { get;  }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ReportSettings"/> class.
         /// </summary>
         /// <param name="projectName">The project name to report.</param>
         /// <param name="jobName">The job name to report.</param>
-        public ReportSettings(string projectName, string jobName)
+        /// <param name="reportType">The report type of the execution (local, cloud, both).</param>
+        public ReportSettings(string projectName, string jobName, ReportType reportType)
         {
             this.ProjectName = projectName;
             this.JobName = jobName;
+            this.ReportType = reportType;
         }
     }
 }
