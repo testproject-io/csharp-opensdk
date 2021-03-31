@@ -18,6 +18,7 @@ namespace TestProject.OpenSDK.Drivers.Web
 {
     using System;
     using OpenQA.Selenium.Safari;
+    using TestProject.OpenSDK.Enums;
     using TestProject.OpenSDK.Internal.Helpers.DriverOptions;
 
     /// <summary>
@@ -35,14 +36,16 @@ namespace TestProject.OpenSDK.Drivers.Web
         /// <param name="projectName">The project name to report.</param>
         /// <param name="jobName">The job name to report.</param>
         /// <param name="disableReports">Set to true to disable all reporting (no report will be created on TestProject).</param>
+        /// <param name="reportType">The report type of the execution, can be local, cloud or both.</param>
         public SafariDriver(
             Uri remoteAddress = null,
             string token = null,
             SafariOptions safariOptions = null,
             string projectName = null,
             string jobName = null,
-            bool disableReports = false)
-            : base(remoteAddress, token, DriverOptionsHelper.Patch(safariOptions, BrowserType.Safari), projectName, jobName, disableReports)
+            bool disableReports = false,
+            ReportType reportType = ReportType.CLOUD_AND_LOCAL)
+            : base(remoteAddress, token, DriverOptionsHelper.Patch(safariOptions, BrowserType.Safari), projectName, jobName, disableReports, reportType)
         {
         }
     }
