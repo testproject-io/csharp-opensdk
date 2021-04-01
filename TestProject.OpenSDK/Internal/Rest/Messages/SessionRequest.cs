@@ -19,6 +19,7 @@ namespace TestProject.OpenSDK.Internal.Rest.Messages
     using System.Collections.Generic;
     using OpenQA.Selenium;
     using TestProject.OpenSDK.Drivers.Generic;
+    using TestProject.OpenSDK.Enums;
     using TestProject.OpenSDK.Internal.Helpers;
 
     /// <summary>
@@ -52,6 +53,11 @@ namespace TestProject.OpenSDK.Internal.Rest.Messages
         public string JobName { get; }
 
         /// <summary>
+        /// The report type, can be local, cloud or both.
+        /// </summary>
+        public ReportType ReportType { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="SessionRequest"/> class.
         /// </summary>
         /// <param name="reportSettings">Report settings with the project and job names to report.</param>
@@ -62,6 +68,7 @@ namespace TestProject.OpenSDK.Internal.Rest.Messages
             {
                 this.ProjectName = reportSettings.ProjectName;
                 this.JobName = reportSettings.JobName;
+                this.ReportType = reportSettings.ReportType;
             }
 
             // Convert DriverOptions to a format that preserves arguments and extensions when serializing it.

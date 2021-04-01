@@ -47,5 +47,10 @@ namespace TestProject.OpenSDK.Internal.Rest.Messages
         /// The current version of the Agent.
         /// </summary>
         public string Version { get; set; }
+
+        /// <summary>
+        /// The local report generated.
+        /// </summary>
+        public string LocalReport { get; set; }
     }
 }

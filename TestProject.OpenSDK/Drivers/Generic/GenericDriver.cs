@@ -57,14 +57,16 @@ namespace TestProject.OpenSDK.Drivers.Generic
         /// <param name="projectName">The project name to report.</param>
         /// <param name="jobName">The job name to report.</param>
         /// <param name="disableReports">Set to true to disable all reporting (no report will be created on TestProject).</param>
+        /// <param name="reportType">The report type of the execution, can be local, cloud or both.</param>
         public GenericDriver(
             Uri remoteAddress = null,
             string token = null,
             string projectName = null,
             string jobName = null,
-            bool disableReports = false)
+            bool disableReports = false,
+            ReportType reportType = ReportType.CLOUD_AND_LOCAL)
         {
-            AgentClient agentClient = AgentClient.GetInstance(remoteAddress, token, new GenericOptions(), new ReportSettings(projectName, jobName), disableReports, this.minGenericDriverSupportedVersion);
+            AgentClient agentClient = AgentClient.GetInstance(remoteAddress, token, new GenericOptions(), new ReportSettings(projectName, jobName, reportType), disableReports, this.minGenericDriverSupportedVersion);
 
             this.commandExecutor = new GenericCommandExecutor(remoteAddress, disableReports);
 

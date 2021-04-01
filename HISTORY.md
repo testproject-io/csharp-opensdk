@@ -1,10 +1,18 @@
 # Changelog
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.0.0] - 2021-04-01
+
+### Added
+
+- ([#157](https://github.com/testproject-io/csharp-opensdk/issues/157)) - Allow controlling report type - local / cloud or both.
+- ([#158](https://github.com/testproject-io/csharp-opensdk/issues/158)) - Added DriverBuilder.
 
 ## [0.66.0] - 2021-03-19
 
@@ -27,14 +35,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ([#129](https://github.com/testproject-io/csharp-opensdk/issues/129)) - The IWebDriver object must implement or wrap a driver that implements IHasTouchScreen
 - ([#127](https://github.com/testproject-io/csharp-opensdk/issues/127)) - Implicit timeout command is not reported in the proper test
 - ([#125](https://github.com/testproject-io/csharp-opensdk/issues/125)) - ResetApp throws System.NullReferenceException
-- ([#123](https://github.com/testproject-io/csharp-opensdk/issues/123)) - Failing driver command is not reported when using implicit wait 
+- ([#123](https://github.com/testproject-io/csharp-opensdk/issues/123)) - Failing driver command is not reported when using implicit wait
 - ([#117](https://github.com/testproject-io/csharp-opensdk/issues/117)) - [NUnit] elementDictionary (Parameter 'The specified dictionary does not contain an element reference')'
 - ([#109](https://github.com/testproject-io/csharp-opensdk/issues/109)) - SDK throws NullReferenceException when agent isn't running
 - ([#106](https://github.com/testproject-io/csharp-opensdk/issues/106)) - All Scenarios and Steps are under a single test when using GenericDriver with SpecFlow plugin
 - ([#103](https://github.com/testproject-io/csharp-opensdk/issues/103)) - When TP_KEEP_DRIVER_SESSION is set, test names are not reported
 - ([#91](https://github.com/testproject-io/csharp-opensdk/issues/91)) - Generated reports on xunit contain wrong test details
 - ([#90](https://github.com/testproject-io/csharp-opensdk/issues/90)) - driver.ExecuteScript fails when using driver from OpenSDK
-- ([#89](https://github.com/testproject-io/csharp-opensdk/issues/89)) - element.GetAttribute(*) returns null when using FirefoxDriver
+- ([#89](https://github.com/testproject-io/csharp-opensdk/issues/89)) - element.GetAttribute(\*) returns null when using FirefoxDriver
 - ([#88](https://github.com/testproject-io/csharp-opensdk/issues/88)) - Test name in report is wrong (after using driver.Quit())
 - ([#87](https://github.com/testproject-io/csharp-opensdk/issues/87)) - Updated incorrect code samples in README.md
 - ([#85](https://github.com/testproject-io/csharp-opensdk/issues/85)) - Stub OpenSDK C# test fails in ChromeDriver constructor

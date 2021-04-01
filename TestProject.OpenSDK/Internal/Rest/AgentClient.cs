@@ -19,6 +19,7 @@ namespace TestProject.OpenSDK.Internal.Rest
     using System;
     using System.Collections.Generic;
     using System.Net;
+    using System.Text;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using NLog;
@@ -31,6 +32,7 @@ namespace TestProject.OpenSDK.Internal.Rest
     using OpenQA.Selenium.Safari;
     using RestSharp;
     using TestProject.OpenSDK.Drivers.Generic;
+    using TestProject.OpenSDK.Enums;
     using TestProject.OpenSDK.Exceptions;
     using TestProject.OpenSDK.Internal.Addons;
     using TestProject.OpenSDK.Internal.CallStackAnalysis;
@@ -85,6 +87,11 @@ namespace TestProject.OpenSDK.Internal.Rest
         private readonly int defaultRestClientTimeoutInMilliseconds = 100 * 1000;
 
         /// <summary>
+        /// Minimum agent version that supports local reports.
+        /// </summary>
+        private readonly Version minLocalReportSupportedVersion = new Version("2.1.0");
+
+        /// <summary>
         /// The current version of the Agent in use.
         /// </summary>
         private Version agentVersion;
@@ -113,6 +120,11 @@ namespace TestProject.OpenSDK.Internal.Rest
         /// The queue used to submit and report driver command, test and step reports.
         /// </summary>
         private ReportsQueue reportsQueue;
+
+        /// <summary>
+        /// Response from the starting of the agent session.
+        /// </summary>
+        private SessionResponse sessionResponse;
 
         /// <summary>
         /// Logger instance for this class.
@@ -211,6 +223,14 @@ namespace TestProject.OpenSDK.Internal.Rest
             this.reportsQueue = new ReportsQueue(this.client);
 
             this.StartSession(sessionReportSettings, capabilities);
+
+            // Verify the agent version supports local report generation
+            this.VerifyIfLocalReportsIsSupported(reportSettings.ReportType);
+
+            if (!string.IsNullOrEmpty(this.sessionResponse.LocalReport))
+            {
+                Logger.Info($"Execution Report: {this.sessionResponse.LocalReport}");
+            }
         }
 
         /// <summary>
@@ -452,6 +472,7 @@ namespace TestProject.OpenSDK.Internal.Rest
             this.AgentSession = new AgentSession(serverAddress, sessionResponse.SessionId, sessionResponse.Dialect, options);
 
             Logger.Info($"Session [{sessionResponse.SessionId}] initialized");
+            this.sessionResponse = sessionResponse;
         }
 
         private void OpenSocketConnectionUsing(SessionResponse sessionResponse)
@@ -581,7 +602,7 @@ namespace TestProject.OpenSDK.Internal.Rest
         /// <summary>
         /// Tries to infer report settings using the <see cref="StackTraceHelper"/> and returns resulting reporting settings.
         /// </summary>
-        /// <param name="originalSettings">The explicitly specified project and job names (may be null or empty).</param>
+        /// <param name="originalSettings">The explicitly specified project and job names (may be null or empty) and the report type if set.</param>
         /// <returns><see cref="ReportSettings"/> instance with inferred project and job names (where applicable).</returns>
         private ReportSettings InferReportSettings(ReportSettings originalSettings)
         {
@@ -590,6 +611,7 @@ namespace TestProject.OpenSDK.Internal.Rest
                 !string.IsNullOrEmpty(originalSettings.ProjectName))
             {
                 Logger.Trace("Project and job names were explicitly specified, skipping inferring.");
+                Logger.Trace($"Report Type was set to {originalSettings.ReportType}");
                 return originalSettings;
             }
 
@@ -603,19 +625,40 @@ namespace TestProject.OpenSDK.Internal.Rest
             if (originalSettings == null)
             {
                 // Create ReportSettings
-                inferredReportSettings = new ReportSettings(projectName, jobName);
+                inferredReportSettings = new ReportSettings(projectName, jobName, ReportType.CLOUD_AND_LOCAL);
             }
             else
             {
-                // Overwrite empty values with inferred ones
+                // Overwrite empty values with inferred ones, Report type is either the default value or supplied one
                 inferredReportSettings = new ReportSettings(
                     string.IsNullOrEmpty(originalSettings.ProjectName) ? projectName : originalSettings.ProjectName,
-                    string.IsNullOrEmpty(originalSettings.JobName) ? jobName : originalSettings.JobName);
+                    string.IsNullOrEmpty(originalSettings.JobName) ? jobName : originalSettings.JobName,
+                    originalSettings.ReportType);
             }
 
             Logger.Trace($"Using inferred values '{inferredReportSettings.ProjectName}' and '{inferredReportSettings.JobName}' as project and job name, respectively.");
+            Logger.Trace($"Report Type was set to {inferredReportSettings.ReportType}.");
 
             return inferredReportSettings;
+        }
+
+        /// <summary>
+        /// Verify whether the current Agent version supports local report generation.
+        /// </summary>
+        /// <param name="reportType">The request Report Type.</param>
+        /// <throws>AgentConnectionException if the current agent version older than <see cref="minLocalReportSupportedVersion"/>.</returns>
+        private void VerifyIfLocalReportsIsSupported(ReportType reportType)
+        {
+            if (reportType == ReportType.LOCAL && this.agentVersion.CompareTo(this.minLocalReportSupportedVersion) < 0)
+            {
+                StringBuilder message = new StringBuilder()
+                    .Append("Target Agent version")
+                    .Append(" [").Append(this.agentVersion)
+                    .Append("] ")
+                    .Append("doesn't support local reports. ")
+                    .Append("Upgrade the Agent to the latest version and try again.");
+                throw new AgentConnectException(message.ToString());
+            }
         }
 
         /// <summary>
