@@ -100,6 +100,19 @@ ChromeDriver driver = new ChromeDriver(remoteAddress: "your_address_and_port_go_
 
 It can also be set using the `TP_AGENT_URL` environment variable.
 
+## Driver Builder
+The SDK provides a generic builder for the drivers - `DriverBuilder`, for example:
+
+```csharp
+var caps = new FireFoxOptions();
+caps.AddArguments("--headless");
+var driver = new DriverBuilder<FirefoxDriver>()
+    .WithJobName("DriverBuilder Job")
+    .WithProjectName("TestProject C# OpenSDK")
+    .WithOptions(caps)
+    .Build();
+```
+
 # Reports
 
 The TestProject OpenSDK reports all driver commands and their results to the TestProject Cloud. Doing so allows us to present beautifully designed reports and statistics in its dashboards.

@@ -310,10 +310,15 @@ namespace TestProject.OpenSDK.Internal.Rest
 
             this.reportsQueue.Stop();
 
+            /*
             if (!this.CanReuseSession())
             {
                 SocketManager.GetInstance().CloseSocket();
             }
+            */
+
+            // TODO: Add proper session reuse logic.
+            SocketManager.GetInstance().CloseSocket();
 
             // Nullifying the Agent instance reference ensures that a new session is started for subsequent tests
             instance = null;
