@@ -18,6 +18,7 @@ namespace TestProject.OpenSDK.Drivers
     using System;
     using NLog;
     using OpenQA.Selenium;
+    using TestProject.OpenSDK.Enums;
 
     /// <summary>
     /// Utility class to build Driver instances.
@@ -60,6 +61,11 @@ namespace TestProject.OpenSDK.Drivers
         /// Enable/Disable reports.
         /// </summary>
         private bool builderDisableReports;
+
+        /// <summary>
+        /// Set report type to Cloud, Local or Both.
+        /// </summary>
+        private ReportType builderReportType = ReportType.CLOUD_AND_LOCAL;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DriverBuilder{T}"/> class.
@@ -137,6 +143,17 @@ namespace TestProject.OpenSDK.Drivers
         }
 
         /// <summary>
+        /// Set Report Type to Cloud, Local or Both.
+        /// </summary>
+        /// <param name="reportType">Type of Report to generate.</param>
+        /// <returns>Modified DriverBuilder instance.</returns>
+        public DriverBuilder<T> WithReportType(ReportType reportType)
+        {
+            this.builderReportType = reportType;
+            return this;
+        }
+
+        /// <summary>
         /// Builds an instance of the requested driver using set values.
         /// </summary>
         /// <returns>Driver instance.</returns>
@@ -151,7 +168,8 @@ namespace TestProject.OpenSDK.Drivers
                     this.builderOptions,
                     this.builderProjectName,
                     this.builderJobName,
-                    this.builderDisableReports);
+                    this.builderDisableReports,
+                    this.builderReportType);
             } catch (Exception)
             {
                 throw new WebDriverException($"Failed to create an instance of {typeof(T)}");
