@@ -222,6 +222,34 @@ driver.Report().DisableCommandReports(DriverCommandsFilter.All);
 
 will result in a report with no steps, unless they are reported manually using `driver.Report().Step()`.
 
+## Cloud and Local Report
+
+By default, the execution report is uploaded to the cloud, and a local report is created, as an HTML file in a temporary folder.
+
+At the end of execution, the report is uploaded to the cloud and SDK outputs to the console/terminal the path for a local report file:
+
+`Execution Report: {temporary_folder}/report.html`
+
+This behavior can be controlled, by requesting only a `LOCAL` or only a `CLOUD` report.
+
+> When the Agent is offline, and only a _cloud_ report is requested, execution will fail with appropriate message.
+
+Via a driver constructor:
+
+```csharp
+var driver = new ChromeDriver(chromeOptions: new ChromeOptions(), reportType: ReportType.LOCAL);
+```
+
+Via Driver Builder:
+
+```csharp
+var driver = new DriverBuilder<FirefoxDriver>()
+    .WithJobName("DriverBuilder Job")
+    .WithProjectName("TestProject C# OpenSDK")
+    .WithReportType(ReportType.LOCAL)
+    .Build();
+```
+
 ### Disable command redaction
 
 When reporting driver commands, the OpenSDK performs redaction of sensitive data (values) sent to secured elements. If the element is one of the following:
