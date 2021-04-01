@@ -122,6 +122,11 @@ namespace TestProject.OpenSDK.Internal.Rest
         private ReportsQueue reportsQueue;
 
         /// <summary>
+        /// Response from the starting of the agent session.
+        /// </summary>
+        private SessionResponse sessionResponse;
+
+        /// <summary>
         /// Logger instance for this class.
         /// </summary>
         private static Logger Logger { get; set; } = LogManager.GetCurrentClassLogger();
@@ -221,6 +226,11 @@ namespace TestProject.OpenSDK.Internal.Rest
 
             // Verify the agent version supports local report generation
             this.VerifyIfLocalReportsIsSupported(reportSettings.ReportType);
+
+            if (!string.IsNullOrEmpty(this.sessionResponse.LocalReport))
+            {
+                Logger.Info($"Execution Report: {this.sessionResponse.LocalReport}");
+            }
         }
 
         /// <summary>
@@ -462,6 +472,7 @@ namespace TestProject.OpenSDK.Internal.Rest
             this.AgentSession = new AgentSession(serverAddress, sessionResponse.SessionId, sessionResponse.Dialect, options);
 
             Logger.Info($"Session [{sessionResponse.SessionId}] initialized");
+            this.sessionResponse = sessionResponse;
         }
 
         private void OpenSocketConnectionUsing(SessionResponse sessionResponse)

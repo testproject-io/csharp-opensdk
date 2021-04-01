@@ -51,6 +51,6 @@ namespace TestProject.OpenSDK.Internal.Rest.Messages
         /// <summary>
         /// The local report generated.
         /// </summary>
-        public string LocalReport { get; }
+        public string LocalReport { get; set; }
     }
 }
