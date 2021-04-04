@@ -113,6 +113,24 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
         }
 
         /// <summary>
+        /// Checks if the TestProject SpecFlow plugin is referenced.
+        /// </summary>
+        /// <returns>True if SpecFlow Plugin reference is found, false otherwise.</returns>
+        public bool IsSpecFlowPluginInstalled()
+        {
+            try
+            {
+                // This will fail if the assembly is not present.
+                Assembly.Load("TestProject.OpenSDK.SpecFlowPlugin");
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Checks if we're running inside a test method (such as NUnit test) and returns said method
         /// If no such method is found, attempts to detect the method that called the runner.
         /// </summary>
