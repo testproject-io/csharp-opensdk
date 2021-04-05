@@ -87,8 +87,13 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
 
             if (isQuitCommand)
             {
-                // Close the client after finishing the test using driver.Quit()
-                AgentClient.GetInstance().Stop();
+                var instance = AgentClient.GetInstance();
+
+                // Send SpecFlow test report, if exists.
+                if (instance.SpecFlowTestReport != null)
+                {
+                    instance.ReportTest(instance.SpecFlowTestReport);
+                }
 
                 // Do not report Quit() command to avoid creating a new test in the reports
                 return;
