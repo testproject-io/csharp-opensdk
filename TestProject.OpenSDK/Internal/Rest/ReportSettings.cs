@@ -44,11 +44,33 @@ namespace TestProject.OpenSDK.Internal.Rest
         /// <param name="projectName">The project name to report.</param>
         /// <param name="jobName">The job name to report.</param>
         /// <param name="reportType">The report type of the execution (local, cloud, both).</param>
-        public ReportSettings(string projectName, string jobName, ReportType reportType)
+        public ReportSettings(string projectName, string jobName, ReportType reportType = ReportType.CLOUD_AND_LOCAL)
         {
             this.ProjectName = projectName;
             this.JobName = jobName;
             this.ReportType = reportType;
         }
+
+        /// <summary>
+        /// Override equals method of <see cref="ReportSettings"/> class.
+        /// </summary>
+        /// <param name="obj">Target object to compare to.</param>
+        /// <returns> True if both objects are equal, false otherwise.</returns>
+        public override bool Equals(object obj)
+        {
+            if (this == obj)
+            {
+                return true;
+            }
+
+            if (obj == null || !this.GetType().Name.Equals(obj.GetType().Name))
+            {
+                return false;
+            }
+
+            ReportSettings that = obj as ReportSettings;
+            return object.Equals(this.ProjectName, that.ProjectName) && object.Equals(this.JobName, that.JobName);
+        }
+
     }
 }
