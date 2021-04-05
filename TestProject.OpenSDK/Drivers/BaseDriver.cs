@@ -23,6 +23,7 @@ namespace TestProject.OpenSDK.Drivers
     using OpenQA.Selenium;
     using OpenQA.Selenium.Remote;
     using TestProject.OpenSDK.Enums;
+    using TestProject.OpenSDK.Exceptions;
     using TestProject.OpenSDK.Internal.Addons;
     using TestProject.OpenSDK.Internal.CallStackAnalysis;
     using TestProject.OpenSDK.Internal.Helpers;
@@ -104,9 +105,20 @@ namespace TestProject.OpenSDK.Drivers
 
             if (StackTraceHelper.Instance.TryDetectSpecFlow())
             {
+                var report = this.Report();
+
+                if (!StackTraceHelper.Instance.IsSpecFlowPluginInstalled())
+                {
+                    string message = "TestProject Plugin for SpecFlow is not installed, please install the plugin and run the Test again.";
+                    report.Step(description: message, passed: false);
+                    Logger.Error(message);
+                    this.Stop();
+                    throw new SdkException(message);
+                }
+
+                report.DisableCommandReports(DriverCommandsFilter.All);
+                report.DisableAutoTestReports(true);
                 Logger.Info("SpecFlow detected, applying SpecFlow-specific reporting settings...");
-                this.Report().DisableCommandReports(DriverCommandsFilter.All);
-                this.Report().DisableAutoTestReports(true);
             }
         }
 
