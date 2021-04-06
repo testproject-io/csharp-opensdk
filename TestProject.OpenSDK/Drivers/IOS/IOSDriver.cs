@@ -79,8 +79,8 @@ namespace TestProject.OpenSDK.Drivers.IOS
             bool disableReports = false,
             ReportType reportType = ReportType.CLOUD_AND_LOCAL)
             : base(
-                AgentClient.GetInstance(remoteAddress, token, appiumOptions, new ReportSettings(projectName, jobName, reportType), disableReports).AgentSession.RemoteAddress,
-                AgentClient.GetInstance(remoteAddress, token, appiumOptions, new ReportSettings(projectName, jobName, reportType), disableReports).AgentSession.Capabilities)
+                  AgentClient.GetInstance(remoteAddress, token, appiumOptions, new ReportSettings(projectName, jobName, reportType), disableReports).AgentSession.RemoteAddress,
+                  AgentClient.GetInstance().AgentSession.Capabilities)
         {
             this.sessionId = AgentClient.GetInstance().AgentSession.SessionId;
 
