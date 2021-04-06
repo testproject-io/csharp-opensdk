@@ -47,6 +47,16 @@ namespace TestProject.OpenSDK.Internal.Rest
     public class AgentClient
     {
         /// <summary>
+        /// Minimum Agent version that support session reuse.
+        /// </summary>
+        private static readonly Version MinSessionReuseCapableVersion = new Version("0.64.32");
+
+        /// <summary>
+        /// The current version of the Agent in use.
+        /// </summary>
+        private static Version agentVersion;
+
+        /// <summary>
         /// Class member to store Agent session details.
         /// </summary>
         public AgentSession AgentSession { get; private set; }
@@ -57,7 +67,7 @@ namespace TestProject.OpenSDK.Internal.Rest
         public TestReport SpecFlowTestReport { get; set; }
 
         /// <summary>
-        /// A singleton instance of the <see cref="AgentClient"/> class.
+        /// An instance of the <see cref="AgentClient"/> class.
         /// </summary>
         private static AgentClient instance;
 
@@ -77,11 +87,6 @@ namespace TestProject.OpenSDK.Internal.Rest
         private readonly string agentDefaultAddress = "http://localhost:8585";
 
         /// <summary>
-        /// Minimum Agent version that support session reuse.
-        /// </summary>
-        private readonly Version minSessionReuseCapableVersion = new Version("0.64.32");
-
-        /// <summary>
         /// The default timeout in milliseconds for the <see cref="RestClient"/> class.
         /// </summary>
         private readonly int defaultRestClientTimeoutInMilliseconds = 100 * 1000;
@@ -90,11 +95,6 @@ namespace TestProject.OpenSDK.Internal.Rest
         /// Minimum agent version that supports local reports.
         /// </summary>
         private readonly Version minLocalReportSupportedVersion = new Version("2.1.0");
-
-        /// <summary>
-        /// The current version of the Agent in use.
-        /// </summary>
-        private Version agentVersion;
 
         /// <summary>
         /// The remote address where the Agent is running.
@@ -127,21 +127,26 @@ namespace TestProject.OpenSDK.Internal.Rest
         private SessionResponse sessionResponse;
 
         /// <summary>
+        /// Agent Session report settings.
+        /// </summary>
+        private ReportSettings reportSettings;
+
+        /// <summary>
         /// Logger instance for this class.
         /// </summary>
         private static Logger Logger { get; set; } = LogManager.GetCurrentClassLogger();
 
         /// <summary>
-        /// Returns a singleton instance of the <see cref="AgentClient"/>.
+        /// Returns an instance of the <see cref="AgentClient"/>.
         /// </summary>
-        /// <returns>A singleton instance of the <see cref="AgentClient"/>.</returns>
+        /// <returns>An instance of the <see cref="AgentClient"/>.</returns>
         public static AgentClient GetInstance()
         {
-            return GetInstance(null, string.Empty, null, null, false);
+            return instance ?? throw new SdkException("Drivers must be set before getting the AgentClient instance");
         }
 
         /// <summary>
-        /// If necessary, creates and then returns a singleton instance of the <see cref="AgentClient"/>.
+        /// If necessary, creates and then returns an instance of the <see cref="AgentClient"/>.
         /// </summary>
         /// <param name="remoteAddress">The remote address where the Agent is running.</param>
         /// <param name="token">The development token used to authenticate with the Agent.</param>
@@ -149,14 +154,52 @@ namespace TestProject.OpenSDK.Internal.Rest
         /// <param name="reportSettings">Contains the project and job name to report to TestProject.</param>
         /// <param name="disableReports">Set to true to disable all reporting to TestProject, false otherwise.</param>
         /// <param name="compatibleVersion">Minimum Agent version that supports the requested feature. Can be used to check Agent compatibility.</param>
-        /// <returns>A singleton instance of the <see cref="AgentClient"/>.</returns>
+        /// <returns>A instance of the <see cref="AgentClient"/>.</returns>
         public static AgentClient GetInstance(Uri remoteAddress, string token, DriverOptions capabilities, ReportSettings reportSettings, bool disableReports, Version compatibleVersion = null)
         {
-            if (instance == null)
+            lock (typeof(AgentClient))
             {
-                instance = new AgentClient(remoteAddress, token, capabilities, reportSettings, disableReports, compatibleVersion);
+                if (IsInitialized())
+                {
+                    string jobName = string.Empty;
+                    string projectName = string.Empty;
+                    if (reportSettings.JobName == null && reportSettings.ProjectName != null)
+                    {
+                        jobName = StackTraceHelper.Instance.GetInferredJobName();
+                    }
+                    else if (reportSettings.ProjectName == null && reportSettings.JobName != null)
+                    {
+                        projectName = StackTraceHelper.Instance.GetInferredProjectName();
+                    }
+                    else if (reportSettings.ProjectName == null && reportSettings.JobName == null)
+                    {
+                        projectName = StackTraceHelper.Instance.GetInferredProjectName();
+                        jobName = StackTraceHelper.Instance.GetInferredJobName();
+                    }
+                    else
+                    {
+                        jobName = reportSettings.JobName;
+                        projectName = reportSettings.ProjectName;
+                    }
+
+                    ReportSettings newSettings = new ReportSettings(projectName, jobName);
+
+                    bool sameReportSettings = instance.reportSettings != null && instance.reportSettings.Equals(newSettings);
+                    if (!sameReportSettings || !CanReuseSession())
+                    {
+                        // Close the dev socket as this is not the same session as previous test
+                        SocketManager.GetInstance().CloseSocket();
+                    }
+
+                    // Stop the current AgentClient instance and submit the test reports.
+                    instance.Stop();
+                }
+
+                // Create a new AgentClient instance
+                instance = new AgentClient(remoteAddress, token, capabilities, reportSettings, disableReports);
             }
 
+            // Return new instance.
             return instance;
         }
 
@@ -178,11 +221,12 @@ namespace TestProject.OpenSDK.Internal.Rest
         /// <param name="reportSettings">Contains the project and job name to report to TestProject.</param>
         /// <param name="disableReports">Set to true to disable all reporting to TestProject, false otherwise.</param>
         /// <param name="compatibleVersion">Minimum Agent version that supports the requested feature. Can be used to check Agent compatibility.</param>
-        private AgentClient(Uri remoteAddress, string token, DriverOptions capabilities, ReportSettings reportSettings, bool disableReports, Version compatibleVersion)
+        private AgentClient(Uri remoteAddress, string token, DriverOptions capabilities, ReportSettings reportSettings, bool disableReports, Version compatibleVersion = null)
         {
             this.remoteAddress = this.InferRemoteAddress(remoteAddress);
 
             ReportSettings sessionReportSettings = disableReports ? null : this.InferReportSettings(reportSettings);
+            this.reportSettings = sessionReportSettings;
 
             if (token != null)
             {
@@ -207,15 +251,11 @@ namespace TestProject.OpenSDK.Internal.Rest
             {
                 Logger.Trace($"Checking if the Agent version is {compatibleVersion} at minimum");
 
-                this.agentVersion = this.GetAgentVersion();
+                agentVersion = this.GetAgentVersion();
 
-                // a.CompareTo(b) returns:
-                // * <0 if a is earlier than b
-                // *  0 if a is the same version as b
-                // * >0 is a is later than b
-                if (this.agentVersion.CompareTo(compatibleVersion) < 0)
+                if (agentVersion.CompareTo(compatibleVersion) < 0)
                 {
-                    throw new AgentConnectException($"Current Agent version {this.agentVersion} does not support the requested feature," +
+                    throw new AgentConnectException($"Current Agent version {agentVersion} does not support the requested feature," +
                         $" should be at least {compatibleVersion}");
                 }
             }
@@ -323,25 +363,21 @@ namespace TestProject.OpenSDK.Internal.Rest
         /// </summary>
         public void Stop()
         {
-            if (this.SpecFlowTestReport != null)
-            {
-                this.ReportTest(this.SpecFlowTestReport);
-            }
-
             this.reportsQueue.Stop();
+        }
 
-            /*
-            if (!this.CanReuseSession())
+        /// <summary>
+        /// Indicates whether the current Agent version supports session reuse.
+        /// </summary>
+        /// <returns>True if the Agent version supports session reuse, false otherwise.</returns>
+        private static bool CanReuseSession()
+        {
+            if (agentVersion == null)
             {
-                SocketManager.GetInstance().CloseSocket();
+                return false;
             }
-            */
 
-            // TODO: Add proper session reuse logic.
-            SocketManager.GetInstance().CloseSocket();
-
-            // Nullifying the Agent instance reference ensures that a new session is started for subsequent tests
-            instance = null;
+            return agentVersion.CompareTo(MinSessionReuseCapableVersion) >= 0;
         }
 
         /// <summary>
@@ -377,9 +413,9 @@ namespace TestProject.OpenSDK.Internal.Rest
             this.StartSdkSession(startSessionResponse, capabilities);
 
             // Only retrieve the Agent version when it has not yet been set
-            if (this.agentVersion == null)
+            if (agentVersion == null)
             {
-                this.agentVersion = this.GetAgentVersion();
+                agentVersion = this.GetAgentVersion();
             }
         }
 
@@ -564,24 +600,6 @@ namespace TestProject.OpenSDK.Internal.Rest
             return new Version(agentStatusResponse.Tag);
         }
 
-        /// <summary>
-        /// Indicates whether the current Agent version supports session reuse.
-        /// </summary>
-        /// <returns>True if the Agent version supports session reuse, false otherwise.</returns>
-        private bool CanReuseSession()
-        {
-            if (this.agentVersion == null)
-            {
-                return false;
-            }
-
-            // a.CompareTo(b) returns:
-            // * -1 if a is earlier than b
-            // *  0 if a is the same version as b
-            // *  1 is a is later than b
-            return this.agentVersion.CompareTo(this.minSessionReuseCapableVersion) >= 0;
-        }
-
         private Uri InferRemoteAddress(Uri originalUri)
         {
             if (originalUri != null)
@@ -649,11 +667,11 @@ namespace TestProject.OpenSDK.Internal.Rest
         /// <throws>AgentConnectionException if the current agent version older than <see cref="minLocalReportSupportedVersion"/>.</returns>
         private void VerifyIfLocalReportsIsSupported(ReportType reportType)
         {
-            if (reportType == ReportType.LOCAL && this.agentVersion.CompareTo(this.minLocalReportSupportedVersion) < 0)
+            if (reportType == ReportType.LOCAL && agentVersion.CompareTo(this.minLocalReportSupportedVersion) < 0)
             {
                 StringBuilder message = new StringBuilder()
                     .Append("Target Agent version")
-                    .Append(" [").Append(this.agentVersion)
+                    .Append(" [").Append(agentVersion)
                     .Append("] ")
                     .Append("doesn't support local reports. ")
                     .Append("Upgrade the Agent to the latest version and try again.");
