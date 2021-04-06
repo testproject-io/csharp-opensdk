@@ -67,7 +67,7 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
         {
             MethodBase method = this.TryDetectSetupMethod() ?? this.TryDetectTestMethod() ?? this.TryDetectConstructor() ?? this.GetTestMethod();
 
-            return method.DeclaringType.Namespace.Split('.').Last();
+            return method.DeclaringType.Namespace?.Split('.').Last() ?? "My Project";
         }
 
         /// <summary>

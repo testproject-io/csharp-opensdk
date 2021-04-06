@@ -8,8 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 - ([#161](https://github.com/testproject-io/csharp-opensdk/issues/161)) - Fix for Agent Session reuse, tests with the same Project name and Job name will be aggregated in the Test Report.
+- ([#160](https://github.com/testproject-io/csharp-opensdk/issues/160)) - Added a null check on infered Specflow project name when using the BeforeTestRun annotation.
 - ([#159](https://github.com/testproject-io/csharp-opensdk/issues/159)) - Fix for Skipped reports if the Specflow plugin was not installed, will now show a clear error message.
- - 
+
 ## [1.0.0] - 2021-04-01
 
 ### Added
