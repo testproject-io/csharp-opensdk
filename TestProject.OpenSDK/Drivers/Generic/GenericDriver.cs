@@ -127,8 +127,6 @@ namespace TestProject.OpenSDK.Drivers.Generic
             }
 
             this.IsRunning = false;
-
-            AgentClient.GetInstance().Stop();
         }
     }
 }
