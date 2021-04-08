@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- ([#164](https://github.com/testproject-io/csharp-opensdk/issues/164)) - Fix for GenericDriver multitest session reuse.
 - ([#162](https://github.com/testproject-io/csharp-opensdk/issues/162)) - Fix for AgentClient creation on Mobile tests, it will now reuse the previously created session in the constructor.
 - ([#161](https://github.com/testproject-io/csharp-opensdk/issues/161)) - Fix for Agent Session reuse, tests with the same Project name and Job name will be aggregated in the Test Report.
 - ([#160](https://github.com/testproject-io/csharp-opensdk/issues/160)) - Added a null check on infered Specflow project name when using the BeforeTestRun annotation.
