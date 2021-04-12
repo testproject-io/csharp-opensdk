@@ -31,6 +31,7 @@ namespace TestProject.OpenSDK.Drivers.Android
     using TestProject.OpenSDK.Internal.Helpers.Threading;
     using TestProject.OpenSDK.Internal.Reporting;
     using TestProject.OpenSDK.Internal.Rest;
+    using TestProject.OpenSDK.Internal.Tcp;
 
     /// <summary>
     /// Driver.
@@ -53,7 +54,7 @@ namespace TestProject.OpenSDK.Drivers.Android
 
         private readonly string sessionId;
 
-        private readonly CustomHttpCommandExecutor commandExecutor;
+        private readonly AppiumCustomHttpCommandExecutor commandExecutor;
 
         /// <summary>
         /// Logger instance for this class.
@@ -89,7 +90,7 @@ namespace TestProject.OpenSDK.Drivers.Android
             sessionIdField.SetValue(this, new SessionId(this.sessionId));
 
             // Create a new command executor for this driver session and set disable reporting flag
-            this.commandExecutor = new CustomHttpCommandExecutor(AgentClient.GetInstance().AgentSession.RemoteAddress, disableReports);
+            this.commandExecutor = new AppiumCustomHttpCommandExecutor(AgentClient.GetInstance().AgentSession.RemoteAddress, disableReports);
 
             // If the driver returned by the Agent is in W3C mode, we need to update the command info repository
             // associated with the base RemoteWebDriver to the W3C command info repository (default is OSS).
