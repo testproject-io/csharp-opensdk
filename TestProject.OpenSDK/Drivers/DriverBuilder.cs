@@ -68,6 +68,16 @@ namespace TestProject.OpenSDK.Drivers
         private ReportType builderReportType = ReportType.CLOUD_AND_LOCAL;
 
         /// <summary>
+        /// Set name of local generated report.
+        /// </summary>
+        private string builderReportName;
+
+        /// <summary>
+        /// Set path of local generated report.
+        /// </summary>
+        private string builderReportPath;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="DriverBuilder{T}"/> class.
         /// </summary>
         /// <param name="options">See <see cref="DriverOptions"/> for more details.</param>
@@ -154,6 +164,28 @@ namespace TestProject.OpenSDK.Drivers
         }
 
         /// <summary>
+        /// Set report name of local generated report.
+        /// </summary>
+        /// <param name="reportName">Name of local report.</param>
+        /// <returns>Modified DriverBuilder instance.</returns>
+        public DriverBuilder<T> WithLocalReportName(string reportName)
+        {
+            this.builderReportName = reportName;
+            return this;
+        }
+
+        /// <summary>
+        /// Set report path of local generated report.
+        /// </summary>
+        /// <param name="reportPath">Path of local report.</param>
+        /// <returns>Modified DriverBuilder instance.</returns>
+        public DriverBuilder<T> WithLocalReportPath(string reportPath)
+        {
+            this.builderReportPath = reportPath;
+            return this;
+        }
+
+        /// <summary>
         /// Builds an instance of the requested driver using set values.
         /// </summary>
         /// <returns>Driver instance.</returns>
@@ -169,7 +201,9 @@ namespace TestProject.OpenSDK.Drivers
                     this.builderProjectName,
                     this.builderJobName,
                     this.builderDisableReports,
-                    this.builderReportType);
+                    this.builderReportType,
+                    this.builderReportName,
+                    this.builderReportPath);
             } catch (Exception)
             {
                 throw new WebDriverException($"Failed to create an instance of {typeof(T)}");
