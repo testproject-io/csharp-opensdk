@@ -58,6 +58,16 @@ namespace TestProject.OpenSDK.Internal.Rest.Messages
         public ReportType ReportType { get; }
 
         /// <summary>
+        /// The name of local generated report.
+        /// </summary>
+        public string ReportName { get; }
+
+        /// <summary>
+        /// The path of local generated report.
+        /// </summary>
+        public string ReportPath { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="SessionRequest"/> class.
         /// </summary>
         /// <param name="reportSettings">Report settings with the project and job names to report.</param>
@@ -69,6 +79,8 @@ namespace TestProject.OpenSDK.Internal.Rest.Messages
                 this.ProjectName = reportSettings.ProjectName;
                 this.JobName = reportSettings.JobName;
                 this.ReportType = reportSettings.ReportType;
+                this.ReportName = reportSettings.ReportName;
+                this.ReportPath = reportSettings.ReportPath;
             }
 
             // Convert DriverOptions to a format that preserves arguments and extensions when serializing it.
