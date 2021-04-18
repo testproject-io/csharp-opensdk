@@ -37,6 +37,8 @@ namespace TestProject.OpenSDK.Drivers.Web
         /// <param name="jobName">The job name to report.</param>
         /// <param name="disableReports">Set to true to disable all reporting (no report will be created on TestProject).</param>
         /// <param name="reportType">The report type of the execution, can be local, cloud or both.</param>
+        /// <param name="reportName">The name of the local generated report.</param>
+        /// <param name="reportPath">The path of the local generated report.</param>
         public InternetExplorerDriver(
             Uri remoteAddress = null,
             string token = null,
@@ -44,8 +46,10 @@ namespace TestProject.OpenSDK.Drivers.Web
             string projectName = null,
             string jobName = null,
             bool disableReports = false,
-            ReportType reportType = ReportType.CLOUD_AND_LOCAL)
-            : base(remoteAddress, token, DriverOptionsHelper.Patch(internetExplorerOptions, BrowserType.InternetExplorer), projectName, jobName, disableReports, reportType)
+            ReportType reportType = ReportType.CLOUD_AND_LOCAL,
+            string reportName = null,
+            string reportPath = null)
+            : base(remoteAddress, token, DriverOptionsHelper.Patch(internetExplorerOptions, BrowserType.InternetExplorer), projectName, jobName, disableReports, reportType, reportName, reportPath)
         {
         }
     }

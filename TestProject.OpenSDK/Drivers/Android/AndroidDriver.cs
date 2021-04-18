@@ -31,7 +31,6 @@ namespace TestProject.OpenSDK.Drivers.Android
     using TestProject.OpenSDK.Internal.Helpers.Threading;
     using TestProject.OpenSDK.Internal.Reporting;
     using TestProject.OpenSDK.Internal.Rest;
-    using TestProject.OpenSDK.Internal.Tcp;
 
     /// <summary>
     /// Driver.
@@ -71,6 +70,8 @@ namespace TestProject.OpenSDK.Drivers.Android
         /// <param name="jobName">The job name to report.</param>
         /// <param name="disableReports">Set to true to disable all reporting (no report will be created on TestProject).</param>
         /// <param name="reportType">The report type of the execution, can be local, cloud or both.</param>
+        /// <param name="reportName">The name of the local generated report.</param>
+        /// <param name="reportPath">The path of the local generated report.</param>
         public AndroidDriver(
             Uri remoteAddress = null,
             string token = null,
@@ -78,9 +79,11 @@ namespace TestProject.OpenSDK.Drivers.Android
             string projectName = null,
             string jobName = null,
             bool disableReports = false,
-            ReportType reportType = ReportType.CLOUD_AND_LOCAL)
+            ReportType reportType = ReportType.CLOUD_AND_LOCAL,
+            string reportName = null,
+            string reportPath = null)
             : base(
-                  AgentClient.GetInstance(remoteAddress, token, appiumOptions, new ReportSettings(projectName, jobName, reportType), disableReports).AgentSession.RemoteAddress,
+                  AgentClient.GetInstance(remoteAddress, token, appiumOptions, new ReportSettings(projectName, jobName, reportType, reportName, reportPath), disableReports).AgentSession.RemoteAddress,
                   AgentClient.GetInstance().AgentSession.Capabilities)
         {
             this.sessionId = AgentClient.GetInstance().AgentSession.SessionId;
