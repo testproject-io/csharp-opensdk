@@ -267,9 +267,15 @@ namespace TestProject.OpenSDK.Internal.Rest
             // Verify the agent version supports local report generation
             this.VerifyIfLocalReportsIsSupported(reportSettings.ReportType);
 
-            if (!string.IsNullOrEmpty(this.sessionResponse.LocalReport))
+            // Show local report path only when executing on local agents.
+            if (this.client.BaseUrl.IsLocal())
             {
                 Logger.Info($"Execution Report: {this.sessionResponse.LocalReport}");
+            }
+
+            if (!string.IsNullOrWhiteSpace(this.sessionResponse.LocalReportUrl))
+            {
+                Logger.Info($"Execution Report Link: {this.sessionResponse.LocalReportUrl}");
             }
         }
 
