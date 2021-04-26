@@ -49,8 +49,13 @@ namespace TestProject.OpenSDK.Internal.Rest.Messages
         public string Version { get; set; }
 
         /// <summary>
-        /// The local report generated.
+        /// Path to the local report.
         /// </summary>
         public string LocalReport { get; set; }
+
+        /// <summary>
+        /// The URL to download the local report from a remote agent.
+        /// </summary>
+        public string LocalReportUrl { get; set; }
     }
 }
