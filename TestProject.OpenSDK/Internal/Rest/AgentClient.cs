@@ -651,7 +651,9 @@ namespace TestProject.OpenSDK.Internal.Rest
                 inferredReportSettings = new ReportSettings(
                     string.IsNullOrEmpty(originalSettings.ProjectName) ? projectName : originalSettings.ProjectName,
                     string.IsNullOrEmpty(originalSettings.JobName) ? jobName : originalSettings.JobName,
-                    originalSettings.ReportType);
+                    originalSettings.ReportType,
+                    originalSettings.ReportName,
+                    originalSettings.ReportPath);
             }
 
             Logger.Trace($"Using inferred values '{inferredReportSettings.ProjectName}' and '{inferredReportSettings.JobName}' as project and job name, respectively.");

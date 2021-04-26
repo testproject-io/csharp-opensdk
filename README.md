@@ -250,6 +250,28 @@ var driver = new DriverBuilder<FirefoxDriver>()
     .Build();
 ```
 
+## Control Path and Name of Local Reports
+
+By default, the local reports name is the timestamp of the test execution, and the path is the reports directory in the agent data folder.
+
+The SDK provides a way to override the default values of the generated local reports name and path.
+
+Via driver constructor:
+
+```csharp
+var driver = new ChromeDriver(chromeOptions: new ChromeOptions(), reportName: "C# Local report", reportPath: "/my_executions/reports);
+```
+
+Via Driver Builder:
+
+```csharp
+var driver = new DriverBuilder<FirefoxDriver>()
+    .WithLocalReportName("C# Local Report")
+    .WithLocalReportPath("/my_executions/reports")
+    .Build();
+```
+
+
 ### Disable command redaction
 
 When reporting driver commands, the OpenSDK performs redaction of sensitive data (values) sent to secured elements. If the element is one of the following:

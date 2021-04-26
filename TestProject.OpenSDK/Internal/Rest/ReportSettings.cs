@@ -34,6 +34,16 @@ namespace TestProject.OpenSDK.Internal.Rest
         public string JobName { get; }
 
         /// <summary>
+        /// The name of the local generated report.
+        /// </summary>
+        public string ReportName { get; }
+
+        /// <summary>
+        /// The path of the local generated report.
+        /// </summary>
+        public string ReportPath { get; }
+
+        /// <summary>
         /// The report type of the execution.
         /// </summary>
         public ReportType ReportType { get;  }
@@ -44,11 +54,20 @@ namespace TestProject.OpenSDK.Internal.Rest
         /// <param name="projectName">The project name to report.</param>
         /// <param name="jobName">The job name to report.</param>
         /// <param name="reportType">The report type of the execution (local, cloud, both).</param>
-        public ReportSettings(string projectName, string jobName, ReportType reportType = ReportType.CLOUD_AND_LOCAL)
+        /// <param name="reportName">The name of the local generated report.</param>
+        /// <param name="reportPath">The path to the local generated report.</param>
+        public ReportSettings(
+            string projectName,
+            string jobName,
+            ReportType reportType = ReportType.CLOUD_AND_LOCAL,
+            string reportName = null,
+            string reportPath = null)
         {
             this.ProjectName = projectName;
             this.JobName = jobName;
             this.ReportType = reportType;
+            this.ReportName = reportName;
+            this.ReportPath = reportPath;
         }
 
         /// <summary>
