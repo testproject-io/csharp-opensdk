@@ -7,11 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2021-04-27
+
+### Added
+
+- Added Control for Reports configuration, it is now possible to state the name and path of the generated report.
+- Added Remote Execution Support, it is now possible to execute tests on remote agents in the same network.
+- Added the underlying selenium version TestProject SDK uses to the SDK documentaion.
+- ([#160](https://github.com/testproject-io/csharp-opensdk/issues/160)) - Added a null check on infered Specflow project name when using the BeforeTestRun annotation.
+
+
+### Fixed
+
 - ([#165](https://github.com/testproject-io/csharp-opensdk/issues/165)) - Fix for Mobile multitest agent dev session reuse.
 - ([#164](https://github.com/testproject-io/csharp-opensdk/issues/164)) - Fix for GenericDriver multitest session reuse.
 - ([#162](https://github.com/testproject-io/csharp-opensdk/issues/162)) - Fix for AgentClient creation on Mobile tests, it will now reuse the previously created session in the constructor.
 - ([#161](https://github.com/testproject-io/csharp-opensdk/issues/161)) - Fix for Agent Session reuse, tests with the same Project name and Job name will be aggregated in the Test Report.
-- ([#160](https://github.com/testproject-io/csharp-opensdk/issues/160)) - Added a null check on infered Specflow project name when using the BeforeTestRun annotation.
 - ([#159](https://github.com/testproject-io/csharp-opensdk/issues/159)) - Fix for Skipped reports if the Specflow plugin was not installed, will now show a clear error message.
 
 ## [1.0.0] - 2021-04-01
