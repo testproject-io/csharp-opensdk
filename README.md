@@ -345,6 +345,10 @@ Now your code is ready to be uploaded to TestProject's platform!
 TestProject platform supports the upload and execution of NUnit, xUnit and MSTest testing frameworks.  
 It also supports SpecFlow tests that use [OpenSDK's SpecFlow plugin](#specflow-support).
 
+## Underlying Selenium Version
+
+TestProject uses the latest Selenium Version *3.141.59* 
+
 # Examples
 
 More usage examples for the OpenSDK can be found [here](https://github.com/testproject-io/csharp-opensdk/tree/main/TestProject.OpenSDK.Tests/Examples):
