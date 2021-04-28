@@ -7,8 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Fixed a bug where mobile tests steps would report the same steps twice.
-- Fixed a bug where in certain conditions, the test name was not reported correctly.
+## [1.1.1] - 2021-04-28
+
+### Fixed
+
+- ([#178](https://github.com/testproject-io/csharp-opensdk/issues/178)) - Fixed a bug where mobile tests steps would report the same steps twice.
+- ([#177](https://github.com/testproject-io/csharp-opensdk/issues/177)) - Fixed a bug where in certain conditions, the test name was not reported correctly.
 
 ## [1.1.0] - 2021-04-27
 
