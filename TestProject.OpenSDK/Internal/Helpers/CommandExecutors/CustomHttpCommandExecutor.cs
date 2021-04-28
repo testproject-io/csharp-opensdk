@@ -116,7 +116,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
             {
                 try
                 {
-                    response = base.Execute(commandToExecute);
+                    response = this.BaseExecute(commandToExecute);
                 }
                 catch (WebDriverException)
                 {
@@ -142,6 +142,16 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
             }
 
             return response;
+        }
+
+        /// <summary>
+        /// Invoke Appium/Selenium base Executor executor method.
+        /// </summary>
+        /// <param name="command">The WebDriver command to execute.</param>
+        /// <returns>The <see cref="Response"/> returned by the Agent.</returns>
+        protected Response BaseExecute(Command command)
+        {
+            return base.Execute(command);
         }
     }
 }

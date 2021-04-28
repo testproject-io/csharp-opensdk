@@ -18,6 +18,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.Threading
 {
     using System;
     using NLog;
+    using TestProject.OpenSDK.Internal.Rest;
     using TestProject.OpenSDK.Internal.Tcp;
 
     /// <summary>
@@ -42,6 +43,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.Threading
         public override void RunThread()
         {
             Logger.Info("Closing socket gracefully...");
+            AgentClient.GetInstance().Stop();
             SocketManager.GetInstance().CloseSocket();
         }
 

@@ -18,6 +18,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
 {
     using System;
     using System.Collections.Generic;
+    using NLog;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Remote;
 
@@ -28,6 +29,8 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
     internal class AppiumCustomHttpCommandExecutor : CustomHttpCommandExecutor
     {
         private bool skipReporting;
+
+        private static Logger Logger { get; set; } = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AppiumCustomHttpCommandExecutor"/> class.
@@ -73,7 +76,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
             {
                 try
                 {
-                    response = base.Execute(commandToExecute);
+                    response = this.BaseExecute(commandToExecute);
                 }
                 catch (WebDriverException)
                 {
