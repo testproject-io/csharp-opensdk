@@ -416,13 +416,13 @@ namespace TestProject.OpenSDK.Internal.Rest
                 return;
             }
 
-            this.StartSdkSession(startSessionResponse, capabilities);
-
             // Only retrieve the Agent version when it has not yet been set
             if (agentVersion == null)
             {
                 agentVersion = this.GetAgentVersion();
             }
+
+            this.StartSdkSession(startSessionResponse, capabilities);
         }
 
         private void StartSdkSession(IRestResponse startSessionResponse, DriverOptions capabilities)
@@ -519,7 +519,7 @@ namespace TestProject.OpenSDK.Internal.Rest
 
         private void OpenSocketConnectionUsing(SessionResponse sessionResponse)
         {
-            SocketManager.GetInstance().OpenSocket(this.remoteAddress.Host, sessionResponse.DevSocketPort);
+            SocketManager.GetInstance().OpenSocket(this.remoteAddress.Host, sessionResponse.DevSocketPort, agentVersion, this.sessionResponse.Uuid);
         }
 
         private AppiumOptions CreateAppiumOptions(Dictionary<string, object> caps)
