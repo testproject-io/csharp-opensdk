@@ -18,6 +18,7 @@ namespace TestProject.OpenSDK.Internal.Tcp
 {
     using System;
     using System.Net.Sockets;
+    using System.Text;
     using NLog;
     using TestProject.OpenSDK.Exceptions;
     using TestProject.OpenSDK.Internal.Helpers.Threading;
@@ -27,6 +28,16 @@ namespace TestProject.OpenSDK.Internal.Tcp
     /// </summary>
     public class SocketManager
     {
+        /// <summary>
+        /// Timeout for validation between the socket and the Agent in microseconds.
+        /// </summary>
+        private static readonly int SOCKET_VALIDATION_TIMEOUT = 15000000;
+
+        /// <summary>
+        /// Minimum Agent version supporting message validation between the SDK and the Agent.
+        /// </summary>
+        private static readonly Version MinAgentSocketValidationVersion = new Version("2.3.0");
+
         /// <summary>
         /// The SocketManager singleton instance.
         /// </summary>
@@ -74,7 +85,9 @@ namespace TestProject.OpenSDK.Internal.Tcp
         /// </summary>
         /// <param name="host">The host name to connect to.</param>
         /// <param name="port">The development socket port to connect to.</param>
-        public void OpenSocket(string host, int port)
+        /// <param name="agentVersion">The current agent version.</param>
+        /// <param name="uuid">The returned uuid from the agent.</param>
+        public void OpenSocket(string host, int port, Version agentVersion, string uuid)
         {
             if (this.socket != null && this.socket.Connected)
             {
@@ -86,6 +99,35 @@ namespace TestProject.OpenSDK.Internal.Tcp
             {
                 this.socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
                 this.socket.Connect(host, port);
+
+                if (agentVersion.CompareTo(MinAgentSocketValidationVersion) >= 0)
+                {
+                    Logger.Debug("Validating connection to the Agent...");
+                    bool connected = false;
+
+                    // Wait for data to be available until the set timeout
+                    if (this.socket.Poll(SOCKET_VALIDATION_TIMEOUT, SelectMode.SelectRead))
+                    {
+                        // Set the byte buffer size to 36 chars, max size of UUID + 2 bytes for header
+                        byte[] byteResponse = new byte[36];
+
+                        int size = this.socket.Receive(byteResponse);
+
+                        // Read response from socket, ignore the first 2 bytes as they represent a header.
+                        string result = Encoding.UTF8.GetString(byteResponse, 2, size - 2);
+                        if (result.Equals(uuid))
+                        {
+                            connected = true;
+                        }
+                    }
+
+                    if (!connected)
+                    {
+                        throw new AgentConnectException($"SDK failed to connect to the Agent via a TCP socket on port {port}.\n" +
+                                                        "Please check if you have any interfering software installed, and disable it.");
+                    }
+                }
+
                 Logger.Info($"Successfully connected to TCP socket at {host}:{port}");
             }
             catch (SocketException se)
