@@ -54,6 +54,20 @@ namespace TestProject.OpenSDK.Drivers
         /// </summary>
         private static Logger Logger { get; set; } = LogManager.GetCurrentClassLogger();
 
+        /// <summary>
+        /// Current active driver instance.
+        /// </summary>
+        private static BaseDriver instance;
+
+        /// <summary>
+        /// Getter of current active driver.
+        /// </summary>
+        /// <returns> Active driver session.</returns>
+        public static BaseDriver GetInstance()
+        {
+            return instance;
+        }
+
         static BaseDriver()
         {
         }
@@ -124,6 +138,8 @@ namespace TestProject.OpenSDK.Drivers
                 report.DisableAutoTestReports(true);
                 Logger.Info("SpecFlow detected, applying SpecFlow-specific reporting settings...");
             }
+
+            instance = this;
         }
 
         /// <summary>
