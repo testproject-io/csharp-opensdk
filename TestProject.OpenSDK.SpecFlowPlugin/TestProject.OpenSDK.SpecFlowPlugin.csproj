@@ -17,6 +17,10 @@
     <PackageTags>TestProject;Selenium;Appium;OpenSDK;SpecFlow</PackageTags>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <SkipPostSharp>True</SkipPostSharp>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Include="..\LICENSE" Link="LICENSE">
       <PackagePath></PackagePath>

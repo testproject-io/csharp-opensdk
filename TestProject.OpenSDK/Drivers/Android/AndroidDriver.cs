@@ -61,6 +61,20 @@ namespace TestProject.OpenSDK.Drivers.Android
         private static Logger Logger { get; set; } = LogManager.GetCurrentClassLogger();
 
         /// <summary>
+        /// Current active driver instance.
+        /// </summary>
+        private static AndroidDriver<T> instance;
+
+        /// <summary>
+        /// Getter of current active driver.
+        /// </summary>
+        /// <returns> Active driver session.</returns>
+        public static AndroidDriver<T> GetInstance()
+        {
+            return instance;
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="AndroidDriver{T}"/> class.
         /// </summary>
         /// <param name="remoteAddress">The base address for the Agent API (e.g. http://localhost:8585).</param>
@@ -129,6 +143,8 @@ namespace TestProject.OpenSDK.Drivers.Android
                 report.DisableAutoTestReports(true);
                 Logger.Info("SpecFlow detected, applying SpecFlow-specific reporting settings...");
             }
+
+            instance = this;
         }
 
         /// <summary>
