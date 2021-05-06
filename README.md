@@ -374,6 +374,74 @@ Now your code is ready to be uploaded to TestProject's platform!
 TestProject platform supports the upload and execution of NUnit, xUnit and MSTest testing frameworks.  
 It also supports SpecFlow tests that use [OpenSDK's SpecFlow plugin](#specflow-support).
 
+### Parameterizing Your Tests
+
+TestProject platform supports uploading tests that can use custom parameters.
+To do this, we use the new `TestProjectDataProvider` class. It supports both NUnit and xUnit. MSTest is not supported.
+
+Here's some code examples how to create tests with the new `TestProjectDataProvider` class:
+
+<details><summary>Nunit</summary>
+
+```csharp
+namespace ParameterizationExamples
+{
+    using NUnit.Framework;
+    using OpenQA.Selenium;
+    using TestProject.OpenSDK.DataProviders;
+    using TestProject.OpenSDK.Drivers.Web;
+
+    public class NUnitExample
+    {
+        [TestCaseSource(typeof(TestProjectDataProvider), nameof(TestProjectDataProvider.DataSource))]
+        public void ExampleTest(string username, string password)
+        {
+            var driver = new ChromeDriver();  // Project and job names are inferred.
+            driver.Navigate().GoToUrl("https://example.testproject.io");
+            driver.FindElement(By.CssSelector("#name")).SendKeys("John Smith");
+            driver.FindElement(By.CssSelector("#password")).SendKeys("12345");
+            driver.FindElement(By.CssSelector("#login")).Click();
+
+            Assert.IsTrue(driver.FindElement(By.CssSelector("#greetings")).Displayed);
+            driver.Quit();
+        }
+    }
+}
+```
+
+</details>
+
+<details><summary>xUnit</summary>
+
+```csharp
+namespace ParameterizationExamples
+{
+    using OpenQA.Selenium;
+    using TestProject.OpenSDK.DataProviders;
+    using TestProject.OpenSDK.Drivers.Web;
+    using Xunit;
+
+    public class XUnitExample
+    {
+        [Theory]
+        [ClassData(typeof(TestProjectDataProvider))]
+        public void ExampleTest(string username, string password)
+        {
+            var driver = new ChromeDriver();  // Project and job names are inferred.
+            driver.Navigate().GoToUrl("https://example.testproject.io");
+            driver.FindElement(By.CssSelector("#name")).SendKeys("John Smith");
+            driver.FindElement(By.CssSelector("#password")).SendKeys("12345");
+            driver.FindElement(By.CssSelector("#login")).Click();
+
+            Assert.True(driver.FindElement(By.CssSelector("#greetings")).Displayed);
+            driver.Quit();
+        }
+    }
+}
+```
+
+</details>
+
 ## Underlying Selenium Version
 
 TestProject uses the latest Selenium Version *3.141.59* 
