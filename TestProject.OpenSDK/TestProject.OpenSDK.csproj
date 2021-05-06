@@ -10,7 +10,7 @@ From now on, you can effortlessly execute Selenium and Appium native tests using
     <PackageProjectUrl>https://testproject.io/</PackageProjectUrl>
     <MinClientVersion>4.3.0</MinClientVersion>
     <Authors>TestProject</Authors>
-    <Version>0.64.4</Version>
+    <Version>1.2.0</Version>
     <Copyright>2020 TestProject (https://testproject.io)</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
     <RepositoryType>git</RepositoryType> 
