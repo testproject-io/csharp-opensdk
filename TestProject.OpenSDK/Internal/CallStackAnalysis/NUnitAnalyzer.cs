@@ -16,6 +16,7 @@
 
 namespace TestProject.OpenSDK.Internal.CallStackAnalysis
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
     using NUnit.Framework;
@@ -30,6 +31,12 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
         private const string TestClassDescriptionAttribute = "DescriptionAttribute";
         private const string NUnitFrameworkNamespace = "NUnit.Framework";
         private const string DescriptionProperty = "Description";
+        private static readonly List<string> Attributes = new List<string>
+        {
+            TestAttribute,
+            "TestCaseAttribute",
+            "TestCaseSourceAttribute",
+        };
 
         /// <summary>
         /// Determines whether or not the class containing the method that is run belongs to NUnit.
@@ -38,10 +45,10 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
         /// <returns>True if the class containing the method is an NUnit class, false otherwise.</returns>
         public bool IsTestClass(MethodBase method)
         {
-            // NUnit has [Test] attribute on test methods.
+            // NUnit has [Test], [TestCase], [TestCaseSource] attribute on test methods.
             return method.GetCustomAttributes(true)
-                .Any(a => a.GetType().Name.Equals(TestAttribute)
-                && a.GetType().Namespace.Equals(NUnitFrameworkNamespace));
+                .Any(a => Attributes.Contains(a.GetType().Name)
+                && NUnitFrameworkNamespace.Equals(a.GetType().Namespace));
         }
 
         /// <summary>
