@@ -57,5 +57,10 @@ namespace TestProject.OpenSDK.Internal.Rest.Messages
         /// The URL to download the local report from a remote agent.
         /// </summary>
         public string LocalReportUrl { get; set; }
+
+        /// <summary>
+        /// Agent connection validation uuid.
+        /// </summary>
+        public string Uuid { get; set; }
     }
 }
