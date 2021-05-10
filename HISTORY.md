@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2021-05-26
+
+### Added
+
+- Added parameterization of uploaded tests to the TestProject platform.
+- Added a new connection validation for the TestProject agent version 2.3.0 or greater.
+
+### Fixed
+
+- Fixed Nunit test name inferring when tests used TestSource/TestCase attribues.
+
 ## [1.1.1] - 2021-04-28
 
 ### Fixed
