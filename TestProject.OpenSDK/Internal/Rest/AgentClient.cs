@@ -519,7 +519,7 @@ namespace TestProject.OpenSDK.Internal.Rest
 
         private void OpenSocketConnectionUsing(SessionResponse sessionResponse)
         {
-            SocketManager.GetInstance().OpenSocket(this.remoteAddress.Host, sessionResponse.DevSocketPort, agentVersion, this.sessionResponse.Uuid);
+            SocketManager.GetInstance().OpenSocket(this.remoteAddress.Host, sessionResponse.DevSocketPort, this.sessionResponse.Uuid);
         }
 
         private AppiumOptions CreateAppiumOptions(Dictionary<string, object> caps)
