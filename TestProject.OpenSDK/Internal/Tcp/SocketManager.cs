@@ -16,7 +16,6 @@
 
 namespace TestProject.OpenSDK.Internal.Tcp
 {
-    using System;
     using System.Net.Sockets;
     using System.Text;
     using NLog;
@@ -32,11 +31,6 @@ namespace TestProject.OpenSDK.Internal.Tcp
         /// Timeout for validation between the socket and the Agent in microseconds.
         /// </summary>
         private static readonly int SOCKET_VALIDATION_TIMEOUT = 15000000;
-
-        /// <summary>
-        /// Minimum Agent version supporting message validation between the SDK and the Agent.
-        /// </summary>
-        private static readonly Version MinAgentSocketValidationVersion = new Version("2.3.0");
 
         /// <summary>
         /// The SocketManager singleton instance.
@@ -85,9 +79,8 @@ namespace TestProject.OpenSDK.Internal.Tcp
         /// </summary>
         /// <param name="host">The host name to connect to.</param>
         /// <param name="port">The development socket port to connect to.</param>
-        /// <param name="agentVersion">The current agent version.</param>
         /// <param name="uuid">The returned uuid from the agent.</param>
-        public void OpenSocket(string host, int port, Version agentVersion, string uuid)
+        public void OpenSocket(string host, int port, string uuid)
         {
             if (this.socket != null && this.socket.Connected)
             {
@@ -100,7 +93,8 @@ namespace TestProject.OpenSDK.Internal.Tcp
                 this.socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
                 this.socket.Connect(host, port);
 
-                if (agentVersion.CompareTo(MinAgentSocketValidationVersion) >= 0)
+                // Only agent 2.3.0 or greater will return a UUID
+                if (!string.IsNullOrEmpty(uuid))
                 {
                     Logger.Debug("Validating connection to the Agent...");
                     bool connected = false;
