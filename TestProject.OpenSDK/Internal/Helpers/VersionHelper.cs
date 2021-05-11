@@ -29,7 +29,17 @@ namespace TestProject.OpenSDK.Internal.Helpers
         /// <returns>The current SDK version.</returns>
         public static string GetSdkVersion()
         {
-            return Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+            string version = Assembly.GetExecutingAssembly()
+                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+                .InformationalVersion;
+
+            if (version.Contains("-"))
+            {
+                // Return version x.x.x only
+                version = version.Split('-')[0];
+            }
+
+            return version;
         }
     }
 }
