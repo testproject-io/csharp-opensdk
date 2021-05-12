@@ -52,4 +52,10 @@ From now on, you can effortlessly execute Selenium and Appium native tests using
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="PostSharp.license">
+      <Link>PostSharp.license</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>
