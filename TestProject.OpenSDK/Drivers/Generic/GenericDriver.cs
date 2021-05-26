@@ -51,20 +51,6 @@ namespace TestProject.OpenSDK.Drivers.Generic
         private static Logger Logger { get; set; } = LogManager.GetCurrentClassLogger();
 
         /// <summary>
-        /// Instance of current active driver.
-        /// </summary>
-        private static GenericDriver instance;
-
-        /// <summary>
-        /// Getter of current active driver.
-        /// </summary>
-        /// <returns> Active driver session.</returns>
-        public static GenericDriver GetInstance()
-        {
-            return instance;
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="GenericDriver"/> class.
         /// </summary>
         /// <param name="remoteAddress">The base address for the Agent API (e.g. http://localhost:8585).</param>
@@ -108,8 +94,6 @@ namespace TestProject.OpenSDK.Drivers.Generic
                 report.DisableAutoTestReports(true);
                 Logger.Info("SpecFlow detected, applying SpecFlow-specific reporting settings...");
             }
-
-            instance = this;
         }
 
         /// <summary>
