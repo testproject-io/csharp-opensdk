@@ -157,35 +157,6 @@ Examples of explicit project and job name configuration:
 * [NUnit example](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Frameworks/NUnit/ExplicitReportTest.cs)
 * [XUnit example](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Frameworks/XUnit/ExplicitReportTest.cs)
 
-## Reporting Extensions
-
-Reporting extensions extend the TestProject SDK reporting capabilities by intercepting unit testing framework assertion errors and reporting them as failed steps.
-This functionality can be added by adding the attribute ``AssertionHelper`` on your Test Method or Class.
-This attribute has an optional boolean argument **Screenshot** that will decide if failed assertions will include screenshots in the report, by default it is set to **true**.
-
-You can add the attributes on an entire Class, which then automatically enables the assertion capturing on each method inside the class:
-
-```csharp
-[AssertionHelper]
-public class BaseTest
-```
-
-or per method:
-
-```csharp
-[AssertionHelper(Screenshot = false)]
-[TestMethod]
-public void ExampleTestUsingDriverBuilder()
-{
-    this.driver.Navigate().GoToUrl("https://example.testproject.io");
-    this.driver.FindElement(By.CssSelector("#name")).SendKeys("John Smith");
-    this.driver.FindElement(By.CssSelector("#password")).SendKeys("12345");
-    this.driver.FindElement(By.CssSelector("#login")).Click();
-
-    Assert.IsTrue(this.driver.FindElement(By.CssSelector("#greetings")).Displayed);
-}
-```
-
 ## Tests Reports
 
 ### Automatic Tests Reporting
