@@ -118,17 +118,13 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
                 {
                     response = this.BaseExecute(commandToExecute);
                 }
-                catch (WebDriverException)
+                catch (WebDriverException e)
                 {
-                    Dictionary<string, object> responseValue = new Dictionary<string, object>();
-                    responseValue.Add("error", "no such element");
-                    responseValue.Add("message", $"Unable to locate element {commandToExecute.ParametersAsJsonString}");
-
                     response = new Response
                     {
-                        Status = WebDriverResult.Timeout,
+                        Status = WebDriverResult.UnhandledError,
                         SessionId = commandToExecute.SessionId.ToString(),
-                        Value = responseValue,
+                        Value = e.ToString(),
                     };
                 }
             }
