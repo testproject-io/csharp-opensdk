@@ -92,7 +92,7 @@ namespace TestProject.OpenSDK.Drivers
             sessionIdField.SetValue(this, new SessionId(this.sessionId));
 
             // Create a new command executor for this driver session and set disable reporting flag
-            this.commandExecutor = new CustomHttpCommandExecutor(AgentClient.GetInstance().AgentSession.RemoteAddress, disableReports, remoteConnectionTimeout ?? TimeSpan.FromSeconds(60));
+            this.commandExecutor = new CustomHttpCommandExecutor(AgentClient.GetInstance().AgentSession.RemoteAddress, disableReports, remoteConnectionTimeout ?? AgentClient.DefaultConnectionTimeout);
 
             // If the driver returned by the Agent is in W3C mode, we need to update the command info repository
             // associated with the base RemoteWebDriver to the W3C command info repository (default is OSS).
