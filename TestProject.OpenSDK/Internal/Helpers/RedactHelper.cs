@@ -83,7 +83,7 @@ namespace TestProject.OpenSDK.Internal.Helpers
 
             Response response = executor.Execute(getAttributeCommand, true);
 
-            string inputType = response.Status.Equals(WebDriverResult.Success) ? response.Value.ToString() : string.Empty;
+            string inputType = response.Status.Equals(WebDriverResult.Success) ? (response.Value?.ToString() ?? string.Empty) : string.Empty;
 
             return inputType.Equals("password") || inputType.Equals("XCUIElementTypeSecureTextField");
         }
