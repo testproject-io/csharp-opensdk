@@ -52,7 +52,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         /// <param name="addressOfRemoteServer">URL of the remote Selenium server managed by the Agent.</param>
         /// <param name="disableReports">True if all reporting should be disabled, false otherwise.</param>
         public CustomHttpCommandExecutor(Uri addressOfRemoteServer, bool disableReports)
-            : this(addressOfRemoteServer, disableReports, TimeSpan.FromSeconds(10))
+            : this(addressOfRemoteServer, disableReports, TimeSpan.FromSeconds(60))
         {
         }
 
