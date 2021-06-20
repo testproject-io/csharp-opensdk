@@ -233,13 +233,18 @@ namespace TestProject.OpenSDK.Internal.Rest
             ReportSettings sessionReportSettings = disableReports ? null : this.InferReportSettings(reportSettings);
             this.reportSettings = sessionReportSettings;
 
-            if (token != null)
+            if (Environment.GetEnvironmentVariable(this.tpDevToken) != null)
+            {
+                if (token != null)
+                {
+                    Logger.Info("Using {0} parameter from environment", this.tpDevToken);
+                }
+
+                this.token = Environment.GetEnvironmentVariable(this.tpDevToken);
+            }
+            else if (token != null)
             {
                 this.token = token;
-            }
-            else if (Environment.GetEnvironmentVariable(this.tpDevToken) != null)
-            {
-                this.token = Environment.GetEnvironmentVariable(this.tpDevToken);
             }
             else
             {
