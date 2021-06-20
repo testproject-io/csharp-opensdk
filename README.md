@@ -88,6 +88,8 @@ The OpenSDK uses a development token for communication with the Agent and the Te
 ChromeDriver driver = new ChromeDriver(token: "your_token_goes_here");
 ```
 
+> When a token is provided in both the constructor and an environment variable, the token in the environment variable will be used.
+
 ## Remote Agent
 
 By default, drivers communicate with the local Agent listening on http://localhost:8585.
