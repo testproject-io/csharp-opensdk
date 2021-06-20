@@ -72,6 +72,7 @@ namespace TestProject.OpenSDK.Drivers.Android
         /// <param name="reportType">The report type of the execution, can be local, cloud or both.</param>
         /// <param name="reportName">The name of the local generated report.</param>
         /// <param name="reportPath">The path of the local generated report.</param>
+        /// <param name="remoteConnectionTimeout">Timeout for the remote connection to the WebDriver server executing the commands.</param>
         public AndroidDriver(
             Uri remoteAddress = null,
             string token = null,
@@ -81,10 +82,12 @@ namespace TestProject.OpenSDK.Drivers.Android
             bool disableReports = false,
             ReportType reportType = ReportType.CLOUD_AND_LOCAL,
             string reportName = null,
-            string reportPath = null)
+            string reportPath = null,
+            TimeSpan? remoteConnectionTimeout = null)
             : base(
                   AgentClient.GetInstance(remoteAddress, token, appiumOptions, new ReportSettings(projectName, jobName, reportType, reportName, reportPath), disableReports).AgentSession.RemoteAddress,
-                  AgentClient.GetInstance().AgentSession.Capabilities)
+                  AgentClient.GetInstance().AgentSession.Capabilities,
+                  remoteConnectionTimeout ?? DefaultCommandTimeout)
         {
             this.sessionId = AgentClient.GetInstance().AgentSession.SessionId;
 
@@ -93,7 +96,7 @@ namespace TestProject.OpenSDK.Drivers.Android
             sessionIdField.SetValue(this, new SessionId(this.sessionId));
 
             // Create a new command executor for this driver session and set disable reporting flag
-            this.commandExecutor = new AppiumCustomHttpCommandExecutor(AgentClient.GetInstance().AgentSession.RemoteAddress, disableReports);
+            this.commandExecutor = new AppiumCustomHttpCommandExecutor(AgentClient.GetInstance().AgentSession.RemoteAddress, disableReports, remoteConnectionTimeout ?? AgentClient.DefaultConnectionTimeout);
 
             // If the driver returned by the Agent is in W3C mode, we need to update the command info repository
             // associated with the base RemoteWebDriver to the W3C command info repository (default is OSS).

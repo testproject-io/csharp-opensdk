@@ -47,6 +47,11 @@ namespace TestProject.OpenSDK.Internal.Rest
     public class AgentClient
     {
         /// <summary>
+        /// Default remote connection timeout.
+        /// </summary>
+        internal static readonly TimeSpan DefaultConnectionTimeout = TimeSpan.FromSeconds(60);
+
+        /// <summary>
         /// Minimum Agent version that support session reuse.
         /// </summary>
         private static readonly Version MinSessionReuseCapableVersion = new Version("0.64.32");

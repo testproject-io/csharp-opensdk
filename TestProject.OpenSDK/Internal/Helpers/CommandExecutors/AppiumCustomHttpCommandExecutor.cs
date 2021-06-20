@@ -37,8 +37,9 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         /// </summary>
         /// <param name="addressOfRemoteServer">URL of the remote Selenium server managed by the Agent.</param>
         /// <param name="disableReports">True if all reporting should be disabled, false otherwise.</param>
-        public AppiumCustomHttpCommandExecutor(Uri addressOfRemoteServer, bool disableReports)
-            : base(addressOfRemoteServer, disableReports)
+        /// <param name="remoteConnectionTimeout">Timeout for the remote connection to the WebDriver server executing the commands.</param>
+        public AppiumCustomHttpCommandExecutor(Uri addressOfRemoteServer, bool disableReports, TimeSpan remoteConnectionTimeout)
+            : base(addressOfRemoteServer, disableReports, remoteConnectionTimeout)
         {
             this.skipReporting = disableReports;
         }

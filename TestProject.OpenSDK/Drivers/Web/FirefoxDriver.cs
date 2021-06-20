@@ -39,6 +39,7 @@ namespace TestProject.OpenSDK.Drivers.Web
         /// <param name="reportType">The report type of the execution, can be local, cloud or both.</param>
         /// <param name="reportName">The name of the local generated report.</param>
         /// <param name="reportPath">The path of the local generated report.</param>
+        /// <param name="remoteConnectionTimeout">The remote connection timeout to the server. Default is 60 seconds.</param>
         public FirefoxDriver(
             Uri remoteAddress = null,
             string token = null,
@@ -48,8 +49,9 @@ namespace TestProject.OpenSDK.Drivers.Web
             bool disableReports = false,
             ReportType reportType = ReportType.CLOUD_AND_LOCAL,
             string reportName = null,
-            string reportPath = null)
-            : base(remoteAddress, token, DriverOptionsHelper.Patch(firefoxOptions, BrowserType.Firefox), projectName, jobName, disableReports, reportType, reportName, reportPath)
+            string reportPath = null,
+            TimeSpan? remoteConnectionTimeout = null)
+            : base(remoteAddress, token, DriverOptionsHelper.Patch(firefoxOptions, BrowserType.Chrome), projectName, jobName, disableReports, reportType, reportName, reportPath, remoteConnectionTimeout)
         {
         }
     }

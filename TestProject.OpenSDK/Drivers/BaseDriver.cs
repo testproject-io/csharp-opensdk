@@ -70,6 +70,7 @@ namespace TestProject.OpenSDK.Drivers
         /// <param name="reportType">The report type of the execution, can be local, cloud or both.</param>
         /// <param name="reportName">The name of the local generated report.</param>
         /// <param name="reportPath">The path of the local generated report.</param>
+        /// <param name="remoteConnectionTimeout">The remote connection timeout to the server. Default is 60 seconds.</param>
         protected BaseDriver(
             Uri remoteAddress = null,
             string token = null,
@@ -79,7 +80,8 @@ namespace TestProject.OpenSDK.Drivers
             bool disableReports = false,
             ReportType reportType = ReportType.CLOUD_AND_LOCAL,
             string reportName = null,
-            string reportPath = null)
+            string reportPath = null,
+            TimeSpan? remoteConnectionTimeout = null)
             : base(
                   AgentClient.GetInstance(remoteAddress, token, driverOptions, new ReportSettings(projectName, jobName, reportType, reportName, reportPath), disableReports).AgentSession.Capabilities)
         {
@@ -90,7 +92,7 @@ namespace TestProject.OpenSDK.Drivers
             sessionIdField.SetValue(this, new SessionId(this.sessionId));
 
             // Create a new command executor for this driver session and set disable reporting flag
-            this.commandExecutor = new CustomHttpCommandExecutor(AgentClient.GetInstance().AgentSession.RemoteAddress, disableReports);
+            this.commandExecutor = new CustomHttpCommandExecutor(AgentClient.GetInstance().AgentSession.RemoteAddress, disableReports, remoteConnectionTimeout ?? AgentClient.DefaultConnectionTimeout);
 
             // If the driver returned by the Agent is in W3C mode, we need to update the command info repository
             // associated with the base RemoteWebDriver to the W3C command info repository (default is OSS).
