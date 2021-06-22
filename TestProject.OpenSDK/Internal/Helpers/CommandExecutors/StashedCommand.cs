@@ -50,5 +50,31 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
             this.Result = result;
             this.Passed = passed;
         }
+
+        /// <inheritdoc cref="object"/>
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return this.Equals((StashedCommand) obj);
+        }
+
+        /// <inheritdoc cref="object"/>
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = this.Command != null ? this.Command.GetHashCode() : 0;
+                hashCode = (hashCode * 397) ^ this.Passed.GetHashCode();
+                return hashCode;
+            }
+        }
+
+        /// <inheritdoc cref="object"/>
+        protected bool Equals(StashedCommand other)
+        {
+            return object.Equals(this.Command, other.Command) && this.Passed == other.Passed;
+        }
     }
 }
