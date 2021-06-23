@@ -520,6 +520,13 @@ namespace TestProject.OpenSDK.Internal.Rest
 
             Logger.Info($"Session [{sessionResponse.SessionId}] initialized");
             this.sessionResponse = sessionResponse;
+            if (this.sessionResponse.Warnings != null)
+            {
+               foreach (string warning in this.sessionResponse.Warnings)
+                {
+                    Logger.Warn(warning);
+                }
+            }
         }
 
         private void OpenSocketConnectionUsing(SessionResponse sessionResponse)
