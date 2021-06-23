@@ -18,6 +18,7 @@ namespace TestProject.OpenSDK.Internal
 {
     using System.Collections.Concurrent;
     using System.Threading;
+    using System.Threading.Tasks;
     using NLog;
     using RestSharp;
     using TestProject.OpenSDK.Internal.Rest.Messages;
@@ -30,7 +31,12 @@ namespace TestProject.OpenSDK.Internal
         /// <summary>
         /// Maximum amount of time to wait in milliseconds before forcibly terminating the queue.
         /// </summary>
-        private const int REPORTS_QUEUE_TIMEOUT = 10000;
+        private const int REPORTS_QUEUE_TIMEOUT = 1000 * 10 * 60; // 10 minutes
+
+        /// <summary>
+        /// Progress report delay in milliseconds.
+        /// </summary>
+        private const int PROGRESS_REPORT_DELAY = 3000;
 
         /// <summary>
         /// HTTP client used to send reports to the Agent.
@@ -89,12 +95,34 @@ namespace TestProject.OpenSDK.Internal
             this.reportItems.Add(new QueueItem(null, null));
 
             this.reportItems.CompleteAdding();
+            var task = Task.Run(async () => await this.LogItems());
+        }
 
-            // Wait until all pending items are reported or the timeout has been reached.
-            bool reportingCompleted = SpinWait.SpinUntil(() => this.reportItems.Count == 0, REPORTS_QUEUE_TIMEOUT);
-
-            if (!reportingCompleted)
+        private async Task Dowork()
+        {
+            while (this.reportItems.Count != 0)
             {
+                await Task.Delay(PROGRESS_REPORT_DELAY);
+                Logger.Info(
+                    $"There are [{this.reportItems.Count}] outstanding reports that should be transmitted to the Agent before"
+                             + " the process exits.");
+            }
+
+            Logger.Trace("Reporting queue is empty, stopping progress report...");
+            return;
+        }
+
+        private async Task LogItems()
+        {
+            var task = this.Dowork();
+            if (await Task.WhenAny(task, Task.Delay(REPORTS_QUEUE_TIMEOUT)) == task)
+            {
+                // Finished within timeout
+                return;
+            }
+            else
+            {
+                // Took more time then configured timeout
                 Logger.Warn($"There are {this.reportItems.Count} unreported items left in the queue.");
             }
         }
