@@ -51,7 +51,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
 
         private ITestProjectCommandExecutor commandExecutor;
 
-        private StashedCommand stashedCommand;
+        private SortedDictionary<string, StashedCommand> stashedCommands;
 
         private string currentTestName;
 
@@ -67,6 +67,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         /// <param name="disableReports">True if all reporting should be disabled, false otherwise.</param>
         public ReportingCommandExecutor(ITestProjectCommandExecutor commandExecutor, bool disableReports)
         {
+            this.stashedCommands = new SortedDictionary<string, StashedCommand>();
             this.commandExecutor = commandExecutor;
             this.ReportsDisabled = disableReports;
         }
@@ -101,26 +102,18 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
 
             if (StackTraceHelper.Instance.IsRunningInsideWait())
             {
-                // We're only interested in reporting the final FindElement or FindElements call
-                // (these are executed by the ExpectedConditions helper methods)
-                if (
-                    command.Name.Equals(DriverCommand.FindElement) ||
-                    command.Name.Equals(DriverCommand.FindElements))
-                {
-                    this.stashedCommand = new StashedCommand(command, response.Value, response.IsPassed());
-                }
+                // Save the command
+                var stashedCommand = new StashedCommand(command, response.Value, response.IsPassed());
+                this.stashedCommands[$"{command}_{response.IsPassed()}"] = stashedCommand;
 
                 // Do not report the command right away if it's executed inside a WebDriverWait
                 return;
             }
 
-            // If we have a previously stashed command to report, report it first.
-            if (this.stashedCommand != null)
-            {
-                this.SendCommandToAgent(this.stashedCommand.Command, this.stashedCommand.Result, this.stashedCommand.Passed);
-                this.stashedCommand = null;
-            }
+            // Send all stashed command first.
+            this.ClearStash();
 
+            // If we have a previously stashed command to report, report it first.
             this.SendCommandToAgent(command, response.Value, response.IsPassed());
         }
 
@@ -129,10 +122,15 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         /// </summary>
         public void ClearStash()
         {
-            if (this.stashedCommand != null)
+            if (this.stashedCommands.Count > 0)
             {
-                this.SendCommandToAgent(this.stashedCommand.Command, this.stashedCommand.Result, this.stashedCommand.Passed);
-                this.stashedCommand = null;
+                foreach (var keyValuePair in this.stashedCommands)
+                {
+                    var command = keyValuePair.Value;
+                    this.SendCommandToAgent(command.Command, command.Result, command.Passed);
+                }
+
+                this.stashedCommands.Clear();
             }
         }
 
