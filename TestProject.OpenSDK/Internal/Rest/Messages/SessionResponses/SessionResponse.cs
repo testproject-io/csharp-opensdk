@@ -17,6 +17,7 @@
 namespace TestProject.OpenSDK.Internal.Rest.Messages
 {
     using OpenQA.Selenium;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Payload object returned by the Agent when starting a development session.
@@ -62,5 +63,10 @@ namespace TestProject.OpenSDK.Internal.Rest.Messages
         /// Agent connection validation uuid.
         /// </summary>
         public string Uuid { get; set; }
+
+        /// <summary>
+        /// Warnings sent by the Agent for this development session.
+        /// </summary>
+        public List<string> Warnings { get; set; }
     }
 }
