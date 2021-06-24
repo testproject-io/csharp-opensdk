@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.1] - 2021-06-24
+
+### Added
+
+- [#170](https://github.com/testproject-io/csharp-opensdk/issues/170) - Users can now specify the remote connection timeout via driver constructor.
+- [#202](https://github.com/testproject-io/csharp-opensdk/issues/202) - Added new capability for using cloud drivers, with examples & documentation
+
+### Fixed
+
+- [#200](https://github.com/testproject-io/csharp-opensdk/issues/200) - Failed SDK commands now return the actual error instead of an element not found error.
+- [#170](https://github.com/testproject-io/csharp-opensdk/issues/170) - Increased the default connection timeout to 60 seconds
+- [#203](https://github.com/testproject-io/csharp-opensdk/issues/203) - SDK will now report the last set of commands executed inside fluent wait
+
 ## [1.2.0] - 2021-05-26
 
 ### Added
