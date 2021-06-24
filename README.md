@@ -106,6 +106,36 @@ It can also be set using the `TP_AGENT_URL` environment variable.
 In order to allow the SDK to communicate with agents running on a remote machine (*On the same network*), the agent should bind to an external interface.
 For additional documentation on how to achieve such, please refer [here](https://docs.testproject.io/testproject-agents/testproject-agent-cli#start)
 
+## Remote (Cloud) Driver
+
+By default, TestProject Agent communicates with the local Selenium or Appium server. \
+In order to initialize a remote driver for cloud providers such as SauceLabs or BrowserStack, \
+a custom capability `cloud:URL` should be set. Here's how to use it with each cloud service:
+
+<details><summary>SauceLabs</summary>
+
+```csharp
+ChromeOptions chromeOptions = new ChromeOptions();
+chromeOptions.AddAdditionalCapability(
+        TestProjectCapabilityType.CLOUD_URL,
+        "https://{USERNAME}:{PASSWORD}@ondemand.us-west-1.saucelabs.com:443/wd/hub");
+ChromeDriver driver = new ChromeDriver(chromeOptions: chromeOptions);
+```
+
+</details>
+
+<details><summary>BrowserStack</summary>
+
+```csharp
+ChromeOptions chromeOptions = new ChromeOptions();
+chromeOptions.AddAdditionalCapability(
+        TestProjectCapabilityType.CLOUD_URL,
+        "https://{USERNAME}:{PASSWORD}@hub-cloud.browserstack.com/wd/hub");
+ChromeDriver driver = new ChromeDriver(chromeOptions: chromeOptions);
+```
+
+</details>
+
 ## Driver Builder
 The SDK provides a generic builder for the drivers - `DriverBuilder`, for example:
 
