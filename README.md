@@ -344,6 +344,34 @@ A working example project can be found [here](https://github.com/testproject-io/
 * [A feature with a scenario outline using desktop Chrome](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.SpecFlowExamples/Features/SpecFlowScenarioOutlineExample.feature)
 * [A feature with a scenario using a native Android app](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.SpecFlowExamples/Features/SpecFlowMobileExample.feature)
 
+# Addon Proxy
+
+One of the greatest features of the TestProject platform is the ability to execute a code written by someone else. 
+It can be your account colleagues, writing actions that you can reuse, or TestProject community users creating addons and solving common automation challenges.
+
+To get started, download a source file with the proxy class for the Action(s) you want to execute. 
+It can be done by navigating to the [Addons page](https://app.testproject.io/#/addons), opening an addon, 
+and clicking on the `Proxy` link at the bottom left corner of the popup.
+
+Now, let's pretend that one of your colleagues coded and uploaded an Addon naming it - `Example Addon`. 
+To use it in your test, download its proxy source file, add it to your project and invoke the actions using the following driver method:
+
+```csharp
+driver.Addons().Execute()
+```
+That expects an instance of the `ActionProxy` class. For example:
+```csharp
+ // Use Addon proxy to invoke 'Clear Fields' Action
+this.driver.Addons().Execute(new ExampleAddon.ClearFieldsAction());
+```
+Following is an example of an element action invocation:
+```csharp
+// Use Addon proxy to invoke 'Type Random Phone' Action
+// Notice how the action parameters are provided using an action proxy convenience method
+driver.Addons().Execute(new ExampleAddon.TypeRandomPhoneAction("1", 10),  By.CssSelector("#phone"));
+```
+Refer to the [Addon Proxy Test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Addons/ChromeDriverWithAddonTest.cs) for complete example source.
+
 # Package & Upload Tests to TestProject
 
 Tests can be executed locally using the SDK, or triggered remotely from the TestProject platform.  
@@ -461,6 +489,7 @@ More usage examples for the OpenSDK can be found [here](https://github.com/testp
     * [Internet Explorer Test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/InternetExplorerDriverTest.cs)
     * [Safari Test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/SafariDriverTest.cs)
     * [Remote Web Driver Test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/RemoteWebDriverTest.cs)
+    * [Addon Proxy Test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Addons/ChromeDriverWithAddonTest.cs)
   * Android
     * [Android native test](https://github.com/testproject-io/csharp-opensdk/blob/main/TestProject.OpenSDK.Tests/Examples/Drivers/AndroidDriverTest.cs)
     * [Android native app](https://github.com/testproject-io/android-demo-app)
