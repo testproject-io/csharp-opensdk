@@ -237,7 +237,7 @@ namespace TestProject.OpenSDK.Internal.Rest
             {
                 if (token != null)
                 {
-                    Logger.Info("Using {0} parameter from environment", this.tpDevToken);
+                    Logger.Info("Found {0} environment variable. Using its value as the development token", this.tpDevToken);
                 }
 
                 this.token = Environment.GetEnvironmentVariable(this.tpDevToken);
