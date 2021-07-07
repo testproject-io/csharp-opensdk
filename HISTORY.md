@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.2] - 2021-07-07
+
+### Fixed
+
+- [#221](https://github.com/testproject-io/csharp-opensdk/issues/221) - Fixed message when both environment variable and token parameter are present.
+- [#218](https://github.com/testproject-io/csharp-opensdk/issues/218) - Added remote connection timeout parameter to DriverBuilder
+
 ## [1.2.1] - 2021-06-24
 
 ### Added
