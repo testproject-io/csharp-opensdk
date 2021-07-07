@@ -78,6 +78,11 @@ namespace TestProject.OpenSDK.Drivers
         private string builderReportPath;
 
         /// <summary>
+        /// Set remote connection timeout for sending commands to the server.
+        /// </summary>
+        private TimeSpan? remoteConnectionTimeout;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="DriverBuilder{T}"/> class.
         /// </summary>
         /// <param name="options">See <see cref="DriverOptions"/> for more details.</param>
@@ -175,6 +180,18 @@ namespace TestProject.OpenSDK.Drivers
         }
 
         /// <summary>
+        /// Set remote connection timeout for sending commands to the server.
+        /// </summary>
+        /// <param name="remoteConnectionTimeout">The remote connection timeout to the server. Default is 60 seconds.</param>
+        /// <returns>Modified DriverBuilder instance.</returns>
+        public DriverBuilder<T> WithRemoteCommandTimeout(TimeSpan? remoteConnectionTimeout)
+        {
+            this.remoteConnectionTimeout = remoteConnectionTimeout;
+            return this;
+        }
+
+
+        /// <summary>
         /// Set report path of local generated report.
         /// </summary>
         /// <param name="reportPath">Path of local report.</param>
@@ -203,10 +220,11 @@ namespace TestProject.OpenSDK.Drivers
                     this.builderDisableReports,
                     this.builderReportType,
                     this.builderReportName,
-                    this.builderReportPath);
-            } catch (Exception)
+                    this.builderReportPath,
+                    this.remoteConnectionTimeout);
+            } catch (Exception e)
             {
-                throw new WebDriverException($"Failed to create an instance of {typeof(T)}");
+                throw new WebDriverException($"Failed to create an instance of {typeof(T)}", e);
             }
         }
     }
