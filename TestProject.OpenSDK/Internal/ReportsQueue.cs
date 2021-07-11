@@ -161,7 +161,7 @@ namespace TestProject.OpenSDK.Internal
                     return;
                 }
 
-                Logger.Warn($"Agent responded with an unexpected status {(int)response.StatusCode} with message: {response.ErrorMessage}.");
+                Logger.Warn($"Agent responded with an unexpected status {response?.StatusCode ?? 0} during the report: {response?.ErrorMessage ?? "No message."}.");
                 Logger.Info($"Attempt to send report again to the Agent. {reportAttemptsCount - 1} more attempts are left.");
             }
 
