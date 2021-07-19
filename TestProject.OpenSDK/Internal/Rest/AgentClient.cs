@@ -276,7 +276,7 @@ namespace TestProject.OpenSDK.Internal.Rest
             }
 
             // Create the relevant ReportsQueue according agentVersion in order to handle reports.
-            this.reportsQueue = (agentVersion.CompareTo(MinBatchReportSupportedVersion) > 0) ? new ReportsQueueBatch(this.client) : new ReportsQueue(this.client);
+            this.reportsQueue = (agentVersion.CompareTo(MinBatchReportSupportedVersion) >= 0) ? new ReportsQueueBatch(this.client) : new ReportsQueue(this.client);
 
             this.StartSession(sessionReportSettings, capabilities);
 
