@@ -42,7 +42,7 @@ namespace TestProject.OpenSDK.Internal
         /// Name of the environment variable that stores the max reports batch size.
         /// Default value of <see cref="MaxReportsBatchSize"> can be override by this environment variable.
         /// </summary>
-        private const string TpMaxBatchSize = "TP_MAX_BATCH_SIZE";
+        private const string TpMaxBatchSizeVariableName = "TP_MAX_REPORTS_BATCH_SIZE";
 
         /// <summary>
         /// The max batch size used in reports batch creation.
@@ -76,7 +76,7 @@ namespace TestProject.OpenSDK.Internal
             this.serializerSettings.Converters.Add(new StringEnumConverter());
 
             // Try to get maximum report batch size from env variable.
-            string tpMaxBatchSizeEnvVal = Environment.GetEnvironmentVariable(TpMaxBatchSize);
+            string tpMaxBatchSizeEnvVal = Environment.GetEnvironmentVariable(TpMaxBatchSizeVariableName);
             this.maxBatchSize = (tpMaxBatchSizeEnvVal != null) ? int.Parse(tpMaxBatchSizeEnvVal) : MaxReportsBatchSize;
         }
 
