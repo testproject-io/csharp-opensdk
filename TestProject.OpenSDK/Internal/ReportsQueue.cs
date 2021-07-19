@@ -20,6 +20,7 @@ namespace TestProject.OpenSDK.Internal
     using System.Threading;
     using NLog;
     using RestSharp;
+    using TestProject.OpenSDK.Exceptions;
     using TestProject.OpenSDK.Internal.Rest.Messages;
 
     /// <summary>
@@ -28,19 +29,29 @@ namespace TestProject.OpenSDK.Internal
     public class ReportsQueue
     {
         /// <summary>
-        /// Maximum amount of time to wait in milliseconds before forcibly terminating the queue.
+        /// In case of failure during report - attempt maximum 4 times.
         /// </summary>
-        private const int REPORTS_QUEUE_TIMEOUT = 10000;
-
-        /// <summary>
-        /// HTTP client used to send reports to the Agent.
-        /// </summary>
-        private RestClient client;
+        protected const int MaxReportFailureAttempts = 4;
 
         /// <summary>
         /// Queue that will hold the items to be reported.
         /// </summary>
-        private BlockingCollection<QueueItem> reportItems = new BlockingCollection<QueueItem>();
+        protected BlockingCollection<QueueItem> ReportItems { get; } = new BlockingCollection<QueueItem>();
+
+        /// <summary>
+        /// HTTP client used to send reports to the Agent.
+        /// </summary>
+        protected RestClient Client { get; set; }
+
+        /// <summary>
+        /// A flag that is raised when all attempts submitting a report fail.
+        /// </summary>
+        protected bool StopReports { get; set; } = false;
+
+        /// <summary>
+        /// Maximum amount of time to wait in milliseconds before forcibly terminating the queue.
+        /// </summary>
+        private const int REPORTS_QUEUE_TIMEOUT = 10000;
 
         /// <summary>
         /// Thread that will take care of reporting while test execution continues.
@@ -63,7 +74,7 @@ namespace TestProject.OpenSDK.Internal
         /// <param name="client">The <see cref="RestClient"/> HTTP client to send reports to the Agent.</param>
         public ReportsQueue(RestClient client)
         {
-            this.client = client;
+            this.Client = client;
             this.reporterThread = new Thread(new ThreadStart(this.Worker));
             this.reporterThread.IsBackground = true;
             this.reporterThread.Start();
@@ -76,7 +87,10 @@ namespace TestProject.OpenSDK.Internal
         /// <param name="report">The report that this HTTP request contains.</param>
         public void Submit(RestRequest request, Report report)
         {
-            this.reportItems.Add(new QueueItem(request, report));
+            if (!this.StopReports)
+            {
+                this.ReportItems.Add(new QueueItem(request, report));
+            }
         }
 
         /// <summary>
@@ -86,17 +100,75 @@ namespace TestProject.OpenSDK.Internal
         {
             this.running = false;
 
-            this.reportItems.Add(new QueueItem(null, null));
+            this.ReportItems.Add(new QueueItem(null, null));
 
-            this.reportItems.CompleteAdding();
+            this.ReportItems.CompleteAdding();
 
             // Wait until all pending items are reported or the timeout has been reached.
-            bool reportingCompleted = SpinWait.SpinUntil(() => this.reportItems.Count == 0, REPORTS_QUEUE_TIMEOUT);
+            bool reportingCompleted = SpinWait.SpinUntil(() => this.ReportItems.Count == 0, REPORTS_QUEUE_TIMEOUT);
 
             if (!reportingCompleted)
             {
-                Logger.Warn($"There are {this.reportItems.Count} unreported items left in the queue.");
+                Logger.Warn($"There are {this.ReportItems.Count} unreported items left in the queue.");
             }
+        }
+
+        /// <summary>
+        ///  Handle the report.
+        ///  From version 3.1.0 -> send reports in batches.
+        ///  For lower versions -> Send standalone report.
+        /// </summary>
+        protected virtual void HandleReport()
+        {
+            foreach (QueueItem itemToReport in this.ReportItems.GetConsumingEnumerable(CancellationToken.None))
+            {
+                if (itemToReport.Request == null && itemToReport.Report == null)
+                {
+                    if (this.running)
+                    {
+                        // These nulls are not OK, something went wrong preparing the report/request.
+                        Logger.Error("An empty request and report were submitted to the queue");
+                    }
+
+                    // These nulls are OK, they were added by stop() method on purpose.
+                    return;
+                }
+
+                this.SendReport(itemToReport.Request);
+            }
+        }
+
+        /// <summary>
+        /// Submits a report to the Agent.
+        /// </summary>
+        /// <param name="sendReportsBatchRequest"> Http request to send report to the agent.
+        /// For lower versions than 3.1.0 -> HTTP request retrieved from the queue.
+        /// For versions 3.1.0 and greater -> Build reports batch HTTP request.
+        /// </param>
+        /// <exception>FailedReportException if cannot send report to the agent more than <see cref="MaxReportFailureAttempts"/> attempts.</exception>
+        protected void SendReport(RestRequest sendReportsBatchRequest)
+        {
+            IRestResponse response;
+            int reportAttemptsCount;
+            for (reportAttemptsCount = MaxReportFailureAttempts; reportAttemptsCount > 0; reportAttemptsCount--)
+            {
+                response = this.Client.Execute(sendReportsBatchRequest);
+
+                // If the reports were sent successfully, there is no need to continue to the rest of the code
+                // since it's handling unsuccessful response.
+                if (response != null && response.IsSuccessful)
+                {
+                    return;
+                }
+
+                Logger.Warn($"Agent responded with an unexpected status {response?.StatusCode ?? 0} during the report: {response?.ErrorMessage ?? "No message."}.");
+                Logger.Info($"Attempt to send report again to the Agent. {reportAttemptsCount - 1} more attempts are left.");
+            }
+
+            // In case all attepts to send the report are failed.
+            // If the report has been sent successfully - this code will not execute.
+            Logger.Error($"All {MaxReportFailureAttempts} attempts to send report have failed.");
+            throw new FailedReportException($"All {MaxReportFailureAttempts} attempts to send report have failed.");
         }
 
         /// <summary>
@@ -106,38 +178,16 @@ namespace TestProject.OpenSDK.Internal
         {
             this.running = true;
 
-            while (this.running || this.reportItems.Count > 0)
+            while (this.running || this.ReportItems.Count > 0)
             {
-                foreach (QueueItem itemToReport in this.reportItems.GetConsumingEnumerable(CancellationToken.None))
+                try
                 {
-                    this.SendReport(itemToReport);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Submits a report to the Agent.
-        /// </summary>
-        /// <param name="itemToReport">The <see cref="QueueItem"/> to report to the Agent.</param>
-        private void SendReport(QueueItem itemToReport)
-        {
-            if (itemToReport.Request == null && itemToReport.Report == null)
-            {
-                if (this.running)
+                    this.HandleReport();
+                } catch (FailedReportException)
                 {
-                    // These nulls are not OK, something went wrong preparing the report/request.
-                    Logger.Error("An empty request and report were submitted to the queue");
+                    this.StopReports = true;
+                    Logger.Warn("Reports are disabled due to multiple failed attempts of sending reports to the agent.");
                 }
-
-                // These nulls are OK, they were added by stop() method on purpose.
-                return;
-            }
-
-            IRestResponse response = this.client.Execute(itemToReport.Request);
-
-            if ((int)response.StatusCode >= 400)
-            {
-                Logger.Error($"Agent returned HTTP {(int)response.StatusCode} with message: {response.ErrorMessage}");
             }
         }
 
