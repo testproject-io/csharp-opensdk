@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- [#228](https://github.com/testproject-io/csharp-opensdk/issues/228) - Added new class ReportsQueueBatch to support reporting at batches.
+
 ## [1.2.2] - 2021-07-07
 
 ### Fixed
