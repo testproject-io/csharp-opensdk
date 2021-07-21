@@ -101,11 +101,19 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
                 return;
             }
 
+            // If the command is IsDisplayed, the passed value we report to agent should be whether the element is visible or not.
+            bool passed = response.IsPassed();
+            if (CommandHelper.IsDisplayedCommand(command) && passed)
+            {
+                passed = bool.Parse(response.Value.ToString());
+            }
+
             if (StackTraceHelper.Instance.IsRunningInsideWait())
             {
                 // Save the command
                 var stashedCommand = new StashedCommand(command, response.Value, response.IsPassed());
                 this.stashedCommands[$"{command}_{response.IsPassed()}"] = stashedCommand;
+                var stashedCommand = new StashedCommand(command, response.Value, passed);
 
                 // Do not report the command right away if it's executed inside a WebDriverWait
                 return;
