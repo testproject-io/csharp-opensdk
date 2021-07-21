@@ -17,6 +17,7 @@
 namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
 {
     using System.Collections.Generic;
+    using System.Collections.Specialized;
     using NLog;
     using OpenQA.Selenium.Remote;
     using TestProject.OpenSDK.Enums;
@@ -51,7 +52,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
 
         private ITestProjectCommandExecutor commandExecutor;
 
-        private SortedDictionary<string, StashedCommand> stashedCommands;
+        private OrderedDictionary stashedCommands;
 
         private string currentTestName;
 
@@ -67,7 +68,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         /// <param name="disableReports">True if all reporting should be disabled, false otherwise.</param>
         public ReportingCommandExecutor(ITestProjectCommandExecutor commandExecutor, bool disableReports)
         {
-            this.stashedCommands = new SortedDictionary<string, StashedCommand>();
+            this.stashedCommands = new OrderedDictionary();
             this.commandExecutor = commandExecutor;
             this.ReportsDisabled = disableReports;
         }
@@ -124,9 +125,9 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         {
             if (this.stashedCommands.Count > 0)
             {
-                foreach (var keyValuePair in this.stashedCommands)
+                foreach (DictionaryEntry keyValuePair in this.stashedCommands)
                 {
-                    var command = keyValuePair.Value;
+                    var command = (StashedCommand)keyValuePair.Value;
                     this.SendCommandToAgent(command.Command, command.Result, command.Passed);
                 }
 
