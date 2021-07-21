@@ -16,6 +16,7 @@
 
 namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
 {
+    using System.Collections;
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using NLog;
@@ -110,10 +111,18 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
 
             if (StackTraceHelper.Instance.IsRunningInsideWait())
             {
+
+                // If we are running an "is invisible" type command, we need to invert the result of the command set.
+                // This means that checks of Displayed property are inverted, and failure to find the element is actually a success.
+                // In W3C this is an ExecuteScript command, and in OSS it is IsElementDisplayed
+                if (StackTraceHelper.Instance.IsInvisibleCondition() && (command.Name.Equals(DriverCommand.ExecuteScript) || !passed))
+                {
+                    passed = !passed;
+                }
+
                 // Save the command
-                var stashedCommand = new StashedCommand(command, response.Value, response.IsPassed());
-                this.stashedCommands[$"{command}_{response.IsPassed()}"] = stashedCommand;
                 var stashedCommand = new StashedCommand(command, response.Value, passed);
+                this.stashedCommands[$"{command.Name}_{command.ParametersAsJsonString}"] = stashedCommand;
 
                 // Do not report the command right away if it's executed inside a WebDriverWait
                 return;
