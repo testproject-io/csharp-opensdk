@@ -100,6 +100,22 @@ namespace TestProject.OpenSDK.Internal.CallStackAnalysis
         }
 
         /// <summary>
+        /// Checks whether we are running inside an InvisibilityCondition
+        /// </summary>
+        /// <returns></returns>
+        public bool IsInvisibleCondition()
+        {
+            return new StackTrace().GetFrames()
+                .Any(f =>
+                {
+                    var declaringType = f.GetMethod().DeclaringType;
+                    return declaringType != null &&
+                           declaringType.FullName.Contains(".ExpectedConditions") &&
+                           f.GetMethod().Name.StartsWith("<InvisibilityOfElement");
+                });
+        }
+
+        /// <summary>
         /// Checks if we're running inside a SpecFlow scenario.
         /// </summary>
         /// <returns>True if a SpecFlow reference is found in the stack trace, false otherwise.</returns>
