@@ -16,7 +16,9 @@
 
 namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
 {
+    using System.Collections;
     using System.Collections.Generic;
+    using System.Collections.Specialized;
     using NLog;
     using OpenQA.Selenium.Remote;
     using TestProject.OpenSDK.Enums;
@@ -51,7 +53,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
 
         private ITestProjectCommandExecutor commandExecutor;
 
-        private SortedDictionary<string, StashedCommand> stashedCommands;
+        private OrderedDictionary stashedCommands;
 
         private string currentTestName;
 
@@ -67,7 +69,7 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         /// <param name="disableReports">True if all reporting should be disabled, false otherwise.</param>
         public ReportingCommandExecutor(ITestProjectCommandExecutor commandExecutor, bool disableReports)
         {
-            this.stashedCommands = new SortedDictionary<string, StashedCommand>();
+            this.stashedCommands = new OrderedDictionary();
             this.commandExecutor = commandExecutor;
             this.ReportsDisabled = disableReports;
         }
@@ -100,11 +102,27 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
                 return;
             }
 
+            // If the command is IsDisplayed, the passed value we report to agent should be whether the element is visible or not.
+            bool passed = response.IsPassed();
+            if (CommandHelper.IsDisplayedCommand(command) && passed)
+            {
+                passed = bool.Parse(response.Value.ToString());
+            }
+
             if (StackTraceHelper.Instance.IsRunningInsideWait())
             {
+
+                // If we are running an "is invisible" type command, we need to invert the result of the command set.
+                // This means that checks of Displayed property are inverted, and failure to find the element is actually a success.
+                // In W3C this is an ExecuteScript command, and in OSS it is IsElementDisplayed
+                if (StackTraceHelper.Instance.IsInvisibleCondition() && (command.Name.Equals(DriverCommand.ExecuteScript) || !passed))
+                {
+                    passed = !passed;
+                }
+
                 // Save the command
-                var stashedCommand = new StashedCommand(command, response.Value, response.IsPassed());
-                this.stashedCommands[$"{command}_{response.IsPassed()}"] = stashedCommand;
+                var stashedCommand = new StashedCommand(command, response.Value, passed);
+                this.stashedCommands[$"{command.Name}_{command.ParametersAsJsonString}"] = stashedCommand;
 
                 // Do not report the command right away if it's executed inside a WebDriverWait
                 return;
@@ -124,9 +142,9 @@ namespace TestProject.OpenSDK.Internal.Helpers.CommandExecutors
         {
             if (this.stashedCommands.Count > 0)
             {
-                foreach (var keyValuePair in this.stashedCommands)
+                foreach (DictionaryEntry keyValuePair in this.stashedCommands)
                 {
-                    var command = keyValuePair.Value;
+                    var command = (StashedCommand)keyValuePair.Value;
                     this.SendCommandToAgent(command.Command, command.Result, command.Passed);
                 }
 

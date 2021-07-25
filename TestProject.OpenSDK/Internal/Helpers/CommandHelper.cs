@@ -18,7 +18,10 @@ namespace TestProject.OpenSDK.Internal.Helpers
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using NLog;
+    using OpenQA.Selenium;
+    using OpenQA.Selenium.Remote;
 
     /// <summary>
     /// This class contains helper methods to convert WebDriver commands to formats that the Agent understands.
@@ -29,6 +32,20 @@ namespace TestProject.OpenSDK.Internal.Helpers
         private const string KEY_TEXT = "text";
 
         private static Logger Logger { get; set; } = LogManager.GetCurrentClassLogger();
+
+        private static readonly string IsDisplayedAtom = GetSeleniumAtom("isDisplayed.js");
+
+        /// <summary>
+        /// Checks if requested command it an is displayed command.
+        /// </summary>
+        /// <param name="command">Command to analyze.</param>
+        /// <returns>If command is "is displayed"</returns>
+        public static bool IsDisplayedCommand(Command command)
+        {
+            return command.Name.Equals(DriverCommand.IsElementDisplayed) ||
+                (command.Name.Equals(DriverCommand.ExecuteScript) &&
+                (command.Parameters["script"]?.ToString().Contains(IsDisplayedAtom) ?? false));
+        }
 
         /// <summary>
         /// Tries to update SendKeys parameters to a format that the Agent understands.
@@ -71,6 +88,25 @@ namespace TestProject.OpenSDK.Internal.Helpers
         private static string ConvertObjectToString(object obj)
         {
             return obj?.ToString() ?? string.Empty;
+        }
+
+        /// <summary>
+        /// Loads the contents of the isDisplayed script. TThis is used to convert ExecuteScript to Displayed command.
+        /// </summary>
+        /// <param name="atom">Atom name to load.</param>
+        /// <returns>The is displayed script.</returns>
+        private static string GetSeleniumAtom(string atom)
+        {
+            var stream = typeof(IWebDriver).Assembly.GetManifestResourceStream(atom);
+            if (stream == null)
+            {
+                return string.Empty;
+            }
+
+            using (var reader = new StreamReader(stream))
+            {
+                return reader.ReadToEnd();
+            }
         }
     }
 }
