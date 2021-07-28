@@ -322,6 +322,21 @@ ChromeDriver driver = new ChromeDriver(chromeOptions: new ChromeOptions());
 driver.Report().DisableRedaction(true);
 ```
 
+# Capturing output in XUnit tests
+
+In order to capture console output in XUnit tests and in particular the logs of the OpenSDK,
+you will have to inherit from the `XUnitLogger` class and pass an `ITestOutputHelper` to it's constructor.
+
+```csharp
+public class InferredReportTest : XUnitLogger
+    {
+        public InferredReportTest(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+    }
+```
+
 # SpecFlow support
 
 The OpenSDK also supports automatic reporting of SpecFlow features, scenarios and steps through the [TestProject OpenSDK SpecFlow plugin](https://www.nuget.org/packages/TestProject.OpenSDK.SpecFlowPlugin/).
