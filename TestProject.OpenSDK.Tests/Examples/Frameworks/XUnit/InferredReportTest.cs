@@ -18,13 +18,26 @@ namespace TestProject.OpenSDK.Tests.Examples.Frameworks.XUnit
 {
     using OpenQA.Selenium;
     using TestProject.OpenSDK.Drivers.Web;
+    using TestProject.OpenSDK.XUnitLogger;
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// This class contains examples of using the TestProject C# SDK with XUnit and inferred reporting.
+    /// Note: It is important to inherit from the XUnitLogger base class in order to see the logs in the console.
     /// </summary>
-    public class InferredReportTest
+    public class InferredReportTest : XUnitLogger
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InferredReportTest"/> class.
+        /// Init's the base class which configures the NLoger to work with XUnit.
+        /// </summary>
+        /// <param name="outputHelper">XUnit's output helper which allows capturing output.</param>
+        public InferredReportTest(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         /// <summary>
         /// An example test logging in to the TestProject demo application with Chrome.
         /// </summary>
