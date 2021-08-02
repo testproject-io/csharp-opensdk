@@ -19,13 +19,26 @@ namespace TestProject.OpenSDK.Tests.Examples.Parameterization
     using OpenQA.Selenium;
     using TestProject.OpenSDK.DataProviders;
     using TestProject.OpenSDK.Drivers.Web;
+    using TestProject.OpenSDK.XUnitLogger;
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// Examples for XUnit parameterized tests.
+    /// Note: It is important to inherit from the XUnitLogger base class in order to see the logs in the console.
     /// </summary>
-    public class XUnitExample
+    public class XUnitExample : XUnitLogger
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XUnitExample"/> class.
+        /// Init's the base class which configures the NLoger to work with XUnit.
+        /// </summary>
+        /// <param name="outputHelper">XUnit's output helper which allows capturing output.</param>
+        public XUnitExample(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         /// <summary>
         /// Example parameterized test.
         /// </summary>

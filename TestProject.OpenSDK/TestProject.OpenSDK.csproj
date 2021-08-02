@@ -31,6 +31,7 @@ From now on, you can effortlessly execute Selenium and Appium native tests using
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="xunit.abstractions" Version="2.0.3" />
   </ItemGroup>
 
   <ItemGroup>
