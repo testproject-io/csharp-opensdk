@@ -416,8 +416,8 @@ namespace ParameterizationExamples
         {
             var driver = new ChromeDriver();  // Project and job names are inferred.
             driver.Navigate().GoToUrl("https://example.testproject.io");
-            driver.FindElement(By.CssSelector("#name")).SendKeys("John Smith");
-            driver.FindElement(By.CssSelector("#password")).SendKeys("12345");
+            driver.FindElement(By.CssSelector("#name")).SendKeys(username);
+            driver.FindElement(By.CssSelector("#password")).SendKeys(password);
             driver.FindElement(By.CssSelector("#login")).Click();
 
             Assert.IsTrue(driver.FindElement(By.CssSelector("#greetings")).Displayed);
@@ -437,18 +437,25 @@ namespace ParameterizationExamples
     using OpenQA.Selenium;
     using TestProject.OpenSDK.DataProviders;
     using TestProject.OpenSDK.Drivers.Web;
+    using TestProject.OpenSDK.XUnitLogger;
     using Xunit;
+    using Xunit.Abstractions;
 
-    public class XUnitExample
+    public class XUnitExample : XUnitLogger
     {
+        public XUnitExample(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Theory]
         [ClassData(typeof(TestProjectDataProvider))]
         public void ExampleTest(string username, string password)
         {
-            var driver = new ChromeDriver();  // Project and job names are inferred.
+            var driver = new ChromeDriver(); // Project and job names are inferred.
             driver.Navigate().GoToUrl("https://example.testproject.io");
-            driver.FindElement(By.CssSelector("#name")).SendKeys("John Smith");
-            driver.FindElement(By.CssSelector("#password")).SendKeys("12345");
+            driver.FindElement(By.CssSelector("#name")).SendKeys(username);
+            driver.FindElement(By.CssSelector("#password")).SendKeys(password);
             driver.FindElement(By.CssSelector("#login")).Click();
 
             Assert.True(driver.FindElement(By.CssSelector("#greetings")).Displayed);
