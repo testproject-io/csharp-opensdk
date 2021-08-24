@@ -5,9 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.2.3] - 2021-08-24
+
+### Added
 
 - [#228](https://github.com/testproject-io/csharp-opensdk/issues/228) - Added new class ReportsQueueBatch to support reporting at batches.
+
+### Fixed
+
+- [#232](https://github.com/testproject-io/csharp-opensdk/issues/232) - Fixed the result of element.Displayed and InvisibilityOfElement condition to reflect the element's actual visibility stated.
+- [#229](https://github.com/testproject-io/csharp-opensdk/issues/229) - Added support for writing SDK logs to xUnit console using the XUnitLogger class.
 
 ## [1.2.2] - 2021-07-07
 
