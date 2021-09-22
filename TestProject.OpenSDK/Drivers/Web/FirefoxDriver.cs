@@ -20,6 +20,7 @@ namespace TestProject.OpenSDK.Drivers.Web
     using OpenQA.Selenium.Firefox;
     using TestProject.OpenSDK.Enums;
     using TestProject.OpenSDK.Internal.Helpers.DriverOptions;
+    using TestProject.OpenSDK.Internal.Rest;
 
     /// <summary>
     /// Extension of <see cref="OpenQA.Selenium.Firefox.FirefoxDriver">FirefoxDriver</see> for use with TestProject.
@@ -40,6 +41,7 @@ namespace TestProject.OpenSDK.Drivers.Web
         /// <param name="reportName">The name of the local generated report.</param>
         /// <param name="reportPath">The path of the local generated report.</param>
         /// <param name="remoteConnectionTimeout">The remote connection timeout to the server. Default is 60 seconds.</param>
+        /// <param name="restClientTimeout"> The connection timeout to the agent in milliseconds. Default is 120 seconds.</param>
         public FirefoxDriver(
             Uri remoteAddress = null,
             string token = null,
@@ -50,8 +52,9 @@ namespace TestProject.OpenSDK.Drivers.Web
             ReportType reportType = ReportType.CLOUD_AND_LOCAL,
             string reportName = null,
             string reportPath = null,
-            TimeSpan? remoteConnectionTimeout = null)
-            : base(remoteAddress, token, DriverOptionsHelper.Patch(firefoxOptions, BrowserType.Chrome), projectName, jobName, disableReports, reportType, reportName, reportPath, remoteConnectionTimeout)
+            TimeSpan? remoteConnectionTimeout = null,
+            int restClientTimeout = AgentClient.DefaultRestClientTimeoutInMilliseconds)
+            : base(remoteAddress, token, DriverOptionsHelper.Patch(firefoxOptions, BrowserType.Chrome), projectName, jobName, disableReports, reportType, reportName, reportPath, remoteConnectionTimeout, restClientTimeout)
         {
         }
     }
