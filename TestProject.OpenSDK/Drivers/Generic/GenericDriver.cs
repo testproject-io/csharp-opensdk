@@ -61,6 +61,7 @@ namespace TestProject.OpenSDK.Drivers.Generic
         /// <param name="reportType">The report type of the execution, can be local, cloud or both.</param>
         /// <param name="reportName">The name of the local generated report.</param>
         /// <param name="reportPath">The path of the local generated report.</param>
+        /// <param name="restClientTimeout"> The connection timeout to the agent in milliseconds. Default is 120 seconds.</param>
         public GenericDriver(
             Uri remoteAddress = null,
             string token = null,
@@ -69,9 +70,10 @@ namespace TestProject.OpenSDK.Drivers.Generic
             bool disableReports = false,
             ReportType reportType = ReportType.CLOUD_AND_LOCAL,
             string reportName = null,
-            string reportPath = null)
+            string reportPath = null,
+            int restClientTimeout = AgentClient.DefaultRestClientTimeoutInMilliseconds)
         {
-            AgentClient agentClient = AgentClient.GetInstance(remoteAddress, token, new GenericOptions(), new ReportSettings(projectName, jobName, reportType, reportName, reportPath), disableReports, this.minGenericDriverSupportedVersion);
+            AgentClient agentClient = AgentClient.GetInstance(remoteAddress, token, new GenericOptions(), new ReportSettings(projectName, jobName, reportType, reportName, reportPath), disableReports, restClientTimeout, this.minGenericDriverSupportedVersion);
 
             this.commandExecutor = new GenericCommandExecutor(remoteAddress, disableReports);
 
