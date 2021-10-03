@@ -47,6 +47,11 @@ namespace TestProject.OpenSDK.Internal.Rest
     public class AgentClient
     {
         /// <summary>
+        /// The default timeout in milliseconds for the <see cref="RestClient"/> class.
+        /// </summary>
+        public const int DefaultRestClientTimeoutInMilliseconds = 120 * 1000;
+
+        /// <summary>
         /// Default remote connection timeout.
         /// </summary>
         internal static readonly TimeSpan DefaultConnectionTimeout = TimeSpan.FromSeconds(60);
@@ -95,11 +100,6 @@ namespace TestProject.OpenSDK.Internal.Rest
         /// The default Agent address to be used if no address is specified in the driver constructor or environment variable.
         /// </summary>
         private readonly string agentDefaultAddress = "http://localhost:8585";
-
-        /// <summary>
-        /// The default timeout in milliseconds for the <see cref="RestClient"/> class.
-        /// </summary>
-        private readonly int defaultRestClientTimeoutInMilliseconds = 100 * 1000;
 
         /// <summary>
         /// Minimum agent version that supports local reports.
@@ -163,9 +163,10 @@ namespace TestProject.OpenSDK.Internal.Rest
         /// <param name="capabilities">Requested driver options for the browser session.</param>
         /// <param name="reportSettings">Contains the project and job name to report to TestProject.</param>
         /// <param name="disableReports">Set to true to disable all reporting to TestProject, false otherwise.</param>
+        /// <param name="restClientTimeout"> The connection timeout to the agent in milliseconds. Default is 120 seconds.</param>
         /// <param name="compatibleVersion">Minimum Agent version that supports the requested feature. Can be used to check Agent compatibility.</param>
         /// <returns>A instance of the <see cref="AgentClient"/>.</returns>
-        public static AgentClient GetInstance(Uri remoteAddress, string token, DriverOptions capabilities, ReportSettings reportSettings, bool disableReports, Version compatibleVersion = null)
+        public static AgentClient GetInstance(Uri remoteAddress, string token, DriverOptions capabilities, ReportSettings reportSettings, bool disableReports, int restClientTimeout, Version compatibleVersion = null)
         {
             lock (typeof(AgentClient))
             {
@@ -206,7 +207,7 @@ namespace TestProject.OpenSDK.Internal.Rest
                 }
 
                 // Create a new AgentClient instance
-                instance = new AgentClient(remoteAddress, token, capabilities, reportSettings, disableReports);
+                instance = new AgentClient(remoteAddress, token, capabilities, reportSettings, disableReports, restClientTimeout: restClientTimeout);
             }
 
             // Return new instance.
@@ -231,7 +232,8 @@ namespace TestProject.OpenSDK.Internal.Rest
         /// <param name="reportSettings">Contains the project and job name to report to TestProject.</param>
         /// <param name="disableReports">Set to true to disable all reporting to TestProject, false otherwise.</param>
         /// <param name="compatibleVersion">Minimum Agent version that supports the requested feature. Can be used to check Agent compatibility.</param>
-        private AgentClient(Uri remoteAddress, string token, DriverOptions capabilities, ReportSettings reportSettings, bool disableReports, Version compatibleVersion = null)
+        /// <param name="restClientTimeout"> The connection timeout to the agent in milliseconds. Default is 120 seconds.</param>
+        private AgentClient(Uri remoteAddress, string token, DriverOptions capabilities, ReportSettings reportSettings, bool disableReports, int restClientTimeout, Version compatibleVersion = null)
         {
             this.remoteAddress = this.InferRemoteAddress(remoteAddress);
 
@@ -257,6 +259,7 @@ namespace TestProject.OpenSDK.Internal.Rest
             }
 
             this.client = new RestClient(this.remoteAddress);
+            this.client.Timeout = restClientTimeout;
             this.client.AddDefaultHeader("Authorization", this.token);
 
             this.serializerSettings = CustomJsonSerializer.Populate(new JsonSerializerSettings());
@@ -358,6 +361,8 @@ namespace TestProject.OpenSDK.Internal.Rest
 
             sendActionProxyRequest.AddJsonBody(json);
 
+            // Save RestSharp timeout.
+            int previousTimeout = this.client.Timeout;
             if (timeout > 0)
             {
                 // Since action proxy execution can take a while, you can override the default timeout.
@@ -375,7 +380,7 @@ namespace TestProject.OpenSDK.Internal.Rest
             }
 
             // Reset the client timeout to the RestSharp default.
-            this.client.Timeout = this.defaultRestClientTimeoutInMilliseconds;
+            this.client.Timeout = previousTimeout;
 
             return CustomJsonSerializer.FromJson<ActionExecutionResponse>(sendActionProxyResponse.Content, this.serializerSettings);
         }

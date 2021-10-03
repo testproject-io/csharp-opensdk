@@ -71,6 +71,7 @@ namespace TestProject.OpenSDK.Drivers
         /// <param name="reportName">The name of the local generated report.</param>
         /// <param name="reportPath">The path of the local generated report.</param>
         /// <param name="remoteConnectionTimeout">The remote connection timeout to the server. Default is 60 seconds.</param>
+        /// <param name="restClientTimeout"> The connection timeout to the agent in milliseconds. Default is 120 seconds.</param>
         protected BaseDriver(
             Uri remoteAddress = null,
             string token = null,
@@ -81,9 +82,10 @@ namespace TestProject.OpenSDK.Drivers
             ReportType reportType = ReportType.CLOUD_AND_LOCAL,
             string reportName = null,
             string reportPath = null,
-            TimeSpan? remoteConnectionTimeout = null)
+            TimeSpan? remoteConnectionTimeout = null,
+            int restClientTimeout = AgentClient.DefaultRestClientTimeoutInMilliseconds)
             : base(
-                  AgentClient.GetInstance(remoteAddress, token, driverOptions, new ReportSettings(projectName, jobName, reportType, reportName, reportPath), disableReports).AgentSession.Capabilities)
+                  AgentClient.GetInstance(remoteAddress, token, driverOptions, new ReportSettings(projectName, jobName, reportType, reportName, reportPath), disableReports, restClientTimeout).AgentSession.Capabilities)
         {
             this.sessionId = AgentClient.GetInstance().AgentSession.SessionId;
 

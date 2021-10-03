@@ -73,6 +73,7 @@ namespace TestProject.OpenSDK.Drivers.Android
         /// <param name="reportName">The name of the local generated report.</param>
         /// <param name="reportPath">The path of the local generated report.</param>
         /// <param name="remoteConnectionTimeout">Timeout for the remote connection to the WebDriver server executing the commands.</param>
+        /// <param name="restClientTimeout"> The connection timeout to the agent in milliseconds. Default is 120 seconds.</param>
         public AndroidDriver(
             Uri remoteAddress = null,
             string token = null,
@@ -83,9 +84,10 @@ namespace TestProject.OpenSDK.Drivers.Android
             ReportType reportType = ReportType.CLOUD_AND_LOCAL,
             string reportName = null,
             string reportPath = null,
-            TimeSpan? remoteConnectionTimeout = null)
+            TimeSpan? remoteConnectionTimeout = null,
+            int restClientTimeout = AgentClient.DefaultRestClientTimeoutInMilliseconds)
             : base(
-                  AgentClient.GetInstance(remoteAddress, token, appiumOptions, new ReportSettings(projectName, jobName, reportType, reportName, reportPath), disableReports).AgentSession.RemoteAddress,
+                  AgentClient.GetInstance(remoteAddress, token, appiumOptions, new ReportSettings(projectName, jobName, reportType, reportName, reportPath), disableReports, restClientTimeout).AgentSession.RemoteAddress,
                   AgentClient.GetInstance().AgentSession.Capabilities,
                   remoteConnectionTimeout ?? DefaultCommandTimeout)
         {

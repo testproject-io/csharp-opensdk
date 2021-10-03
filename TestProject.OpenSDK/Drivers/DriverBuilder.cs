@@ -83,6 +83,11 @@ namespace TestProject.OpenSDK.Drivers
         private TimeSpan? remoteConnectionTimeout;
 
         /// <summary>
+        /// The connection timeout to the agent in milliseconds.
+        /// </summary>
+        private int builderSocketSessionTimeout;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="DriverBuilder{T}"/> class.
         /// </summary>
         /// <param name="options">See <see cref="DriverOptions"/> for more details.</param>
@@ -202,6 +207,18 @@ namespace TestProject.OpenSDK.Drivers
             return this;
         }
 
+
+        /// <summary>
+        /// Set the connection timeout to the agent in milliseconds.
+        /// </summary>
+        /// <param name="sessionSocketTimeout">timeout to the agent in milliseconds.</param>
+        /// <returns>Modified DriverBuilder instance.</returns>
+        public DriverBuilder<T> WithSessionSocketTimeout(int sessionSocketTimeout)
+        {
+            this.builderSocketSessionTimeout = sessionSocketTimeout;
+            return this;
+        }
+
         /// <summary>
         /// Builds an instance of the requested driver using set values.
         /// </summary>
@@ -221,7 +238,8 @@ namespace TestProject.OpenSDK.Drivers
                     this.builderReportType,
                     this.builderReportName,
                     this.builderReportPath,
-                    this.remoteConnectionTimeout);
+                    this.remoteConnectionTimeout,
+                    this.builderSocketSessionTimeout);
             } catch (Exception e)
             {
                 throw new WebDriverException($"Failed to create an instance of {typeof(T)}", e);
