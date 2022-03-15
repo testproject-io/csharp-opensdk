@@ -54,7 +54,7 @@ namespace TestProject.OpenSDK.Drivers.Web
             string reportPath = null,
             TimeSpan? remoteConnectionTimeout = null,
             int restClientTimeout = AgentClient.DefaultRestClientTimeoutInMilliseconds)
-            : base(remoteAddress, token, DriverOptionsHelper.Patch(safariOptions, BrowserType.Chrome), projectName, jobName, disableReports, reportType, reportName, reportPath, remoteConnectionTimeout, restClientTimeout)
+            : base(remoteAddress, token, DriverOptionsHelper.Patch(safariOptions, BrowserType.Safari), projectName, jobName, disableReports, reportType, reportName, reportPath, remoteConnectionTimeout, restClientTimeout)
         {
         }
     }
